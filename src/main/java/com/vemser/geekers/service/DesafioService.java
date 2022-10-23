@@ -1,5 +1,8 @@
 package com.vemser.geekers.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vemser.geekers.dto.DesafioCreateDTO;
+import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -12,28 +15,37 @@ import java.util.List;
 public class DesafioService {
 
     private DesafioRepository desafioRepository;
+    private ObjectMapper objectMapper;
 
-    public DesafioService(DesafioRepository desafioRepository){
+    public DesafioService(DesafioRepository desafioRepository, ObjectMapper objectMapper){
         this.desafioRepository = desafioRepository;
+        this.objectMapper = objectMapper;
     }
 
-    public Desafio create(Desafio desafio) {
-        Desafio result;
+    public DesafioDTO create(DesafioCreateDTO desafio, Integer id) {
+        DesafioDTO desafioDTO;
         try {
-            result = desafioRepository.adicionar(desafio);
+            Desafio desafioEntity = objectMapper.convertValue(desafio, Desafio.class);
+            Desafio desafioCriado = desafioRepository.adicionar(desafioEntity, id);
+            desafioDTO = objectMapper.convertValue(desafioCriado, DesafioDTO.class);
         } catch (BancoDeDadosException e) {
             throw new RuntimeException(e);
         }
-        return result;
+        return desafioDTO;
     }
 
-    public List<Desafio> list() throws BancoDeDadosException {
-        return desafioRepository.listar();
+    public List<DesafioDTO> list() throws BancoDeDadosException {
+        return desafioRepository.listar()
+                .stream()
+                .map(desafio -> objectMapper.convertValue(desafio, DesafioDTO.class))
+                .toList();
     }
 
-    public Desafio update(Integer id,
-                           Desafio desafioAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
-        return desafioRepository.editar(id,desafioAtualizar);
+    public DesafioDTO update(Integer id,
+                           DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
+        Desafio desafioEntity = objectMapper.convertValue(desafioAtualizar, Desafio.class);
+        DesafioDTO desafioDTO = objectMapper.convertValue(desafioRepository.editar(id,desafioEntity), DesafioDTO.class);
+        return desafioDTO;
     }
 
     public Desafio findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {

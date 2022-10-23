@@ -10,7 +10,7 @@ import java.util.List;
 public interface Repositorio<CHAVE, OBJETO>{
 
     Integer getProximoId(Connection connection) throws SQLException;
-    OBJETO adicionar(OBJETO object) throws BancoDeDadosException;
+    OBJETO adicionar(OBJETO object, CHAVE id) throws BancoDeDadosException;
 
     boolean remover(CHAVE id) throws BancoDeDadosException;
 

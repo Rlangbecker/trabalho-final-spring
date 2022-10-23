@@ -1,8 +1,12 @@
 package com.vemser.geekers.controller;
 
+import com.vemser.geekers.dto.DesafioCreateDTO;
+import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.exception.BancoDeDadosException;
+import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.DesafioService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +18,7 @@ import java.util.List;
 @RestController
 @Validated
 @RequestMapping("/desafio")
+@Slf4j
 public class DesafioController {
 
     private DesafioService desafioService;
@@ -22,18 +27,22 @@ public class DesafioController {
         this.desafioService = desafioService;
     }
 
-    @PostMapping // localhost:8080/pessoa
-    public ResponseEntity<Desafio> create(@Valid @RequestBody Desafio desafio) throws Exception {
-        return new ResponseEntity<>(desafioService.create(desafio), HttpStatus.OK);
+    @PostMapping("/{idUsuario}")// localhost:8080/pessoa
+    public ResponseEntity<DesafioDTO> create(@PathVariable("idUsuario") Integer id,
+            @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
+        log.info("Criando Desafio...");
+        DesafioDTO desafioDTO = desafioService.create(desafio, id);
+        log.info("Desafio criado!");
+        return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
     @GetMapping // localhost:8080/pessoa
-    public List<Desafio> list() throws BancoDeDadosException {
-        return desafioService.list();
+    public ResponseEntity<List<DesafioDTO>> list() throws BancoDeDadosException {
+        return new ResponseEntity<>(desafioService.list(), HttpStatus.OK);
     }
     @PutMapping("/{id}") // localhost:8080/pessoa/1000
-    public ResponseEntity<Desafio> update(@PathVariable("id") Integer id,
-                                         @Valid @RequestBody Desafio desafioAtualizar) throws Exception {
+    public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,
+                                         @Valid @RequestBody DesafioCreateDTO desafioAtualizar) throws Exception {
         return new ResponseEntity<>(desafioService.update(id, desafioAtualizar), HttpStatus.OK);
     }
 

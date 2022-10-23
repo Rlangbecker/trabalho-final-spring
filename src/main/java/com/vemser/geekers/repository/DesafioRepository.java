@@ -35,7 +35,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
     }
 
     @Override
-    public Desafio adicionar(Desafio desafio) throws BancoDeDadosException {
+    public Desafio adicionar(Desafio desafio, Integer id) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -52,7 +52,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
             stmt.setInt(1, desafio.getIdDesafio());
             stmt.setString(2, desafio.getPergunta());
             stmt.setString(3, desafio.getResposta()); // Resposta 0/1
-            stmt.setInt(4, desafio.getIdUsuario());
+            stmt.setInt(4, id);
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarDesafio.res=" + res);
