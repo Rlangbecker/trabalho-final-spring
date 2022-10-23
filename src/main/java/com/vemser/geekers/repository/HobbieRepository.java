@@ -1,12 +1,25 @@
 package com.vemser.geekers.repository;
 
+import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Hobbie;
+import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.exception.BancoDeDadosException;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+import java.lang.annotation.Annotation;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class HobbieRepository implements Repository<Integer, Hobbie> {
+@Repository
+@AllArgsConstructor
+public class HobbieRepository implements Repositorio<Integer, Hobbie> {
+
+    private ConexaoBancoDeDados conexaoBancoDeDados;
+
 
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
@@ -45,7 +58,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
             return hobbie;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new BancoDeDadosException(e.getCause());
+            throw new BancoDeDadosException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -56,6 +69,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
             }
         }
     }
+
 
     @Override
     public boolean remover(Integer id) throws BancoDeDadosException {
@@ -76,7 +90,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new BancoDeDadosException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -117,7 +131,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new BancoDeDadosException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -151,7 +165,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
 
             return hobbies;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new BancoDeDadosException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -182,7 +196,7 @@ public class HobbieRepository implements Repository<Integer, Hobbie> {
             }
             return hobbies;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
+            throw new BancoDeDadosException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
