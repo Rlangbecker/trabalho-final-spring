@@ -4,15 +4,13 @@ import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Hobbie;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
+import com.vemser.geekers.exception.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.lang.annotation.Annotation;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 @AllArgsConstructor
@@ -35,7 +33,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public Hobbie adicionar(Hobbie hobbie) throws BancoDeDadosException {
+    public Hobbie create(Hobbie hobbie) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.getConnection();
@@ -51,14 +49,14 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             stmt.setInt(1, hobbie.getIdHobbies());
             stmt.setString(2, hobbie.getTipoHobbie());
             stmt.setString(3, hobbie.getDescricao());
-            stmt.setInt(4, hobbie.getUsuario().getIdUsuario());
+            stmt.setInt(4, hobbie.getIdUsuario());
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarHobbie.res=" + res);
             return hobbie;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new BancoDeDadosException(e.getMessage());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -103,7 +101,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public boolean editar(Integer id, Hobbie hobbie) throws BancoDeDadosException {
+    public boolean editar(Integer id, Hobbie hobbie) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = ConexaoBancoDeDados.getConnection();
@@ -131,7 +129,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getMessage());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -144,7 +142,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public List<Hobbie> listar() throws BancoDeDadosException {
+    public List<Hobbie> list() throws RegraDeNegocioException {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
@@ -165,7 +163,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
             return hobbies;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getMessage());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -177,7 +175,8 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
         }
     }
 
-    public List<Hobbie> listarHobbiePorUsuario(Integer id) throws BancoDeDadosException {
+
+    public List<Hobbie> listHobbieByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
@@ -186,7 +185,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             String sql = "SELECT * FROM HOBBIE WHERE ID_USUARIO = ? ";
 
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setInt(1, idUsuario);
 
             ResultSet res = stmt.executeQuery();
 
@@ -196,7 +195,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             }
             return hobbies;
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getMessage());
+            throw new RegraDeNegocioException(e.getMessage());
         } finally {
             try {
                 if (con != null) {
@@ -206,6 +205,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
                 e.printStackTrace();
             }
         }
+
     }
 
 
@@ -216,7 +216,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
         hobbie.setDescricao(res.getString("descricao"));
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(res.getInt("id_usuario"));
-        hobbie.setUsuario(usuario);
+        hobbie.setIdUsuario(usuario.getIdUsuario());
         return hobbie;
     }
 }
