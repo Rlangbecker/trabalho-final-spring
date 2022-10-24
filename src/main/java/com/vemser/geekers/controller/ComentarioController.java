@@ -1,6 +1,8 @@
 package com.vemser.geekers.controller;
 
+import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
+import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.ComentarioService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ public class ComentarioController {
     }
 
     @PostMapping("/{comentario}")
-    public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioDTO comentario) throws RegraDeNegocioException {
+    public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Adicionando comentário.");
         ComentarioDTO criandoComentarioDto = comentarioService.create(comentario);
         log.info("Comentário adicionado.");
@@ -33,13 +35,13 @@ public class ComentarioController {
     }
 
     @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listByIdComment(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException {
+    public ResponseEntity<ComentarioDTO> listByIdComment(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
         return new ResponseEntity<>(comentarioService.listarComentarioPorUsuario(idComentario), HttpStatus.OK);
     }
 
     @PutMapping("/{id-comentario}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable("id-comentario") Integer idComentario,
-                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException {
+                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Atualizando comentário, aguarde . . .");
         ComentarioDTO comentarioAtualizado = comentarioService.editarComentario(idComentario, atualizarComantario);
         log.info("Comentário adicionado com sucesso.");

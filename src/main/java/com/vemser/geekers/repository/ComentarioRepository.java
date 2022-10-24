@@ -2,8 +2,10 @@ package com.vemser.geekers.repository;
 
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Comentario;
+import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
+import com.vemser.geekers.service.UsuarioService;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -15,14 +17,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ComentarioRepository implements Repositorio<Integer, Comentario>{
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
+    private final UsuarioService usuarioService;
     private AtomicInteger COUNTER = new AtomicInteger();
 
-    public ComentarioRepository(ConexaoBancoDeDados conexaoBancoDeDados) {
+    public ComentarioRepository(ConexaoBancoDeDados conexaoBancoDeDados, UsuarioService usuarioService) {
         this.conexaoBancoDeDados = conexaoBancoDeDados;
+        this.usuarioService = usuarioService;
     }
 
     @Override
-    public Integer getProximoId(Connection connection) throws RegraDeNegocioException {
+    public Integer getProximoId(Connection connection) throws RegraDeNegocioException, SQLException {
         String sql = "SELECT SEQ_COMENTARIO.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
@@ -36,7 +40,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
     }
 
     @Override
-    public Comentario adicionar(Comentario comentario) throws RegraDeNegocioException {
+    public Comentario adicionar(Comentario comentario) throws RegraDeNegocioException, BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -58,7 +62,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
             System.out.println("adicionarComentario.res=" + res);
             return comentario;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -71,7 +75,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
     }
 
     @Override
-    public boolean editar(Integer id,Comentario comentario) throws RegraDeNegocioException {
+    public boolean editar(Integer id,Comentario comentario) throws BancoDeDadosException, RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -102,7 +106,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
 
             return res > 0;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -115,7 +119,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
     }
 
     @Override
-    public boolean remover(Integer id) throws RegraDeNegocioException {
+    public boolean remover(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -132,7 +136,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
 
             return res > 0;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -145,7 +149,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
     }
 
     @Override
-    public List<Comentario> listar() throws RegraDeNegocioException {
+    public List<Comentario> listar() throws RegraDeNegocioException, BancoDeDadosException {
         List<Comentario> comentarios = new ArrayList<>();
         Connection con = null;
         try {
@@ -166,7 +170,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
             }
             return comentarios;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -179,7 +183,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
 
     }
 
-    public List<Comentario> listarPorUsuario(Integer idUsuario) throws RegraDeNegocioException {
+    public List<Comentario> listarPorUsuario(Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
         List<Comentario> comentarios = new ArrayList<>();
         Connection con = null;
         try {
@@ -204,7 +208,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
             }
             return comentarios;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getCause());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -216,14 +220,13 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
         }
     }
 
-    private Comentario getComentarioFromResultSet(ResultSet res) throws SQLException {
+    private Comentario getComentarioFromResultSet(ResultSet res) throws SQLException, RegraDeNegocioException {
         Comentario comentario = new Comentario();
-        UsuarioService usuarioService = new UsuarioService();
         comentario.setIdComentario(res.getInt("id_comentario"));
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(res.getInt("id_usuario"));
-        Usuario usuarioComentario = usuarioService.listarUsuarioPorId(usuario.getIdUsuario());
-        usuario.setNome(usuarioComentario.getNome());
+//        Usuario usuarioComentario = usuarioService.listarUsuarioPorId(usuario.getIdUsuario());
+//        usuario.setNome(usuarioComentario.getNome());
         comentario.setUsuario(usuario);
         comentario.setComentario(res.getString("comentario"));
         return comentario;

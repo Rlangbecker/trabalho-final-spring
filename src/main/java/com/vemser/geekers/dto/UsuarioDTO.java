@@ -5,8 +5,8 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class ComentarioDTO extends ComentarioCreateDTO {
+public class UsuarioDTO extends UsuarioCreateDTO {
 
-    private Integer idComentario;
+    private Integer idUsuario;
 
 }
