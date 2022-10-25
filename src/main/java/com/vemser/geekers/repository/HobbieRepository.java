@@ -14,11 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
-    private final ConexaoBancoDeDados conexaoBancoDeDados;
+    private ConexaoBancoDeDados conexaoBancoDeDados;
 
+    public HobbieRepository(ConexaoBancoDeDados conexaoBancoDeDados){
+        this.conexaoBancoDeDados=conexaoBancoDeDados;
+    }
 
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
@@ -43,7 +45,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             hobbie.setIdHobbies(proximoId);
 
             String sql = "INSERT INTO HOBBIE \n" +
-                    "(id_hobbies , tipo_hobbie , descricao ,id_usuario ) \n" +
+                    "(id_hobbie , tipo_hobbie , descricao ,id_usuario ) \n" +
                     "VALUES(?, ?, ?, ?) \n";
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -213,7 +215,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
     private Hobbie getHobbieFromResultSet(ResultSet res) throws SQLException {
         Hobbie hobbie = new Hobbie();
-        hobbie.setIdHobbies(res.getInt("id_hobbies"));
+        hobbie.setIdHobbies(res.getInt("id_hobbie"));
         hobbie.setTipoHobbie(res.getString("tipo_hobbie"));
         hobbie.setDescricao(res.getString("descricao"));
         Usuario usuario = new Usuario();
