@@ -36,7 +36,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     public Hobbie create(Hobbie hobbie) throws RegraDeNegocioException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoId = this.getProximoId(con);
             hobbie.setIdHobbies(proximoId);
@@ -74,9 +74,9 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
-            String sql = "DELETE FROM HOBBIE WHERE id_hobbies = ?";
+            String sql = "DELETE FROM HOBBIE WHERE id_hobbie = ?";
 
             PreparedStatement stmt = con.prepareStatement(sql);
 
@@ -104,7 +104,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     public boolean editar(Integer id, Hobbie hobbie) throws RegraDeNegocioException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE HOBBIE SET ");
@@ -142,11 +142,12 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public List<Hobbie> list() throws RegraDeNegocioException {
+    public List<Hobbie> listar() throws BancoDeDadosException, RegraDeNegocioException {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
+
             Statement stmt = con.createStatement();
 
             String sql = "SELECT H.*, U.NOME AS NOME_USUARIO "
@@ -180,7 +181,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM HOBBIE WHERE ID_USUARIO = ? ";
 

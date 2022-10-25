@@ -26,51 +26,39 @@ public class HobbieService {
 
         Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
 
+        hobbieRepository.create(hobbieEntity);
+
         HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.create(hobbieEntity), HobbieDTO.class);
 
         return hDTO;
     }
 
-    public void remover(Integer id) {
-        try {
-            boolean conseguiuRemover = hobbieRepository.remover(id);
-            System.out.println("Hobbie removido? " + conseguiuRemover + "| com id= " + id);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        }
+    public void remover(Integer id) throws BancoDeDadosException {
+       hobbieRepository.remover(id);
     }
 
-    public Hobbie editar(Integer id, HobbieCreateDTO hobbieCreateDTO) {
-        try {
+    public Hobbie editar(Integer id, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
+
             Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
 
-            //verificar se existe usuario
-            //verificar se existe hobbie
-
+            listByIdUsuario(id);
 
             hobbieRepository.editar(id, hobbieEntity);
             return hobbieEntity;
-        } catch (RegraDeNegocioException e) {
-            e.printStackTrace();
-        }
     }
 
-    public List<HobbieDTO> list() throws RegraDeNegocioException {
+    public List<HobbieDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
 
-        return hobbieRepository.list().stream()
+        return hobbieRepository.listar().stream()
                 .map(hobbie -> objectMapper.convertValue(hobbie, HobbieDTO.class))
                 .toList();
 
     }
 
-    public List<Hobbie> listByIdUsuario(Integer id) {
-        try {
+    public List<Hobbie> listByIdUsuario(Integer id) throws RegraDeNegocioException {
+
             List<Hobbie> hobbieList = hobbieRepository.listHobbieByIdUsuario(id);
             return hobbieList;
-        } catch (RegraDeNegocioException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

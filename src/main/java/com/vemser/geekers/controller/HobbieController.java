@@ -1,5 +1,6 @@
 package com.vemser.geekers.controller;
 
+import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
 import com.vemser.geekers.entity.Hobbie;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -32,25 +33,25 @@ public class HobbieController {
     }
 
     @GetMapping("{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public List<Hobbie> listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) {
+    public List<Hobbie> listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
         log.info("Listando Hobbies | idUsuario: " + idUsuario);
         return hobbieService.listByIdUsuario(idUsuario);
     }
 
     @GetMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public List<Hobbie> listByName(@PathVariable("idHobbie") Integer idHobbie) {
+    public List<Hobbie> listByName(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException {
         return hobbieService.listByIdUsuario(idHobbie);
     }
 
 
     @PutMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
     public Hobbie update(@PathVariable("idHobbie") Integer idHobbie,
-                         @RequestBody Hobbie hobbieAtualizar) throws RegraDeNegocioException {
+                         @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
         return hobbieService.editar(idHobbie, hobbieAtualizar);
     }
 
     @DeleteMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException {
+    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException, BancoDeDadosException {
         hobbieService.remover(idHobbie);
     }
 

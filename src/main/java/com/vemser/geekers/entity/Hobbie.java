@@ -16,9 +16,9 @@ public class Hobbie {
     private Integer idUsuario;
 
     private Integer idHobbies;
-    @NotBlank
+
     private String descricao;
-    @NotBlank
+
     private String tipoHobbie;
 
 
