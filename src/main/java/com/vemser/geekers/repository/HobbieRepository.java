@@ -6,6 +6,7 @@ import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -13,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
-    private ConexaoBancoDeDados conexaoBancoDeDados;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
 
     @Override

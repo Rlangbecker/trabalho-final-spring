@@ -22,14 +22,14 @@ public class HobbieService {
     private final HobbieRepository hobbieRepository;
     private final ObjectMapper objectMapper;
 
-    public HobbieDTO create(HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
+    // create - remover - editar - listar(ListHobbieByIdUsuario)
 
+    public HobbieDTO create(HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
         Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
 
         hobbieRepository.create(hobbieEntity);
 
         HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.create(hobbieEntity), HobbieDTO.class);
-
         return hDTO;
     }
 
@@ -38,25 +38,19 @@ public class HobbieService {
     }
 
     public Hobbie editar(Integer id, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
-
             Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
-
             listByIdUsuario(id);
-
             hobbieRepository.editar(id, hobbieEntity);
             return hobbieEntity;
     }
 
     public List<HobbieDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
-
         return hobbieRepository.listar().stream()
                 .map(hobbie -> objectMapper.convertValue(hobbie, HobbieDTO.class))
                 .toList();
-
     }
 
     public List<Hobbie> listByIdUsuario(Integer id) throws RegraDeNegocioException {
-
             List<Hobbie> hobbieList = hobbieRepository.listHobbieByIdUsuario(id);
             return hobbieList;
     }
