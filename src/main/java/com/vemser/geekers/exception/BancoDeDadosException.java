@@ -1,8 +1,11 @@
 package com.vemser.geekers.exception;
 
-public class BancoDeDadosException extends Exception{
+import java.sql.SQLException;
 
-    public BancoDeDadosException(String message) {
-        super(message);
+public class BancoDeDadosException extends SQLException {
+
+    public BancoDeDadosException(Throwable cause) {
+        super(cause);
     }
+
 }
