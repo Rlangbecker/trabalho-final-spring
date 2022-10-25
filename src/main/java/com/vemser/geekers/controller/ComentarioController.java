@@ -34,9 +34,14 @@ public class ComentarioController {
         return new ResponseEntity<>(criandoComentarioDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id-comentario}/comentario")
+    @GetMapping("/{id-comentario}/comentario/id-usuario")
     public ResponseEntity<ComentarioDTO> listByIdComment(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
         return new ResponseEntity<>(comentarioService.listarComentarioPorUsuario(idComentario), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException {
+        return new ResponseEntity<>(comentarioService.list(), HttpStatus.OK);
     }
 
     @PutMapping("/{id-comentario}")

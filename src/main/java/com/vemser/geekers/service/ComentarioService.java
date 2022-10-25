@@ -30,7 +30,7 @@ public class ComentarioService {
         return comentarioDTO;
     }
 
-    public List<ComentarioDTO> findByUsuario() throws BancoDeDadosException, RegraDeNegocioException {
+    public List<ComentarioDTO> list() throws BancoDeDadosException, RegraDeNegocioException {
         return comentarioRepository.listar()
                 .stream()
                 .map(comentario -> objectMapper.convertValue(comentario, ComentarioDTO.class))

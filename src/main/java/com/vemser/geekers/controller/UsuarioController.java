@@ -13,11 +13,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Validated
 @Slf4j
-@RequestMapping
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -37,9 +38,14 @@ public class UsuarioController {
         return new ResponseEntity<>(criandoUsuarioDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id-usuario}")
-    public ResponseEntity<UsuarioDTO> listUsuarios(@PathVariable("/id-usuario") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        return new ResponseEntity<>(usuarioService.listarUsuarioPorId(id), HttpStatus.OK);
+//    @GetMapping("/{id-usuario}")
+//    public ResponseEntity<UsuarioDTO> listUsuarios(@PathVariable("/id-usuario") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+//        return new ResponseEntity<>(usuarioService.listarUsuarioPorId(id), HttpStatus.OK);
+//    }
+
+    @GetMapping
+    public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException {
+        return new ResponseEntity<>(usuarioService.list(), HttpStatus.OK);
     }
 
     @PutMapping("/{id-usuario}")

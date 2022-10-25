@@ -1,6 +1,5 @@
 package com.vemser.geekers.config;
 
-import com.vemser.geekers.exception.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +11,18 @@ import java.sql.SQLException;
 public class ConexaoBancoDeDados {
 
     @Value("${jdbc-string}")
-    private static String jdbcString;
+    private String jdbcString;
 
     @Value("${jdbc-user}")
-    private static String user;
+    private String user;
 
     @Value("${jdbc-pass}")
-    private static String pass;
+    private String pass;
 
     @Value("${jdbc-schema}")
-    private static String schema;
+    private String schema;
 
-    public static Connection getConnection() throws RegraDeNegocioException, SQLException {
+    public Connection getConnection() throws SQLException {
         //  String url = "jdbc:oracle:thin:@" + SERVER + ":" + PORT + ":" + DATABASE;
         // jdbc:oracle:thin:@localhost:1521:xe
         Connection con = DriverManager.getConnection(jdbcString, user, pass);

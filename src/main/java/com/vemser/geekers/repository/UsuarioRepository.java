@@ -20,7 +20,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Integer getProximoId(Connection connection) throws RegraDeNegocioException, SQLException {
+    public Integer getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_USUARIO.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
@@ -34,10 +34,10 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) throws RegraDeNegocioException, BancoDeDadosException {
+    public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoId = this.getProximoId(con);
             usuario.setIdUsuario(proximoId);
@@ -76,7 +76,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         Connection con = null;
 
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
 
@@ -106,7 +106,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE USUARIO SET ");
@@ -152,7 +152,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
             Statement stmt = con.createStatement();
 
             String sql = "SELECT * FROM USUARIO";
@@ -169,7 +169,9 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
                 usuario.setSexo(res.getString("sexo"));
                 usuarios.add(usuario);
+
             }
+            return usuarios;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
@@ -182,7 +184,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 e.printStackTrace();
             }
         }
-        return usuarios;
     }
 
 
@@ -196,7 +197,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         Usuario usuario = new Usuario();
 
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
             String sql = "SELECT * FROM USUARIO " +
                     " WHERE EMAIL = ? AND SENHA = ?";
 
@@ -234,7 +235,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
 
             String sql = "SELECT * \n" +
@@ -270,7 +271,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
 
             String sql = "SELECT * \n" +
