@@ -1,5 +1,6 @@
 package com.vemser.geekers.dto;
 
+import com.vemser.geekers.entity.Usuario;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -12,5 +13,6 @@ public class DesafioCreateDTO {
     @NotBlank
     @Size(max = 1)
     private String resposta;
+    private Usuario Usuario;
 
 }

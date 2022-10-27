@@ -27,18 +27,25 @@ public class DesafioController {
         this.desafioService = desafioService;
     }
 
-    @PostMapping("/{idUsuario}")// localhost:8080/pessoa
-    public ResponseEntity<DesafioDTO> create(@PathVariable("idUsuario") Integer id,
+    @PostMapping("/{idUser}")// localhost:8080/desafio
+    public ResponseEntity<DesafioDTO> create(@PathVariable("idUser") Integer idUser,
             @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
         log.info("Criando Desafio...");
-        DesafioDTO desafioDTO = desafioService.create(desafio, id);
+        DesafioDTO desafioDTO = desafioService.create(desafio, idUser);
         log.info("Desafio criado!");
         return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
     @GetMapping // localhost:8080/pessoa
     public ResponseEntity<List<DesafioDTO>> list() throws BancoDeDadosException {
-        return new ResponseEntity<>(desafioService.list(), HttpStatus.OK);
+        List<DesafioDTO> list = desafioService.list();
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/{idUser}")
+    public ResponseEntity<List<DesafioDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
+        return new ResponseEntity<>(desafioService.listByUser(idUser), HttpStatus.OK);
     }
     @PutMapping("/{id}") // localhost:8080/pessoa/1000
     public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,
@@ -49,7 +56,7 @@ public class DesafioController {
     @DeleteMapping("/{id}") // localhost:8080/pessoa/10
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
         desafioService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

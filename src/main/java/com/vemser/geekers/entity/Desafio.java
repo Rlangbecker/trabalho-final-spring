@@ -13,20 +13,19 @@ import javax.validation.constraints.Size;
 public class Desafio {
 
     private Integer idDesafio;
-    private Integer idUsuario;
-    @NotBlank
+    private Usuario Usuario;
     private String pergunta;
-    @NotBlank
-    @Size(max = 1)
     private String resposta;
 
     public Desafio() {
 
     }
+
     @Override
     public String toString() {
         return "Desafio{" +
                 "idDesafio=" + idDesafio +
+                ", Usuario=" + Usuario +
                 ", pergunta='" + pergunta + '\'' +
                 ", resposta='" + resposta + '\'' +
                 '}';
