@@ -73,6 +73,9 @@ public class HobbieController {
         //VERIFICAR SE VAI FICAR POR IDHOBBIE OU IDUSUARIO
         return hobbieService.editar(idHobbie, hobbieAtualizar);
     }
+
+
+
     @Operation(summary = "Deletar hobbie", description = "Deleta o hobbie do usuario passado por ID(Hobbie)")
     @ApiResponses(
             value = {

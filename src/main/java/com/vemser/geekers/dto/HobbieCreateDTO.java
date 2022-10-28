@@ -7,7 +7,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class HobbieCreateDTO {
-
+    
+    @NotBlank
+    private Integer idUsuario;
     @NotBlank
     private String descricao;
     @NotBlank
