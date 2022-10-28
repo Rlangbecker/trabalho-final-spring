@@ -19,10 +19,4 @@ public class Hobbie {
 
     private String tipoHobbie;
 
-
-    @Override
-    public String toString() {
-        return "ID_Hobbies : " + idHobbies + "\n"
-                + " Descricao : " + descricao;
-    }
 }

@@ -36,9 +36,8 @@ public class HobbieController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idHobbie
-    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario
-            , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException {
+    @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idUsuario
+    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario            , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException, BancoDeDadosException {
         HobbieDTO hDTO= hobbieService.create(idUsuario,hobbieDTO);
         return new ResponseEntity<>(hDTO, HttpStatus.OK) ;
     }

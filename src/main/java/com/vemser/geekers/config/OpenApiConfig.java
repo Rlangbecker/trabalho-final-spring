@@ -1,5 +1,6 @@
 package com.vemser.geekers.config;
 
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -16,8 +17,8 @@ public class OpenApiConfig {
     public OpenAPI springShopOpenAPI() {
         String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .info(new Info().title("Pessoa API")
-                        .description("Pessoa API documentação")
+                .info(new Info().title("Geekers API")
+                        .description("Geekers API documentação")
                         .version("v1.0.0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
