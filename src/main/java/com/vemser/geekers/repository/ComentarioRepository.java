@@ -73,7 +73,6 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
             }
         }
     }
-
     @Override
     public boolean editar(Integer id,Comentario comentario) throws BancoDeDadosException, RegraDeNegocioException {
         Connection con = null;

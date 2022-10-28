@@ -1,8 +1,12 @@
 package com.vemser.geekers.entity;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDate;
 
@@ -21,3 +25,6 @@ public class Usuario {
     private boolean logado;
 
 }
+
+
+

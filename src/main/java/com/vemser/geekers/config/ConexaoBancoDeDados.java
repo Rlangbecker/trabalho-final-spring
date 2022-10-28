@@ -1,5 +1,6 @@
 package com.vemser.geekers.config;
 
+import com.vemser.geekers.exception.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
