@@ -30,7 +30,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/{usuario}")
-    public ResponseEntity<UsuarioDTO> create(@PathVariable("/usuario") @Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Iniciando cadastro de usuário . . .");
         UsuarioDTO criandoUsuarioDto = usuarioService.create(usuarioDto);
         log.info("Usuário cadastrado.");
@@ -48,8 +48,19 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.list(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id-usuario}")
+    public ResponseEntity<UsuarioDTO> listUsuarioPorId(@PathVariable(name = "id-usuario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+        return new ResponseEntity<>(usuarioService.listarUsuarioPorId(idUsuario), HttpStatus.OK);
+    }
+
+    @GetMapping("/nome")
+    public ResponseEntity<UsuarioDTO> ListarPorNome(@RequestParam("nome") String nome) throws BancoDeDadosException, RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.listarUsuarioPorNome(nome), HttpStatus.OK);
+    }
+
     @PutMapping("/{id-usuario}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable("id-usuario") Integer idUsuario, @Valid @RequestBody UsuarioDTO atualizarUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<UsuarioDTO> update(@PathVariable("id-usuario") Integer idUsuario,
+                                             @Valid @RequestBody UsuarioDTO atualizarUsuario) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Atualizando perfil do usuário, aguarde . . .");
         UsuarioDTO usuarioAtualizado = usuarioService.editarUsuario(idUsuario, atualizarUsuario);
         log.info("Perfil de usuário foi atualizado.");
@@ -57,7 +68,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioAtualizado, HttpStatus.OK);
     }
 
-    @DeleteMapping("/id-usuario")
+    @DeleteMapping("/{id-usuario}")
     public ResponseEntity<Void> delete(@PathVariable("id-usuario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Aguarde, removendo usuário . . .");
         usuarioService.removerUsuario(idUsuario);

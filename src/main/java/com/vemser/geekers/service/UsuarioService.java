@@ -49,26 +49,42 @@ public class UsuarioService {
         usuarioRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
         usuarioRecuperado.setSexo(usuarioAtualizar.getSexo());
 
-        return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
-    }
+        boolean conseguiuEditar = usuarioRepository.editar(id, usuarioRecuperado);
 
-    public UsuarioDTO listarUsuarioPorId(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
-        Usuario usuarioRecuperado = (Usuario) usuarioRepository.listar()
-                .stream()
-                .map(usuario -> usuario.getIdUsuario().equals(idUsuario))
-                .toList();
-        Usuario usuarioEntity = objectMapper.convertValue(usuarioRecuperado, Usuario.class);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-
-        return usuarioDTO;
+        return usuarioAtualizar;
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         usuarioRepository.remover(id);
     }
 
-    public Usuario findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+    public UsuarioDTO listarUsuarioPorId(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
         Usuario usuarioRecuperado = usuarioRepository.listar()
+                .stream()
+                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado."));
+
+        Usuario usuarioEntity = objectMapper.convertValue(usuarioRecuperado, Usuario.class);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+
+        return usuarioDTO;
+    }
+
+    public UsuarioDTO listarUsuarioPorNome(String nomeUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+        Usuario usuarioRecuperado = usuarioRepository.listar()
+                .stream()
+                .filter(usuario -> usuario.getNome().equalsIgnoreCase(nomeUsuario))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado pelo nome"));
+
+        return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
+    }
+
+
+
+    public Usuario findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
+        Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(id)
                 .stream()
                 .filter(usuario -> usuario.getIdUsuario().equals(id))
                 .findFirst()

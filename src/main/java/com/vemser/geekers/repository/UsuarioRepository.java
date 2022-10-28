@@ -72,24 +72,32 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException, RegraDeNegocioException {
+    public List<Usuario> listar() throws BancoDeDadosException, RegraDeNegocioException {
+        List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
-
         try {
             con = conexaoBancoDeDados.getConnection();
+            Statement stmt = con.createStatement();
 
-            String sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
+            String sql = "SELECT * FROM USUARIO";
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet res = stmt.executeQuery(sql);
 
-            stmt.setInt(1, id);
+            while (res.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(res.getInt("id_usuario"));
+                usuario.setNome(res.getString("nome"));
+                usuario.setEmail(res.getString("email"));
+                usuario.setTelefone(res.getString("telefone"));
+                usuario.setSenha(res.getString("senha"));
+                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+                usuario.setSexo(res.getString("sexo"));
+                usuarios.add(usuario);
 
-            int res = stmt.executeUpdate();
-            System.out.println("removerUsuarioPorId.res = " + res);
-
-            return res > 0;
-
+            }
+            return usuarios;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -148,32 +156,24 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
+    public boolean remover(Integer id) throws BancoDeDadosException, RegraDeNegocioException {
         Connection con = null;
+
         try {
             con = conexaoBancoDeDados.getConnection();
-            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM USUARIO";
+            String sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
 
-            ResultSet res = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
 
-            while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setTelefone(res.getString("telefone"));
-                usuario.setSenha(res.getString("senha"));
-                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                usuario.setSexo(res.getString("sexo"));
-                usuarios.add(usuario);
+            stmt.setInt(1, id);
 
-            }
-            return usuarios;
+            int res = stmt.executeUpdate();
+            System.out.println("removerUsuarioPorId.res = " + res);
+
+            return res > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -187,51 +187,87 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
 
-    public boolean logar(Usuario usuario) {
-        usuario.setLogado(true);
-        return true;
-    }
+//    public boolean logar(Usuario usuario) {
+//        usuario.setLogado(true);
+//        return true;
+//    }
 
-    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException, RegraDeNegocioException {
-        Connection con = null;
-        Usuario usuario = new Usuario();
+//    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException, RegraDeNegocioException {
+//        Connection con = null;
+//        Usuario usuario = new Usuario();
+//
+//        try {
+//            con = conexaoBancoDeDados.getConnection();
+//            String sql = "SELECT * FROM USUARIO " +
+//                    " WHERE EMAIL = ? AND SENHA = ?";
+//
+//            PreparedStatement stmt = con.prepareStatement(sql);
+//            stmt.setString(1, usuarioLogin.getEmail());
+//            stmt.setString(2, usuarioLogin.getSenha());
+//
+//            ResultSet res = stmt.executeQuery();
+//
+//            res.next();
+//            usuario.setIdUsuario(res.getInt("id_usuario"));
+//            usuario.setNome(res.getString("nome"));
+//            usuario.setEmail(res.getString("email"));
+//            usuario.setSenha(res.getString("senha"));
+//            usuario.setTelefone(res.getString("telefone"));
+//            usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
+//            usuario.setSexo(res.getString("sexo"));
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            try {
+//                if (con != null) {
+//                    con.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return usuario;
+//    }
 
-        try {
-            con = conexaoBancoDeDados.getConnection();
-            String sql = "SELECT * FROM USUARIO " +
-                    " WHERE EMAIL = ? AND SENHA = ?";
+//    public List<Usuario> listarUsuariosRandom(Integer quantidadeUsuarios) throws BancoDeDadosException, RegraDeNegocioException {
+//
+//        List<Usuario> usuarios = new ArrayList<>();
+//        Connection con = null;
+//        try {
+//            con = conexaoBancoDeDados.getConnection();
+//
+//
+//            String sql = "SELECT * \n" +
+//                    "FROM (SELECT * FROM USUARIO u ORDER BY dbms_random.value) \n" +
+//                    " WHERE rownum <= ?\n";
+//
+//            // Executa-se a consulta
+//            PreparedStatement stmt = con.prepareStatement(sql);
+//
+//            stmt.setInt(1, quantidadeUsuarios);
+//
+//            ResultSet res = stmt.executeQuery();
+//
+//            while (res.next()) {
+//                Usuario usuario = getUsuarioFromResultSet(res);
+//                usuarios.add(usuario);
+//            }
+//            return usuarios;
+//        } catch (SQLException e) {
+//            throw new BancoDeDadosException(e.getCause());
+//        } finally {
+//            try {
+//                if (con != null) {
+//                    con.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, usuarioLogin.getEmail());
-            stmt.setString(2, usuarioLogin.getSenha());
-
-            ResultSet res = stmt.executeQuery();
-
-            res.next();
-            usuario.setIdUsuario(res.getInt("id_usuario"));
-            usuario.setNome(res.getString("nome"));
-            usuario.setEmail(res.getString("email"));
-            usuario.setSenha(res.getString("senha"));
-            usuario.setTelefone(res.getString("telefone"));
-            usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-            usuario.setSexo(res.getString("sexo"));
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return usuario;
-    }
-
-    public List<Usuario> listarPorUsuario(Integer quantidadeUsuarios) throws BancoDeDadosException, RegraDeNegocioException {
-
+    public List<Usuario> listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
@@ -239,13 +275,13 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
 
             String sql = "SELECT * \n" +
-                    "FROM (SELECT * FROM USUARIO u ORDER BY dbms_random.value) \n" +
-                    " WHERE rownum <= ?\n";
+                    "FROM USUARIO u \n" +
+                    " WHERE u.ID_USUARIO = ?\n";
 
             // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, quantidadeUsuarios);
+            stmt.setInt(1, idUsuario);
 
             ResultSet res = stmt.executeQuery();
 
@@ -267,7 +303,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-    public List<Usuario> listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public List<Usuario> listarUsuarioPorNome(String nome) throws BancoDeDadosException, RegraDeNegocioException {
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
         try {
@@ -276,12 +312,12 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             String sql = "SELECT * \n" +
                     "FROM USUARIO u \n" +
-                    " WHERE u.ID_USUARIO = ?\n";
+                    " WHERE u.NOME = ?\n";
 
             // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setInt(1, idUsuario);
+            stmt.setString(1, nome);
 
             ResultSet res = stmt.executeQuery();
 
