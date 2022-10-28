@@ -59,37 +59,35 @@ public class UsuarioService {
     }
 
     public UsuarioDTO listarUsuarioPorId(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
-        Usuario usuarioRecuperado = usuarioRepository.listar()
-                .stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(idUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado."));
+        try {
+            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(idUsuario);
+            UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
+            return usuarioDTO;
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Usuário não foi encontrado pelo ID.");
+        }
 
-        Usuario usuarioEntity = objectMapper.convertValue(usuarioRecuperado, Usuario.class);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-
-        return usuarioDTO;
     }
 
     public UsuarioDTO listarUsuarioPorNome(String nomeUsuario) throws RegraDeNegocioException, BancoDeDadosException {
-        Usuario usuarioRecuperado = usuarioRepository.listar()
-                .stream()
-                .filter(usuario -> usuario.getNome().equalsIgnoreCase(nomeUsuario))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado pelo nome"));
+        try {
+            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorNome(nomeUsuario);
+            return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Usuário não foi encontrado pelo nome.");
+        }
 
-        return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
     }
 
 
 
     public Usuario findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(id)
-                .stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Usuário não cadastrado."));
+        try {
+            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(id);
+            return usuarioRecuperado;
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException("Usuário não cadastrado.");
+        }
 
-        return usuarioRecuperado;
     }
 }

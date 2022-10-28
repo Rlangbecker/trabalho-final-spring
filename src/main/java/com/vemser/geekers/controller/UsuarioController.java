@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/usuario")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerInterface {
 
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;

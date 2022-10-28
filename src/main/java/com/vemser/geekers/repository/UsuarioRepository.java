@@ -267,8 +267,8 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 //        }
 //    }
 
-    public List<Usuario> listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
+    public Usuario listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+        Usuario usuario = new Usuario();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -286,10 +286,10 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-                Usuario usuario = getUsuarioFromResultSet(res);
-                usuarios.add(usuario);
+                usuario = getUsuarioFromResultSet(res);
+//                usuarios.add(usuario);
             }
-            return usuarios;
+            return usuario;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -303,8 +303,8 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-    public List<Usuario> listarUsuarioPorNome(String nome) throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
+    public Usuario listarUsuarioPorNome(String nome) throws BancoDeDadosException, RegraDeNegocioException {
+        Usuario usuario = new Usuario();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -312,20 +312,19 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 
             String sql = "SELECT * \n" +
                     "FROM USUARIO u \n" +
-                    " WHERE u.NOME = ?\n";
+                    " WHERE UPPER(u.NOME) LIKE ?\n";
 
             // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
-            stmt.setString(1, nome);
+            stmt.setString(1, "%" + nome + "%");
 
             ResultSet res = stmt.executeQuery();
 
             while (res.next()) {
-                Usuario usuario = getUsuarioFromResultSet(res);
-                usuarios.add(usuario);
+                usuario = getUsuarioFromResultSet(res);
             }
-            return usuarios;
+            return usuario;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
