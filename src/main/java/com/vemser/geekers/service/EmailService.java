@@ -1,4 +1,6 @@
 package com.vemser.geekers.service;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.enums.TipoEmail;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    private static final String TO = "rafael.lazzari@dbccompany.com.br";
+    private static final String TO = "suporte@geekers.com";
 
     private final JavaMailSender emailSender;
 
@@ -58,27 +60,50 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void sendEmail() {
+    public void sendEmail(UsuarioDTO usuario,UsuarioDTO usuario2, TipoEmail tipoEmail) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
+            if(tipoEmail==TipoEmail.CADASTRO){
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+                mimeMessageHelper.setFrom(from);
+                mimeMessageHelper.setTo(TO);
+                mimeMessageHelper.setSubject("subject");
+                mimeMessageHelper.setText(geContentFromTemplate(usuario,null,tipoEmail), true);
 
-            mimeMessageHelper.setFrom(from);
-            mimeMessageHelper.setTo(TO);
-            mimeMessageHelper.setSubject("subject");
-            mimeMessageHelper.setText(geContentFromTemplate(), true);
+                emailSender.send(mimeMessageHelper.getMimeMessage());
+            } else {
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            emailSender.send(mimeMessageHelper.getMimeMessage());
+                mimeMessageHelper.setFrom(from);
+                mimeMessageHelper.setTo(TO);
+                mimeMessageHelper.setSubject("subject");
+                mimeMessageHelper.setText(geContentFromTemplate(usuario,usuario2,tipoEmail), true);
+
+                emailSender.send(mimeMessageHelper.getMimeMessage());
+            }
+
+
         } catch (MessagingException | IOException | TemplateException e) {
             e.printStackTrace();
         }
     }
 
-    public String geContentFromTemplate() throws IOException, TemplateException {
+    public String geContentFromTemplate(UsuarioDTO usuario,UsuarioDTO usuario2, TipoEmail tipoEmail) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", "MeuNome");
-        Template template = fmConfiguration.getTemplate("email-template.ftl");
+        dados.put("nome", usuario.getNome());
+        dados.put("email", from);
+
+        if (tipoEmail==TipoEmail.CADASTRO){
+            dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
+            dados.put("msg2", " Seu cadastro foi realizado com sucesso, seu identificador é " + usuario.getIdUsuario());
+        }else{
+            dados.put("nome", usuario.getNome());
+            dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
+            dados.put("msg2", "Você deu match com " + usuario2.getNome().toUpperCase() + " 8)");
+        }
+
+        Template template = fmConfiguration.getTemplate("email-template-universal.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
         return html;
     }

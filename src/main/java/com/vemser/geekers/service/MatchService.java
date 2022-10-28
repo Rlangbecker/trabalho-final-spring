@@ -3,6 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.Match;
+import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.MatchRepository;
@@ -19,6 +20,7 @@ public class MatchService {
     private final DesafioService desafioService;
 
     private final UsuarioService usuarioService;
+    private final EmailService emailService;
 
     public MatchDTO create(MatchCreateDTO matchCreateDTO) {
         MatchDTO matchDTO;
@@ -28,7 +30,10 @@ public class MatchService {
             usuarioService.findById(matchEntity.getUsuarioMain());
             Match matchCriado = matchRepository.adicionarMatch(matchEntity);
             matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
+
             return matchDTO;
+
+
         } catch (BancoDeDadosException e) {
             throw new RuntimeException(e);
         } catch (RegraDeNegocioException e) {

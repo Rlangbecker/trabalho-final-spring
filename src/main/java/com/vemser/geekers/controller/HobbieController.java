@@ -37,7 +37,7 @@ public class HobbieController {
             }
     )
     @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario            , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException, BancoDeDadosException {
         HobbieDTO hDTO= hobbieService.create(idUsuario,hobbieDTO);
         return new ResponseEntity<>(hDTO, HttpStatus.OK) ;
     }
@@ -67,10 +67,11 @@ public class HobbieController {
             }
     )
     @PutMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public Hobbie update(@PathVariable("idHobbie") Integer idHobbie,
+    public ResponseEntity<HobbieDTO> update(@PathVariable("idHobbie") Integer idHobbie,
                          @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
+        HobbieDTO hobbieDTO = hobbieService.editar(idHobbie,hobbieAtualizar);
         //VERIFICAR SE VAI FICAR POR IDHOBBIE OU IDUSUARIO
-        return hobbieService.editar(idHobbie, hobbieAtualizar);
+        return new ResponseEntity<>(hobbieDTO, HttpStatus.OK);
     }
 
 
