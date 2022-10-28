@@ -1,6 +1,7 @@
 package com.vemser.geekers.repository;
 
 import com.vemser.geekers.config.ConexaoBancoDeDados;
+import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.Comentario;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -224,10 +225,20 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario>{
         comentario.setIdComentario(res.getInt("id_comentario"));
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(res.getInt("id_usuario"));
-//        Usuario usuarioComentario = usuarioService.listarUsuarioPorId(usuario.getIdUsuario());
-//        usuario.setNome(usuarioComentario.getNome());
+
+
+
+        UsuarioDTO usuarioComentario = usuarioService.listarUsuarioPorId(usuario.getIdUsuario());
+        usuario.setNome(usuarioComentario.getNome());
+        usuario.setEmail(usuarioComentario.getEmail());
+        usuario.setTelefone(usuarioComentario.getTelefone());
+        usuario.setSenha(usuarioComentario.getSenha());
+        usuario.setDataNascimento(usuarioComentario.getDataNascimento());
+        usuario.setSexo(usuarioComentario.getSexo());
+
         comentario.setUsuario(usuario);
         comentario.setComentario(res.getString("comentario"));
+
         return comentario;
     }
 

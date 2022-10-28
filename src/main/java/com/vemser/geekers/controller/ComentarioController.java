@@ -18,7 +18,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/comentario")
-public class ComentarioController {
+public class ComentarioController implements ComentarioControllerInterface {
 
     private final ComentarioService comentarioService;
 
@@ -51,6 +51,12 @@ public class ComentarioController {
         ComentarioDTO comentarioAtualizado = comentarioService.editarComentario(idComentario, atualizarComantario);
         log.info("Comentário adicionado com sucesso.");
         return new ResponseEntity<>(comentarioAtualizado, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> delete(Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+        comentarioService.delete(idUsuario);
+        return ResponseEntity.noContent().build();
     }
 
 }

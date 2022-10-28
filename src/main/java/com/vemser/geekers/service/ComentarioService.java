@@ -7,21 +7,18 @@ import com.vemser.geekers.entity.Comentario;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.ComentarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ComentarioService {
 
     private final ComentarioRepository comentarioRepository;
     private final ObjectMapper objectMapper;
-
-    public ComentarioService(ComentarioRepository comentarioRepository, ObjectMapper objectMapper) {
-        this.comentarioRepository = comentarioRepository;
-        this.objectMapper = objectMapper;
-    }
 
     public ComentarioDTO create(@Valid ComentarioCreateDTO comentarioDto) throws RegraDeNegocioException, BancoDeDadosException {
         Comentario comentarioEntity = objectMapper.convertValue(comentarioDto, Comentario.class);

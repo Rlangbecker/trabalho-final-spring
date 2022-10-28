@@ -57,19 +57,30 @@ public interface UsuarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "A pesquisa gerou uma exceção")
             }
     )
-    @GetMapping("/nome")
+    @GetMapping("/by-nome")
     public ResponseEntity<UsuarioDTO> ListarPorNome(@RequestParam("nome") String nome) throws BancoDeDadosException, RegraDeNegocioException;
 
-    @Operation(summary = "Lista o usuário por nome", description = "Realiza a pesquisa de usuário no banco pelo seu nome")
+    @Operation(summary = "Atualiza os dados do usuário por ID", description = "Realiza a atualização dos dados do usuário no banco pelo seu ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Pesquisa de usuário por nome realizada com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para pesquisar neste recurso"),
-                    @ApiResponse(responseCode = "500", description = "A pesquisa gerou uma exceção")
+                    @ApiResponse(responseCode = "200", description = "Atualiza de dados de usuário por id realizada com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para atualizar os dados"),
+                    @ApiResponse(responseCode = "500", description = "A atualização gerou uma exceção")
             }
     )
     @PutMapping("/{id-usuario}")
     public ResponseEntity<UsuarioDTO> update(@PathVariable("id-usuario") Integer idUsuario,
                                              @Valid @RequestBody UsuarioDTO atualizarUsuario) throws RegraDeNegocioException, BancoDeDadosException;
+
+    @Operation(summary = "Remove os dados do usuário por ID", description = "Realiza a remoção dos dados do usuário no banco pelo seu ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Remoção de dados de usuário por id realizada com sucesso"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para remover os dados"),
+                    @ApiResponse(responseCode = "500", description = "A remoção gerou uma exceção")
+            }
+    )
+    @DeleteMapping("/{id-usuario}")
+    public ResponseEntity<Void> delete(@PathVariable("id-usuario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException;
 
 }

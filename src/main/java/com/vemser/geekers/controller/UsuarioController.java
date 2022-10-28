@@ -53,7 +53,7 @@ public class UsuarioController implements UsuarioControllerInterface {
         return new ResponseEntity<>(usuarioService.listarUsuarioPorId(idUsuario), HttpStatus.OK);
     }
 
-    @GetMapping("/nome")
+    @GetMapping("/by-nome")
     public ResponseEntity<UsuarioDTO> ListarPorNome(@RequestParam("nome") String nome) throws BancoDeDadosException, RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.listarUsuarioPorNome(nome), HttpStatus.OK);
     }
