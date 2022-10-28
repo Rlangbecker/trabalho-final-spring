@@ -36,7 +36,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public Hobbie create(Hobbie hobbie) throws RegraDeNegocioException {
+    public Hobbie adicionar(Hobbie hobbie) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -91,7 +91,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getMessage());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
