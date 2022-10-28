@@ -23,61 +23,79 @@ public class DesafioService {
 
     private final UsuarioService usuarioService;
 
-    public DesafioDTO create(DesafioCreateDTO desafio, Integer id) {
+    public DesafioDTO create(DesafioCreateDTO desafio, Integer id) throws RegraDeNegocioException {
         DesafioDTO desafioDTO;
         try {
             Desafio desafioEntity = objectMapper.convertValue(desafio, Desafio.class);
             Usuario usuario = usuarioService.findById(id);
-            Desafio desafioCriado = desafioRepository.adicionarDesafio(desafioEntity, usuario);
-            desafioDTO = objectMapper.convertValue(desafioCriado, DesafioDTO.class);
-            return desafioDTO;
+            if (listByUser(id) == null){
+                Desafio desafioCriado = desafioRepository.adicionarDesafio(desafioEntity, usuario);
+                desafioDTO = objectMapper.convertValue(desafioCriado, DesafioDTO.class);
+                desafioDTO.setUsuario(usuario);
+                return desafioDTO;
+            }
+            else {
+                throw  new RegraDeNegocioException("Esse usuario já possui um desafio!");
+            }
         } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
+            throw new RegraDeNegocioException("Erro ao criar!");
         }
     }
 
-    public List<DesafioDTO> list() throws BancoDeDadosException {
-        return desafioRepository.listar()
-                .stream()
-                .map(desafio -> objectMapper.convertValue(desafio, DesafioDTO.class))
-                .toList();
-    }
+//    public List<DesafioDTO> list() throws Re {
+//        try {
+//            Desafio desafioEntity = objectMapper.convertValue(desafioRepository.listar(), Desafio.class);
+//            return objectMapper.convertValue(desafioEntity, DesafioDTO.class);
+//        }
+//        catch (BancoDeDadosException e) {
+//            throw new RegraDeNegocioException("Erro ao listar usuario!");
+//        }
+//    }
 
-    public List<DesafioDTO> listByUser(Integer id) throws BancoDeDadosException {
-        return desafioRepository.listarPorUsuario(id)
-                .stream()
-                .map(desafio -> objectMapper.convertValue(desafio, DesafioDTO.class))
-                .toList();
-
-    }
 
     //Erro no update
     public DesafioDTO update(Integer id,
-                           DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
-        Desafio desafioEntity = objectMapper.convertValue(desafioAtualizar, Desafio.class);
-        usuarioService.findById(desafioEntity.getUsuario().getIdUsuario());
-        Desafio desafio = findById(id);
-        desafio.setIdDesafio(desafioEntity.getIdDesafio());
-        desafio.setResposta(desafioEntity.getResposta());
-        desafio.setPergunta(desafioEntity.getPergunta());
-        desafio.setUsuario(desafioEntity.getUsuario());
-        DesafioDTO desafioDTO = objectMapper.convertValue(desafioRepository.editar(id,desafio), DesafioDTO.class);
-        return desafioDTO;
+                           DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException {
+        try{
+            Desafio desafioEntity = objectMapper.convertValue(desafioAtualizar, Desafio.class);
+            Usuario usuario = findById(id).getUsuario();
+            desafioEntity.setUsuario(usuario);
+            return objectMapper.convertValue(desafioRepository.editar(id,desafioEntity), DesafioDTO.class);
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao atualizar!");
+        }
     }
 
-    public Desafio findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        Desafio desafioEncontrado = desafioRepository.listar().stream()
-                .filter(desafio -> desafio.getIdDesafio().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RegraDeNegocioException("Desafio não encontrado"));
-        return desafioEncontrado;
+    public DesafioDTO listByUser(Integer id) throws RegraDeNegocioException {
+        try {
+            Desafio desafioEntity = objectMapper.convertValue(desafioRepository.listarByUser(id), Desafio.class);
+            return objectMapper.convertValue(desafioEntity, DesafioDTO.class);
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao listar usuario!");
+        }
+
     }
 
-    public void delete(Integer id) throws Exception {
-        Desafio desafioRetornado = findById(id);
-        desafioRepository.remover(desafioRetornado.getIdDesafio());
+    public DesafioDTO findById(Integer id) throws RegraDeNegocioException {
+        try {
+            Desafio desafioEntity = objectMapper.convertValue(desafioRepository.listarById(id), Desafio.class);
+            return objectMapper.convertValue(desafioEntity, DesafioDTO.class);
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao deletar o desafio!");
+        }
+    }
+
+    public void delete(Integer id) throws RegraDeNegocioException {
+        try {
+            Desafio desafioRetornado = objectMapper.convertValue(desafioRepository.listarById(id), Desafio.class);
+            desafioRepository.remover(desafioRetornado.getIdDesafio());
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao criar!");
+        }
     }
 
 }

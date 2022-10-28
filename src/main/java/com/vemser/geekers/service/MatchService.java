@@ -73,8 +73,8 @@ public class MatchService {
     }
 
     public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws BancoDeDadosException, RegraDeNegocioException {
-        List<DesafioDTO> desafio = desafioService.listByUser(matchCreateDTO.getUsuario());
-        if(resposta == desafio.get(0).getResposta()){
+        DesafioDTO desafio = desafioService.listByUser(matchCreateDTO.getUsuario());
+        if(resposta == desafio.getResposta()){
             Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
             usuarioService.findById(matchEntity.getUsuario());
             usuarioService.findById(matchEntity.getUsuarioMain());
