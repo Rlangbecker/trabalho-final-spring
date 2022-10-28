@@ -57,8 +57,8 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
 
             stmt.setInt(1, desafio.getIdDesafio());
             stmt.setString(2, desafio.getPergunta());
-            stmt.setString(3, desafio.getResposta()); // Resposta 0/1
-            stmt.setInt(4, usuario.getIdUsuario());
+            stmt.setInt(3, desafio.getResposta()); // Resposta 0/1
+            stmt.setInt(4, usuario.getIdUsuario()); //Resolver o bug de nao aparecer o usuario
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarDesafio.res=" + res);
@@ -135,7 +135,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
                 stmt.setString(index++, desafio.getPergunta());
             }
             if (desafio.getResposta() != null) {
-                stmt.setString(index++, desafio.getResposta());
+                stmt.setInt(index++, desafio.getResposta());
             }
 
             stmt.setInt(index++, id);
@@ -207,7 +207,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
 //        usuario.setTelefone(userAlterado.getTelefone());
         desafio.setUsuario(usuario);
         desafio.setPergunta(res.getString("pergunta"));
-        desafio.setResposta(res.getString("resposta"));
+        desafio.setResposta(res.getInt("resposta"));
         return desafio;
     }
 

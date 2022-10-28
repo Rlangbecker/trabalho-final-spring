@@ -2,6 +2,7 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
+import com.vemser.geekers.dto.DesafioUsuarioDTO;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;

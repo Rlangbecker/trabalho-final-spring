@@ -15,19 +15,9 @@ public class Desafio {
     private Integer idDesafio;
     private Usuario Usuario;
     private String pergunta;
-    private String resposta;
+    private Integer resposta;
 
     public Desafio() {
 
-    }
-
-    @Override
-    public String toString() {
-        return "Desafio{" +
-                "idDesafio=" + idDesafio +
-                ", Usuario=" + Usuario +
-                ", pergunta='" + pergunta + '\'' +
-                ", resposta='" + resposta + '\'' +
-                '}';
     }
 }

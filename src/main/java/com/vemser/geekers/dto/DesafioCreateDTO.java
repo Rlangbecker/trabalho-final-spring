@@ -10,9 +10,8 @@ import javax.validation.constraints.Size;
 public class DesafioCreateDTO {
     @NotBlank
     private String pergunta;
-    @NotBlank
-    @Size(max = 1)
-    private String resposta;
+
+    private Integer resposta;
     private Usuario Usuario;
 
 }

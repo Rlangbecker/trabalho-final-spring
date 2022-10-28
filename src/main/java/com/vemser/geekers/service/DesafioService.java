@@ -3,6 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
+import com.vemser.geekers.dto.DesafioUsuarioDTO;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -51,6 +52,7 @@ public class DesafioService {
                 .toList();
 
     }
+
     //Erro no update
     public DesafioDTO update(Integer id,
                            DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException, BancoDeDadosException {
