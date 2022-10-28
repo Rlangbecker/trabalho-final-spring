@@ -3,6 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.Match;
+import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -26,10 +27,19 @@ public class MatchService {
         MatchDTO matchDTO;
         try {
             Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
-            usuarioService.findById(matchEntity.getUsuario());
-            usuarioService.findById(matchEntity.getUsuarioMain());
+            Usuario usuario1 = usuarioService.findById(matchEntity.getUsuario());
+            Usuario usuario2 = usuarioService.findById(matchEntity.getUsuarioMain());
             Match matchCriado = matchRepository.adicionarMatch(matchEntity);
             matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
+
+            UsuarioDTO user1Dto = objectMapper.convertValue(usuario1,UsuarioDTO.class);
+            UsuarioDTO user2Dto = objectMapper.convertValue(usuario2,UsuarioDTO.class);
+
+            try {
+                emailService.sendEmail(user1Dto, user2Dto, TipoEmail.MATCH);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return matchDTO;
 
@@ -58,14 +68,14 @@ public class MatchService {
 
     //Erro no update
     public MatchDTO update(Integer id,
-                             MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException, BancoDeDadosException {
+                           MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException, BancoDeDadosException {
         Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
         usuarioService.findById(matchEntity.getUsuario());
         Match match = findById(id);
         match.setIdMatch(matchEntity.getIdMatch());
         match.setUsuario(matchEntity.getUsuario());
         match.setUsuarioMain(matchEntity.getUsuarioMain());
-        MatchDTO matchDTO = objectMapper.convertValue(matchRepository.editar(id,match), MatchDTO.class);
+        MatchDTO matchDTO = objectMapper.convertValue(matchRepository.editar(id, match), MatchDTO.class);
         return matchDTO;
     }
 
@@ -79,15 +89,14 @@ public class MatchService {
 
     public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws BancoDeDadosException, RegraDeNegocioException {
         List<DesafioDTO> desafio = desafioService.listByUser(matchCreateDTO.getUsuario());
-        if(resposta == desafio.get(0).getResposta()){
+        if (resposta == desafio.get(0).getResposta()) {
             Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
             usuarioService.findById(matchEntity.getUsuario());
             usuarioService.findById(matchEntity.getUsuarioMain());
             Match matchCriado = matchRepository.adicionarMatch(matchEntity);
             MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
             return matchDTO;
-        }
-        else {
+        } else {
             throw new RegraDeNegocioException("Resposta errada!");
         }
     }

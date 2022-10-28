@@ -28,7 +28,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    private static final String TO = "suporte@geekers.com";
+    private static final String TO = "ricardo.langbecker@dbccompany.com.br";
 
     private final JavaMailSender emailSender;
 
@@ -67,8 +67,8 @@ public class EmailService {
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
                 mimeMessageHelper.setFrom(from);
-                mimeMessageHelper.setTo(TO);
-                mimeMessageHelper.setSubject("subject");
+                mimeMessageHelper.setTo(usuario.getEmail());
+                mimeMessageHelper.setSubject("Novo Cadastro");
                 mimeMessageHelper.setText(geContentFromTemplate(usuario,null,tipoEmail), true);
 
                 emailSender.send(mimeMessageHelper.getMimeMessage());
@@ -76,8 +76,8 @@ public class EmailService {
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
                 mimeMessageHelper.setFrom(from);
-                mimeMessageHelper.setTo(TO);
-                mimeMessageHelper.setSubject("subject");
+                mimeMessageHelper.setBcc(usuario.getEmail()+","+usuario2.getEmail());
+                mimeMessageHelper.setSubject("Novo Match");
                 mimeMessageHelper.setText(geContentFromTemplate(usuario,usuario2,tipoEmail), true);
 
                 emailSender.send(mimeMessageHelper.getMimeMessage());
