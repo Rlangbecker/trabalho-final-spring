@@ -1,5 +1,6 @@
 package com.vemser.geekers.config;
 
+import com.vemser.geekers.exception.RegraDeNegocioException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class ConexaoBancoDeDados {
     @Value("${jdbc-schema}")
     private String schema;
 
-    public  Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         //  String url = "jdbc:oracle:thin:@" + SERVER + ":" + PORT + ":" + DATABASE;
         // jdbc:oracle:thin:@localhost:1521:xe
         Connection con = DriverManager.getConnection(jdbcString, user, pass);
@@ -32,3 +33,4 @@ public class ConexaoBancoDeDados {
         return con;
     }
 }
+

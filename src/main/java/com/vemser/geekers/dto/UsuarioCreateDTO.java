@@ -1,21 +1,16 @@
-package com.vemser.geekers.entity;
+package com.vemser.geekers.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Usuario {
+public class UsuarioCreateDTO {
 
-    private Integer idUsuario;
     private String nome;
     private String email;
     private String telefone;
@@ -25,6 +20,3 @@ public class Usuario {
     private boolean logado;
 
 }
-
-
-
