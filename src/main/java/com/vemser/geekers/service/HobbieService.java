@@ -29,9 +29,9 @@ public class HobbieService {
 
     //verificar se usuario existe
 
-        hobbieRepository.create(hobbieEntity);
+        hobbieRepository.adicionar(hobbieEntity);
 
-        HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.create(hobbieEntity), HobbieDTO.class);
+        HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.adicionar(hobbieEntity), HobbieDTO.class);
         return hDTO;
     }
 
