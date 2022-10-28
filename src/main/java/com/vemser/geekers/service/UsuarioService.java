@@ -31,7 +31,7 @@ public class UsuarioService {
 
         return usuarioDTO;
     }
-
+    // ListAll - ListbyName - ListById -
     public List<UsuarioDTO> list() throws BancoDeDadosException, RegraDeNegocioException {
         return usuarioRepository.listar()
                 .stream()
@@ -63,49 +63,14 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public void listarPorUsuarios(Integer id_usuario) {
-        try {
-            List<Usuario> listar = usuarioRepository.listarPorUsuario(id_usuario);
-            listar.forEach(System.out::println);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public void listarUsuariosPorUsuario(Integer quantidadeUsuarios) {
-        try {
-            List<Usuario> listar = usuarioRepository.listarPorUsuario(quantidadeUsuarios);
-            listar.forEach(System.out::println);
-        } catch (BancoDeDadosException e) {
-            e.printStackTrace();
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void removerUsuario(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         usuarioRepository.remover(id);
-    }
-
-    public Usuario verificarUsuario (Usuario usuario) {
-        try {
-            return usuarioRepository.receberUsuario(usuario);
-        } catch (BancoDeDadosException e) {
-            System.err.println("ERRO: " + e.getMessage());
-            e.printStackTrace();
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
     }
 
     public Usuario findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
         Usuario usuarioRecuperado = usuarioRepository.listar()
                 .stream()
-                .filter(pessoa -> pessoa.getIdUsuario().equals(id))
+                .filter(usuario -> usuario.getIdUsuario().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não cadastrado."));
 
