@@ -31,7 +31,6 @@ public class UsuarioCreateDTO {
     @Schema(description = "Senha do usuário", example = "K83nsdb&@s")
     private String senha;
 
-    @NotEmpty
     @Schema(description = "Data de nascimento do usuário", example = "2002-02-02")
     private LocalDate dataNascimento;
 

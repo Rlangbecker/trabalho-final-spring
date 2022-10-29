@@ -3,7 +3,6 @@ package com.vemser.geekers.repository;
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
-import com.vemser.geekers.exception.RegraDeNegocioException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -72,46 +71,12 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
-        Connection con = null;
-        try {
-            con = conexaoBancoDeDados.getConnection();
-            Statement stmt = con.createStatement();
-
-            String sql = "SELECT * FROM USUARIO";
-
-            ResultSet res = stmt.executeQuery(sql);
-
-            while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setTelefone(res.getString("telefone"));
-                usuario.setSenha(res.getString("senha"));
-                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                usuario.setSexo(res.getString("sexo"));
-                usuarios.add(usuario);
-
-            }
-            return usuarios;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public List<Usuario> listar() throws BancoDeDadosException {
+        return null;
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -156,7 +121,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException, RegraDeNegocioException {
+    public boolean remover(Integer id) throws BancoDeDadosException {
         Connection con = null;
 
         try {
@@ -192,7 +157,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 //        return true;
 //    }
 
-//    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException, RegraDeNegocioException {
+//    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException {
 //        Connection con = null;
 //        Usuario usuario = new Usuario();
 //
@@ -230,44 +195,44 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
 //        return usuario;
 //    }
 
-//    public List<Usuario> listarUsuariosRandom(Integer quantidadeUsuarios) throws BancoDeDadosException, RegraDeNegocioException {
-//
-//        List<Usuario> usuarios = new ArrayList<>();
-//        Connection con = null;
-//        try {
-//            con = conexaoBancoDeDados.getConnection();
-//
-//
-//            String sql = "SELECT * \n" +
-//                    "FROM (SELECT * FROM USUARIO u ORDER BY dbms_random.value) \n" +
-//                    " WHERE rownum <= ?\n";
-//
-//            // Executa-se a consulta
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//
-//            stmt.setInt(1, quantidadeUsuarios);
-//
-//            ResultSet res = stmt.executeQuery();
-//
-//            while (res.next()) {
-//                Usuario usuario = getUsuarioFromResultSet(res);
-//                usuarios.add(usuario);
-//            }
-//            return usuarios;
-//        } catch (SQLException e) {
-//            throw new BancoDeDadosException(e.getCause());
-//        } finally {
-//            try {
-//                if (con != null) {
-//                    con.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public List<Usuario> listarUsuariosRandom(Integer quantidadeUsuarios) throws BancoDeDadosException {
 
-    public Usuario listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+
+            String sql = "SELECT * \n" +
+                    "FROM (SELECT * FROM USUARIO u ORDER BY dbms_random.value) \n" +
+                    " WHERE rownum <= ?\n";
+
+            // Executa-se a consulta
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, quantidadeUsuarios);
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                Usuario usuario = getUsuarioFromResultSet(res);
+                usuarios.add(usuario);
+            }
+            return usuarios;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Usuario listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException {
         Usuario usuario = new Usuario();
         Connection con = null;
         try {
@@ -278,17 +243,15 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                     "FROM USUARIO u \n" +
                     " WHERE u.ID_USUARIO = ?\n";
 
-            // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, idUsuario);
 
             ResultSet res = stmt.executeQuery();
 
-            while (res.next()) {
-                usuario = getUsuarioFromResultSet(res);
-//                usuarios.add(usuario);
-            }
+            res.next();
+            usuario = getUsuarioFromResultSet(res);
+
             return usuario;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
@@ -303,7 +266,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-    public Usuario listarUsuarioPorNome(String nome) throws BancoDeDadosException, RegraDeNegocioException {
+    public Usuario listarUsuarioPorNome(String nome) throws BancoDeDadosException {
         Usuario usuario = new Usuario();
         Connection con = null;
         try {

@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/usuario")
-public class UsuarioController implements UsuarioControllerInterface {
+public class UsuarioController implements UsuarioControllerInterface{
 
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
@@ -38,14 +38,9 @@ public class UsuarioController implements UsuarioControllerInterface {
         return new ResponseEntity<>(criandoUsuarioDto, HttpStatus.OK);
     }
 
-//    @GetMapping("/{id-usuario}")
-//    public ResponseEntity<UsuarioDTO> listUsuarios(@PathVariable("/id-usuario") Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-//        return new ResponseEntity<>(usuarioService.listarUsuarioPorId(id), HttpStatus.OK);
-//    }
-
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException {
-        return new ResponseEntity<>(usuarioService.list(), HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.listaQuantidadeUsuarios(), HttpStatus.OK);
     }
 
     @GetMapping("/{id-usuario}")

@@ -2,8 +2,6 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
-import com.vemser.geekers.dto.UsuarioCreateDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +26,7 @@ public interface ComentarioControllerInterface {
     @PostMapping("/{usuario}")
     public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Lista de comentários do usuário por ID", description = "Realiza a pesquisa de comentários pelo ID no banco")
+    @Operation(summary = "Lista de comentários do usuário por ID do usuário (limite de 4 comentários)", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco, com um limite de 4 registros ")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Pesquisa de comentários por ID realizada com sucesso"),
@@ -37,9 +35,9 @@ public interface ComentarioControllerInterface {
             }
     )
     @GetMapping
-    public ResponseEntity<ComentarioDTO> listByIdComment(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
+    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Lista de comentários do usuário", description = "Realiza a pesquisa de comentários no banco")
+    @Operation(summary = "Lista de comentários do usuário com limite de 4 registros", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco está limitada à 4 registros")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Pesquisa de comentários realizada com sucesso"),
