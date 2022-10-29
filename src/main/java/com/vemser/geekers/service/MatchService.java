@@ -44,29 +44,18 @@ public class MatchService {
                 .map(match -> objectMapper.convertValue(match, MatchDTO.class))
                 .toList();
     }
-//
-//    public List<MatchDTO> listByUser(Integer id) throws BancoDeDadosException {
-//        try {
-//            List<Match> matchEntity = objectMapper.convertValue(matchRepository.listarPorUsuario(id), Match.class);
-//            return objectMapper.convertValue(matchEntity, MatchDTO.class);
-//        }
-//        catch (BancoDeDadosException e) {
-//            throw new RegraDeNegocioException("Erro ao listar matchs!");
-//        }
-//
-//    }
 
-    //Erro no update
-    public MatchDTO update(Integer id,
-                             MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException, BancoDeDadosException {
-        Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
-        usuarioService.findById(matchEntity.getUsuario());
-        Match match = findById(id);
-        match.setIdMatch(matchEntity.getIdMatch());
-        match.setUsuario(matchEntity.getUsuario());
-        match.setUsuarioMain(matchEntity.getUsuarioMain());
-        MatchDTO matchDTO = objectMapper.convertValue(matchRepository.editar(id,match), MatchDTO.class);
-        return matchDTO;
+    public List<MatchDTO> listByUser(Integer id) throws RegraDeNegocioException {
+        try {
+            return matchRepository.listarPorUsuario(id)
+                    .stream()
+                    .map(match -> objectMapper.convertValue(match, MatchDTO.class))
+                    .toList();
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao listar matchs!");
+        }
+
     }
 
     public Match findById(Integer id) throws RegraDeNegocioException, BancoDeDadosException {

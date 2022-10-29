@@ -34,7 +34,7 @@ public class MatchController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{resposta}")// localhost:8080/desafio
+    @PostMapping("/{resposta}")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
             @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
         log.info("Criando Match...");
@@ -51,40 +51,24 @@ public class MatchController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping // localhost:8080/pessoa
+    @GetMapping
     public ResponseEntity<List<MatchDTO>> list() throws BancoDeDadosException {
         List<MatchDTO> list = matchService.list();
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
-//    @Operation(summary = "Listar matchs por id do usuario", description = "Listar matchs por id do usuario do banco")
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
-//                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-//            }
-//    )
-//    @GetMapping("/{idUser}")
-//    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
-//        return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
-//    }
-
-    @Operation(summary = "Atualiza match por id", description = "Atualiza um match por id no banco")
+    @Operation(summary = "Listar matchs por id do usuario", description = "Listar matchs por id do usuario do banco")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna match atualizado"),
+                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/{id}") // localhost:8080/pessoa/1000
-    public ResponseEntity<MatchDTO> update(@PathVariable("id") Integer id,
-                                             @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws Exception {
-        return new ResponseEntity<>(matchService.update(id, matchCreateDTO), HttpStatus.OK);
+    @GetMapping("/{idUser}")
+    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
+        return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
     }
-
     @Operation(summary = "Deleta match por id", description = "Deleta um match por id no banco")
     @ApiResponses(
             value = {
@@ -93,7 +77,7 @@ public class MatchController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @DeleteMapping("/{id}") // localhost:8080/pessoa/10
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
         matchService.delete(id);
         return ResponseEntity.ok().build();
