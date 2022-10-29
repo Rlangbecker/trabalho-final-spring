@@ -3,7 +3,6 @@ package com.vemser.geekers.repository;
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
-import com.vemser.geekers.exception.RegraDeNegocioException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -20,7 +19,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Integer getProximoId(Connection connection) throws RegraDeNegocioException, SQLException {
+    public Integer getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_USUARIO.nextval mysequence from DUAL";
 
         Statement stmt = connection.createStatement();
@@ -34,7 +33,7 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public Usuario adicionar(Usuario usuario) throws RegraDeNegocioException, BancoDeDadosException {
+    public Usuario adicionar(Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -72,38 +71,12 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public boolean remover(Integer id) throws BancoDeDadosException, RegraDeNegocioException {
-        Connection con = null;
-
-        try {
-            con = conexaoBancoDeDados.getConnection();
-
-            String sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setInt(1, id);
-
-            int res = stmt.executeUpdate();
-            System.out.println("removerUsuarioPorId.res = " + res);
-
-            return res > 0;
-
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public List<Usuario> listar() throws BancoDeDadosException {
+        return null;
     }
 
     @Override
-    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException, RegraDeNegocioException {
+    public boolean editar(Integer id, Usuario usuario) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -148,30 +121,24 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
     }
 
     @Override
-    public List<Usuario> listar() throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
+    public boolean remover(Integer id) throws BancoDeDadosException {
         Connection con = null;
+
         try {
             con = conexaoBancoDeDados.getConnection();
-            Statement stmt = con.createStatement();
 
-            String sql = "SELECT * FROM USUARIO";
+            String sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
 
-            ResultSet res = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
 
-            while (res.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(res.getInt("id_usuario"));
-                usuario.setNome(res.getString("nome"));
-                usuario.setEmail(res.getString("email"));
-                usuario.setTelefone(res.getString("telefone"));
-                usuario.setSenha(res.getString("senha"));
-                usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-                usuario.setSexo(res.getString("sexo"));
-                usuarios.add(usuario);
-            }
+            stmt.setInt(1, id);
+
+            int res = stmt.executeUpdate();
+            System.out.println("removerUsuarioPorId.res = " + res);
+
+            return res > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -182,54 +149,9 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                 e.printStackTrace();
             }
         }
-        return usuarios;
     }
 
-
-    public boolean logar(Usuario usuario) {
-        usuario.setLogado(true);
-        return true;
-    }
-
-    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException, RegraDeNegocioException {
-        Connection con = null;
-        Usuario usuario = new Usuario();
-
-        try {
-            con = conexaoBancoDeDados.getConnection();
-            String sql = "SELECT * FROM USUARIO " +
-                    " WHERE EMAIL = ? AND SENHA = ?";
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, usuarioLogin.getEmail());
-            stmt.setString(2, usuarioLogin.getSenha());
-
-            ResultSet res = stmt.executeQuery();
-
-            res.next();
-            usuario.setIdUsuario(res.getInt("id_usuario"));
-            usuario.setNome(res.getString("nome"));
-            usuario.setEmail(res.getString("email"));
-            usuario.setSenha(res.getString("senha"));
-            usuario.setTelefone(res.getString("telefone"));
-            usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-            usuario.setSexo(res.getString("sexo"));
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return usuario;
-    }
-
-    public List<Usuario> listarPorUsuario(Integer quantidadeUsuarios) throws BancoDeDadosException, RegraDeNegocioException {
+    public List<Usuario> listarUsuariosRandom(Integer quantidadeUsuarios) throws BancoDeDadosException {
 
         List<Usuario> usuarios = new ArrayList<>();
         Connection con = null;
@@ -266,8 +188,8 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-    public List<Usuario> listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException, RegraDeNegocioException {
-        List<Usuario> usuarios = new ArrayList<>();
+    public Usuario listarUsuarioPorID(Integer idUsuario) throws BancoDeDadosException {
+        Usuario usuario = new Usuario();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -277,18 +199,50 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                     "FROM USUARIO u \n" +
                     " WHERE u.ID_USUARIO = ?\n";
 
-            // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setInt(1, idUsuario);
 
             ResultSet res = stmt.executeQuery();
 
-            while (res.next()) {
-                Usuario usuario = getUsuarioFromResultSet(res);
-                usuarios.add(usuario);
+            res.next();
+            usuario = getUsuarioFromResultSet(res);
+
+            return usuario;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            return usuarios;
+        }
+    }
+
+    public Usuario listarUsuarioPorNome(String nome) throws BancoDeDadosException {
+        Usuario usuario = new Usuario();
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+
+            String sql = "SELECT * \n" +
+                    "FROM USUARIO u \n" +
+                    " WHERE UPPER(u.NOME) LIKE ?\n";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setString(1, "%" + nome + "%");
+
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                usuario = getUsuarioFromResultSet(res);
+            }
+            return usuario;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
