@@ -151,50 +151,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
         }
     }
 
-
-//    public boolean logar(Usuario usuario) {
-//        usuario.setLogado(true);
-//        return true;
-//    }
-
-//    public Usuario receberUsuario(Usuario usuarioLogin) throws BancoDeDadosException {
-//        Connection con = null;
-//        Usuario usuario = new Usuario();
-//
-//        try {
-//            con = conexaoBancoDeDados.getConnection();
-//            String sql = "SELECT * FROM USUARIO " +
-//                    " WHERE EMAIL = ? AND SENHA = ?";
-//
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setString(1, usuarioLogin.getEmail());
-//            stmt.setString(2, usuarioLogin.getSenha());
-//
-//            ResultSet res = stmt.executeQuery();
-//
-//            res.next();
-//            usuario.setIdUsuario(res.getInt("id_usuario"));
-//            usuario.setNome(res.getString("nome"));
-//            usuario.setEmail(res.getString("email"));
-//            usuario.setSenha(res.getString("senha"));
-//            usuario.setTelefone(res.getString("telefone"));
-//            usuario.setDataNascimento(res.getDate("data_nascimento").toLocalDate());
-//            usuario.setSexo(res.getString("sexo"));
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            try {
-//                if (con != null) {
-//                    con.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return usuario;
-//    }
-
     public List<Usuario> listarUsuariosRandom(Integer quantidadeUsuarios) throws BancoDeDadosException {
 
         List<Usuario> usuarios = new ArrayList<>();
@@ -277,7 +233,6 @@ public class UsuarioRepository implements Repositorio<Integer, Usuario> {
                     "FROM USUARIO u \n" +
                     " WHERE UPPER(u.NOME) LIKE ?\n";
 
-            // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setString(1, "%" + nome + "%");

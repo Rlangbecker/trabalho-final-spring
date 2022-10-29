@@ -23,7 +23,7 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Comentário gerou uma exceção")
             }
     )
-    @PostMapping("/{usuario}")
+    @PostMapping("/{comentario}")
     public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Lista de comentários do usuário por ID do usuário (limite de 4 comentários)", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco, com um limite de 4 registros ")
@@ -34,8 +34,8 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "A pesquisa de comentário gerou uma exceção")
             }
     )
-    @GetMapping
-    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
+    @GetMapping("/{id-usuario}/usuario")
+    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Lista de comentários do usuário com limite de 4 registros", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco está limitada à 4 registros")
     @ApiResponses(
@@ -45,8 +45,8 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "A pesquisa de comentário gerou uma exceção")
             }
     )
-    @GetMapping("/{id-usuario}")
-    public ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException;
+    @GetMapping("/{id-comentario}/comentario")
+    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Atualiza o comentário do usuário por ID", description = "Realiza a atualização do comentário do usuário no banco pelo seu ID")
     @ApiResponses(
@@ -56,7 +56,7 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "A atualização de comentário gerou uma exceção")
             }
     )
-    @PutMapping("/{id-usuario}")
+    @PutMapping("/{id-comentario}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable("id-comentario") Integer idComentario,
                                                 @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException, BancoDeDadosException;
 
@@ -68,7 +68,7 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "A remoção de comentário gerou uma exceção")
             }
     )
-    @DeleteMapping("/{id-usuario}")
-    public ResponseEntity<Void> delete(@PathVariable("id-usuario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException;
+    @DeleteMapping("/{id-comentario}/remover-comentario")
+    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException;
 
 }

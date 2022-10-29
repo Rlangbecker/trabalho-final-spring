@@ -7,7 +7,6 @@ import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +26,7 @@ public interface UsuarioControllerInterface {
     @PostMapping("/{usuario}")
     public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException;
 
-    @Operation(summary = "Lista de usuários", description = "Realiza a pesquisa de usuários no banco")
+    @Operation(summary = "Lista de usuários aleatórios", description = "Realiza a pesquisa de usuários no banco aleatóriamente com no máximo 3 registros")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Pesquisa de usuários realizado com sucesso"),

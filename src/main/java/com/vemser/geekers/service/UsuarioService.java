@@ -8,8 +8,6 @@ import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.cache.support.NullValue;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +22,7 @@ public class UsuarioService {
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
         Usuario usuarioEntity = objectMapper.convertValue(usuarioDto, Usuario.class);
-
         Usuario usuario = usuarioRepository.adicionar(usuarioEntity);
-
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
 
         return usuarioDTO;
@@ -47,7 +43,6 @@ public class UsuarioService {
 
     public UsuarioDTO editarUsuario(Integer id, UsuarioDTO usuarioAtualizar) throws BancoDeDadosException, RegraDeNegocioException {
         Usuario usuarioRecuperado = findById(id);
-//        Usuario usuario = objectMapper.convertValue(usuarioAtualizar,Usuario.class);
         usuarioRecuperado.setNome(usuarioAtualizar.getNome());
         usuarioRecuperado.setSenha(usuarioAtualizar.getSenha());
         usuarioRecuperado.setEmail(usuarioAtualizar.getEmail());
@@ -57,7 +52,7 @@ public class UsuarioService {
 
         usuarioRepository.editar(id, usuarioRecuperado);
 
-        return usuarioAtualizar;
+        return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
@@ -69,16 +64,6 @@ public class UsuarioService {
         Usuario usuario = findById(idUsuario);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
         return usuarioDTO;
-
-//        try {
-//            Usuario usuario = findById(idUsuario);
-//            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(idUsuario);
-//            UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
-//            return usuarioDTO;
-//
-//        } catch (BancoDeDadosException e) {
-//            throw new RegraDeNegocioException("Erro ao buscar Geekers ^_^");
-//        }
     }
 
     public UsuarioDTO listarUsuarioPorNome(String nomeUsuario) throws RegraDeNegocioException {
@@ -97,12 +82,5 @@ public class UsuarioService {
             throw new RegraDeNegocioException("Usuário não encontrado");
         }
         return  usuario;
-
-//        try {
-//            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorID(id);
-//            return usuarioRecuperado;
-//        } catch (BancoDeDadosException e) {
-//            throw new RegraDeNegocioException("Usuário não cadastrado.");
-//        }
     }
 }

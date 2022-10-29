@@ -101,7 +101,6 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
             }
             stmt.setInt(index++, id);
 
-            // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("editarComentario.res=" + res);
 
@@ -150,39 +149,6 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
 
     @Override
     public List<Comentario> listar() throws BancoDeDadosException {
-//        List<Comentario> comentarios = new ArrayList<>();
-//        Connection con = null;
-//        try {
-//            con = conexaoBancoDeDados.getConnection();
-//            Statement stmt = con.createStatement();
-//
-//            String sql = "SELECT C.*, " +
-//                    "            U.NOME AS NOME_USUARIO " +
-//                    "       FROM COMENTARIO C " +
-//                    "  LEFT JOIN USUARIO U ON (U.ID_USUARIO = C.ID_USUARIO) " +
-//                    "  WHERE ROWNUM <= 4";
-//
-//            // Executa-se a consulta
-//            ResultSet res = stmt.executeQuery(sql);
-//
-//            while (res.next()) {
-//                Comentario comentario = getComentarioFromResultSet(res);
-//                comentarios.add(comentario);
-//            }
-//            return comentarios;
-//        } catch (SQLException e) {
-//            throw new BancoDeDadosException(e.getCause());
-//        } catch (RegraDeNegocioException e) {
-//            throw new RuntimeException(e);
-//        }finally {
-//            try {
-//                if (con != null) {
-//                    con.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return null;
     }
 
@@ -233,7 +199,6 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
                     " INNER JOIN USUARIO U ON (C.ID_USUARIO = U.ID_USUARIO) " +
                     "      WHERE C.ID_USUARIO = ? AND ROWNUM <= 4";
 
-            // Executa-se a consulta
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, idUsuario);
 

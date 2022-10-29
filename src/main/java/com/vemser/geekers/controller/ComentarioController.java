@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/comentario")
-public class ComentarioController  {
+public class ComentarioController implements ComentarioControllerInterface {
 
     private final ComentarioService comentarioService;
 
