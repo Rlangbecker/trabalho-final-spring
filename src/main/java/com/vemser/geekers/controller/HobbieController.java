@@ -68,10 +68,11 @@ public class HobbieController {
             }
     )
     @PutMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public Hobbie update(@PathVariable("idHobbie") Integer idHobbie,
-                         @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
+    public ResponseEntity<HobbieDTO> update(@PathVariable("idHobbie") Integer idHobbie,
+                                            @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
+        HobbieDTO hobbieDTO = hobbieService.editar(idHobbie,hobbieAtualizar);
         //VERIFICAR SE VAI FICAR POR IDHOBBIE OU IDUSUARIO
-        return hobbieService.editar(idHobbie, hobbieAtualizar);
+        return new ResponseEntity<>(hobbieDTO, HttpStatus.OK);
     }
 
 
