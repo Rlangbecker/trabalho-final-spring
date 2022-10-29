@@ -1,9 +1,9 @@
 package com.vemser.geekers.controller;
 
-import com.vemser.geekers.dto.*;
+import com.vemser.geekers.dto.MatchCreateDTO;
+import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
-import com.vemser.geekers.service.DesafioService;
 import com.vemser.geekers.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,18 +58,18 @@ public class MatchController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar matchs por id do usuario", description = "Listar matchs por id do usuario do banco")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @GetMapping("/{idUser}")
-    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
-        return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
-    }
+//    @Operation(summary = "Listar matchs por id do usuario", description = "Listar matchs por id do usuario do banco")
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
+//                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+//                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+//            }
+//    )
+//    @GetMapping("/{idUser}")
+//    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
+//        return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
+//    }
 
     @Operation(summary = "Atualiza match por id", description = "Atualiza um match por id no banco")
     @ApiResponses(

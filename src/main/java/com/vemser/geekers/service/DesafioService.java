@@ -3,7 +3,6 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
-import com.vemser.geekers.dto.DesafioUsuarioDTO;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -42,25 +41,25 @@ public class DesafioService {
         }
     }
 
-//    public List<DesafioDTO> list() throws Re {
-//        try {
-//            Desafio desafioEntity = objectMapper.convertValue(desafioRepository.listar(), Desafio.class);
-//            return objectMapper.convertValue(desafioEntity, DesafioDTO.class);
-//        }
-//        catch (BancoDeDadosException e) {
-//            throw new RegraDeNegocioException("Erro ao listar usuario!");
-//        }
-//    }
+    public List<DesafioDTO> list() throws RegraDeNegocioException {
+        try {
+            return desafioRepository.listar()
+                    .stream()
+                    .map(usuario -> objectMapper.convertValue(usuario, DesafioDTO.class))
+                    .toList();
+        }
+        catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao listar usuario!");
+        }
+    }
 
-
-    //Erro no update
     public DesafioDTO update(Integer id,
                            DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException {
         try{
+            findById(id);
             Desafio desafioEntity = objectMapper.convertValue(desafioAtualizar, Desafio.class);
-            Usuario usuario = findById(id).getUsuario();
-            desafioEntity.setUsuario(usuario);
-            return objectMapper.convertValue(desafioRepository.editar(id,desafioEntity), DesafioDTO.class);
+            desafioRepository.editar(id,desafioEntity);
+            return objectMapper.convertValue(desafioEntity, DesafioDTO.class);
         }
         catch (BancoDeDadosException e) {
             throw new RegraDeNegocioException("Erro ao atualizar!");

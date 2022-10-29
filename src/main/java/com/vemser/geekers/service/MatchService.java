@@ -1,7 +1,9 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.*;
+import com.vemser.geekers.dto.DesafioDTO;
+import com.vemser.geekers.dto.MatchCreateDTO;
+import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.entity.Match;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -42,14 +44,17 @@ public class MatchService {
                 .map(match -> objectMapper.convertValue(match, MatchDTO.class))
                 .toList();
     }
-
-    public List<MatchDTO> listByUser(Integer id) throws BancoDeDadosException {
-        return matchRepository.listarPorUsuario(id)
-                .stream()
-                .map(match -> objectMapper.convertValue(match, MatchDTO.class))
-                .toList();
-
-    }
+//
+//    public List<MatchDTO> listByUser(Integer id) throws BancoDeDadosException {
+//        try {
+//            List<Match> matchEntity = objectMapper.convertValue(matchRepository.listarPorUsuario(id), Match.class);
+//            return objectMapper.convertValue(matchEntity, MatchDTO.class);
+//        }
+//        catch (BancoDeDadosException e) {
+//            throw new RegraDeNegocioException("Erro ao listar matchs!");
+//        }
+//
+//    }
 
     //Erro no update
     public MatchDTO update(Integer id,

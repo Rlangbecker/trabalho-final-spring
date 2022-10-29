@@ -1,5 +1,6 @@
 package com.vemser.geekers.repository;
 
+import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.vemser.geekers.config.ConexaoBancoDeDados;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
@@ -115,35 +114,13 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
             con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE DESAFIO SET \n");
-            Usuario usuario = desafio.getUsuario();
-
-            if (desafio.getPergunta() != null) {
-                sql.append(" pergunta = ?,");
-            }
-            if (desafio.getResposta() != null) {
-                sql.append(" resposta = ?,");
-            }
-            if (desafio.getResposta() != null) {
-                sql.append(" id_usuario = ?,");
-            }
-
-            sql.deleteCharAt(sql.length() - 1); //remove o ultimo ','
-            sql.append(" WHERE id_desafio = ? ");
+            sql.append("UPDATE DESAFIO SET PERGUNTA = ?, RESPOSTA = ? WHERE ID_DESAFIO = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            if (desafio.getPergunta() != null) {
-                stmt.setString(1, desafio.getPergunta());
-            }
-            if (desafio.getResposta() != null) {
-                stmt.setInt(2, desafio.getResposta());
-            }
-            if (desafio.getResposta() != null) {
-                stmt.setInt(3, desafio.getUsuario().getIdUsuario());
-            }
-
-            stmt.setInt(4, id);
+            stmt.setString(1, desafio.getPergunta());
+            stmt.setInt(2, desafio.getResposta());
+            stmt.setInt(3, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();

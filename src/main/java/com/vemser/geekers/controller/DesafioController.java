@@ -2,9 +2,6 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
-import com.vemser.geekers.dto.DesafioUsuarioDTO;
-import com.vemser.geekers.entity.Desafio;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.DesafioService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,24 +39,24 @@ public class DesafioController {
         return new ResponseEntity<>(desafioService.findById(idDesafio), HttpStatus.OK);
     }
 
-//    @GetMapping // localhost:8080/pessoa
-//    public ResponseEntity<List<DesafioDTO>> list() throws RegraDeNegocioException {
-//        List<DesafioDTO> list = desafioService.list();
-//
-//        return new ResponseEntity<>(list, HttpStatus.OK);
-//    }
+    @GetMapping
+    public ResponseEntity<List<DesafioDTO>> list() throws RegraDeNegocioException {
+        List<DesafioDTO> list = desafioService.list();
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
     @GetMapping("/usuario/{idUser}")
     public ResponseEntity<DesafioDTO> listByIdUser(@PathVariable("idUser") Integer idUser) throws RegraDeNegocioException{
         return new ResponseEntity<>(desafioService.listByUser(idUser), HttpStatus.OK);
     }
-    @PutMapping("/{id}") // localhost:8080/pessoa/1000
+    @PutMapping("/{id}")
     public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,
                                          @Valid @RequestBody DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(desafioService.update(id, desafioAtualizar), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}") // localhost:8080/pessoa/10
+    @DeleteMapping("/{id}") 
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException {
         desafioService.delete(id);
         return ResponseEntity.ok().build();
