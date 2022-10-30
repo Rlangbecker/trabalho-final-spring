@@ -3,7 +3,6 @@ package com.vemser.geekers.controller;
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
 import com.vemser.geekers.entity.Hobbie;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.HobbieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,9 +35,8 @@ public class HobbieController {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idHobbie
-    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario
-            , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException {
+    @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idUsuario
+    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException{
         HobbieDTO hDTO= hobbieService.create(idUsuario,hobbieDTO);
         return new ResponseEntity<>(hDTO, HttpStatus.OK) ;
     }
@@ -69,7 +67,7 @@ public class HobbieController {
     )
     @PutMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
     public ResponseEntity<HobbieDTO> update(@PathVariable("idHobbie") Integer idHobbie,
-                                            @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
+                         @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException {
         HobbieDTO hobbieDTO = hobbieService.editar(idHobbie,hobbieAtualizar);
         //VERIFICAR SE VAI FICAR POR IDHOBBIE OU IDUSUARIO
         return new ResponseEntity<>(hobbieDTO, HttpStatus.OK);
@@ -86,9 +84,7 @@ public class HobbieController {
             }
     )
     @DeleteMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException, BancoDeDadosException {
+    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException {
         hobbieService.remover(idHobbie);
     }
-
-
 }

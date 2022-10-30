@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
@@ -18,12 +19,18 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
+    private final EmailService emailService;
     private final Integer QUANTIDADE_USUARIOS = 3;
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
         Usuario usuarioEntity = objectMapper.convertValue(usuarioDto, Usuario.class);
         Usuario usuario = usuarioRepository.adicionar(usuarioEntity);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
+        try {
+            emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return usuarioDTO;
     }

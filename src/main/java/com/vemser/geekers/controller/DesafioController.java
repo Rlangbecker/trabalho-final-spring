@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RequestMapping("/desafio")
 @Slf4j
-public class DesafioController {
+public class DesafioController implements DesafioControllerInterface{
 
     private DesafioService desafioService;
 
