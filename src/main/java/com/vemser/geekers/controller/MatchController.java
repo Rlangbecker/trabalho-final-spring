@@ -2,12 +2,8 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.MatchService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,62 +19,29 @@ import java.util.List;
 @RequestMapping("/match")
 @Slf4j
 @RequiredArgsConstructor
-public class MatchController {
+public class MatchController implements MatchControllerInterface{
     private final MatchService matchService;
 
-    @Operation(summary = "Dar Match", description = "Resolve o desafio do usuario e dar um match")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o match criado"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
     @PostMapping("/{resposta}")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
-            @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws BancoDeDadosException, RegraDeNegocioException {
+            @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
         log.info("Criando Match...");
         MatchDTO matchDTO = matchService.resolverDesafio(matchCreateDTO, resposta);
         log.info("Match dado!");
         return new ResponseEntity<>(matchDTO, HttpStatus.OK);
     }
-
-    @Operation(summary = "Listar matchs", description = "Listar matchs do banco")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
     @GetMapping
-    public ResponseEntity<List<MatchDTO>> list() throws BancoDeDadosException {
+    public ResponseEntity<List<MatchDTO>> list() throws RegraDeNegocioException {
         List<MatchDTO> list = matchService.list();
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-    @Operation(summary = "Listar matchs por id do usuario", description = "Listar matchs por id do usuario do banco")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna os matchs"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
     @GetMapping("/{idUser}")
-    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws Exception{
+    public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws RegraDeNegocioException{
         return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
     }
-    @Operation(summary = "Deleta match por id", description = "Deleta um match por id no banco")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna endereco deletada"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException {
         matchService.delete(id);
         return ResponseEntity.ok().build();
     }

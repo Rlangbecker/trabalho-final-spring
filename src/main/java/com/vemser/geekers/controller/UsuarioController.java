@@ -1,6 +1,5 @@
 package com.vemser.geekers.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -22,14 +21,13 @@ import java.util.List;
 public class UsuarioController implements UsuarioControllerInterface{
 
     private final UsuarioService usuarioService;
-    private final ObjectMapper objectMapper;
 
-    public UsuarioController(UsuarioService usuarioService, ObjectMapper objectMapper) {
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
-        this.objectMapper = objectMapper;
+
     }
 
-    @PostMapping("/{usuario}")
+    @PostMapping
     public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Iniciando cadastro de usuário . . .");
         UsuarioDTO criandoUsuarioDto = usuarioService.create(usuarioDto);
