@@ -46,7 +46,7 @@ public class EmailService {
 
         MimeMessageHelper helper = new MimeMessageHelper(message,
                 true);
-
+        //caso for usar, alterar o setFrom e setTo
         helper.setFrom(from);
         helper.setTo(TO);
         helper.setSubject("Subject");
@@ -66,7 +66,7 @@ public class EmailService {
             if(tipoEmail==TipoEmail.CADASTRO){
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-                mimeMessageHelper.setFrom(from);
+                mimeMessageHelper.setFrom(TO);
                 mimeMessageHelper.setTo(usuario.getEmail());
                 mimeMessageHelper.setSubject("Novo Cadastro");
                 mimeMessageHelper.setText(geContentFromTemplate(usuario,null,tipoEmail), true);
@@ -75,7 +75,7 @@ public class EmailService {
             } else {
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-                mimeMessageHelper.setFrom(from);
+                mimeMessageHelper.setFrom(TO);
                 mimeMessageHelper.setBcc(usuario.getEmail()+","+usuario2.getEmail());
                 mimeMessageHelper.setSubject("Novo Match");
                 mimeMessageHelper.setText(geContentFromTemplate(usuario,usuario2,tipoEmail), true);

@@ -3,7 +3,6 @@ package com.vemser.geekers.controller;
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
 import com.vemser.geekers.entity.Hobbie;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.HobbieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +36,7 @@ public class HobbieController {
             }
     )
     @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException{
         HobbieDTO hDTO= hobbieService.create(idUsuario,hobbieDTO);
         return new ResponseEntity<>(hDTO, HttpStatus.OK) ;
     }
@@ -85,9 +84,7 @@ public class HobbieController {
             }
     )
     @DeleteMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException, BancoDeDadosException {
+    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException {
         hobbieService.remover(idHobbie);
     }
-
-
 }
