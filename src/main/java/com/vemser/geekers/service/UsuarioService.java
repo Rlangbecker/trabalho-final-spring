@@ -32,7 +32,6 @@ public class UsuarioService {
         }
     }
 
-    // ListAll - ListbyName - ListById -
     // Busca no banco de No máximo QUANTIDADE_USUARIOS (3)
     public List<UsuarioDTO> listaQuantidadeUsuarios() throws RegraDeNegocioException {
         try {
@@ -72,7 +71,6 @@ public class UsuarioService {
         }
     }
 
-    //ARRUMAR RETORNO NULL
     public UsuarioDTO listarUsuarioPorId(Integer idUsuario) throws RegraDeNegocioException {
         Usuario usuario = findById(idUsuario);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
@@ -83,17 +81,6 @@ public class UsuarioService {
         Usuario usuario = findByName(nomeUsuario);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
         return  usuarioDTO;
-
-//        try {
-//            Usuario usuarioRecuperado = usuarioRepository.listarUsuarioPorNome(nomeUsuario.toUpperCase());
-//            if(usuarioRecuperado.getNome() == null){
-//                throw new RegraDeNegocioException("Geeker nome");
-//            }
-//            return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
-//        } catch (BancoDeDadosException e) {
-//            throw new RegraDeNegocioException("Geeker não foi encontrado pelo nome ^_^");
-//        }
-
     }
 
     public Usuario findById(Integer id) throws RegraDeNegocioException {
