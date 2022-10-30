@@ -4,9 +4,6 @@ import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Hobbie;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
-import com.vemser.geekers.exception.RegraDeNegocioException;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -36,7 +33,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public Hobbie adicionar(Hobbie hobbie) throws RegraDeNegocioException {
+    public Hobbie adicionar(Hobbie hobbie) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -59,7 +56,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             return hobbie;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RegraDeNegocioException(e.getMessage());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -104,7 +101,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public boolean editar(Integer id, Hobbie hobbie) throws RegraDeNegocioException {
+    public boolean editar(Integer id, Hobbie hobbie) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -125,6 +122,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
             stmt.setString(1, hobbie.getTipoHobbie());
             stmt.setString(2, hobbie.getDescricao());
+            stmt.setInt(3, id);
 
             int res = stmt.executeUpdate();
             System.out.println("editarHobbie.res = " + res);
@@ -132,7 +130,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             return res > 0;
 
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getMessage());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -145,7 +143,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
     @Override
-    public List<Hobbie> listar() throws BancoDeDadosException, RegraDeNegocioException {
+    public List<Hobbie> listar() throws BancoDeDadosException {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
@@ -167,7 +165,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
 
             return hobbies;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getMessage());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {
@@ -180,7 +178,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
     }
 
 
-    public List<Hobbie> listHobbieByIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
+    public List<Hobbie> listHobbieByIdUsuario(Integer idUsuario) throws BancoDeDadosException {
         List<Hobbie> hobbies = new ArrayList<>();
         Connection con = null;
         try {
@@ -199,7 +197,7 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
             }
             return hobbies;
         } catch (SQLException e) {
-            throw new RegraDeNegocioException(e.getMessage());
+            throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
                 if (con != null) {

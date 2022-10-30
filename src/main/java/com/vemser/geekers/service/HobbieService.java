@@ -21,40 +21,61 @@ public class HobbieService {
 
     private final HobbieRepository hobbieRepository;
     private final ObjectMapper objectMapper;
+    private final UsuarioService usuarioService;
 
     // create - remover - editar - listar(ListHobbieByIdUsuario)
 
-    public HobbieDTO create(Integer idUsuario,HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
-        Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
-
-    //verificar se usuario existe
-
-        hobbieRepository.adicionar(hobbieEntity);
-
-        HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.adicionar(hobbieEntity), HobbieDTO.class);
-        return hDTO;
-    }
-
-    public void remover(Integer id) throws BancoDeDadosException {
-       hobbieRepository.remover(id);
-    }
-
-    public Hobbie editar(Integer id, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
+    public HobbieDTO create(Integer idUsuario, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
+        try {
             Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
-            listByIdUsuario(id);
-            hobbieRepository.editar(id, hobbieEntity);
-            return hobbieEntity;
+
+            usuarioService.findById(idUsuario);
+
+            hobbieRepository.adicionar(hobbieEntity);
+
+            HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
+
+            hDTO.setIdHobbie(hobbieEntity.getIdHobbies());
+            return hDTO;
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao criar!");
+        }
     }
 
-    public List<HobbieDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
-        return hobbieRepository.listar().stream()
-                .map(hobbie -> objectMapper.convertValue(hobbie, HobbieDTO.class))
-                .toList();
+    public void remover(Integer id) throws RegraDeNegocioException {
+        try {
+            hobbieRepository.remover(id);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao remover!");
+        }
     }
+
+    public HobbieDTO editar(Integer idHobbie, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
+        try {
+            Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
+            listByIdUsuario(idHobbie);
+            hobbieRepository.editar(idHobbie, hobbieEntity);
+
+            hobbieEntity.setIdHobbies(idHobbie);
+            return objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao editar!");
+        }
+    }
+
+//    public List<HobbieDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
+//        return hobbieRepository.listar().stream()
+//                .map(hobbie -> objectMapper.convertValue(hobbie, HobbieDTO.class))
+//                .toList();
+//    }
 
     public List<Hobbie> listByIdUsuario(Integer id) throws RegraDeNegocioException {
+        try {
             List<Hobbie> hobbieList = hobbieRepository.listHobbieByIdUsuario(id);
             return hobbieList;
+        } catch (BancoDeDadosException e) {
+            throw new RegraDeNegocioException("Erro ao listar!");
+        }
     }
 
 }

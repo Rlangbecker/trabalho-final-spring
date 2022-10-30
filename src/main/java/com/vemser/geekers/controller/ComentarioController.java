@@ -5,6 +5,7 @@ import com.vemser.geekers.dto.ComentarioDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.ComentarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RequestMapping("/comentario")
-public class ComentarioController {
+public class ComentarioController implements ComentarioControllerInterface {
 
     private final ComentarioService comentarioService;
 
@@ -34,9 +35,20 @@ public class ComentarioController {
         return new ResponseEntity<>(criandoComentarioDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listByIdComment(@PathVariable("id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
+    @GetMapping("/{id-usuario}/usuario")
+    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
         return new ResponseEntity<>(comentarioService.listarComentarioPorUsuario(idComentario), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id-comentario}/comentario")
+    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
+        return new ResponseEntity<>(comentarioService.list(idComentario), HttpStatus.OK);
+    }
+
+    @Operation(hidden = true)
+    @GetMapping
+    public ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException {
+        return null;
     }
 
     @PutMapping("/{id-comentario}")
@@ -46,6 +58,12 @@ public class ComentarioController {
         ComentarioDTO comentarioAtualizado = comentarioService.editarComentario(idComentario, atualizarComantario);
         log.info("Comentário adicionado com sucesso.");
         return new ResponseEntity<>(comentarioAtualizado, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id-comentario}/remover-comentario")
+    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+        comentarioService.delete(idUsuario);
+        return ResponseEntity.noContent().build();
     }
 
 }

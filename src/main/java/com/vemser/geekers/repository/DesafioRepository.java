@@ -1,27 +1,26 @@
 package com.vemser.geekers.repository;
 
+import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Desafio;
 import com.vemser.geekers.entity.Usuario;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.vemser.geekers.config.ConexaoBancoDeDados;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
+@RequiredArgsConstructor
 public class DesafioRepository implements Repositorio<Integer,Desafio>{
-    private ConexaoBancoDeDados conexaoBancoDeDados;
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
     private AtomicInteger COUNTER = new AtomicInteger();
+    private final UsuarioService usuarioService;
 
-    public DesafioRepository(ConexaoBancoDeDados conexaoBancoDeDados){
-        this.conexaoBancoDeDados = conexaoBancoDeDados;
-    }
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         String sql = "SELECT SEQ_DESAFIO.nextval mysequence from DUAL";
@@ -37,7 +36,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
     }
 
     @Override
-    public Desafio adicionar(Desafio object) throws BancoDeDadosException, RegraDeNegocioException {
+    public Desafio adicionar(Desafio object) {
         return null;
     }
 
@@ -109,43 +108,27 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
     }
 
     @Override
-    public boolean editar(Integer id, Desafio desafio) throws BancoDeDadosException {
+    public boolean editar(Integer id,Desafio desafio) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE DESAFIO SET \n");
-
-            if (desafio.getPergunta() != null) {
-                sql.append(" pergunta = ?,");
-            }
-            if (desafio.getResposta() != null) {
-                sql.append(" resposta = ?,");
-            }
-
-            sql.deleteCharAt(sql.length() - 1); //remove o ultimo ','
-            sql.append(" WHERE id_desafio = ? ");
+            sql.append("UPDATE DESAFIO SET PERGUNTA = ?, RESPOSTA = ? WHERE ID_DESAFIO = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            int index = 1;
-
-            if (desafio.getPergunta() != null) {
-                stmt.setString(index++, desafio.getPergunta());
-            }
-            if (desafio.getResposta() != null) {
-                stmt.setInt(index++, desafio.getResposta());
-            }
-
-            stmt.setInt(index++, id);
+            stmt.setString(1, desafio.getPergunta());
+            stmt.setInt(2, desafio.getResposta());
+            stmt.setInt(3, id);
 
             // Executa-se a consulta
             int res = stmt.executeUpdate();
             System.out.println("editarDesafio.res=" + res);
 
-            return true;
+            return res > 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new BancoDeDadosException(e.getCause());
         } finally {
             try {
@@ -193,18 +176,90 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
 
     }
 
+    public Desafio listarById(Integer id) throws BancoDeDadosException {
+        Connection con = null;
+        Desafio desafio = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "SELECT * FROM DESAFIO WHERE id_desafio = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+            // Executa-se a consulta
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                desafio = getRespostaFromResultSet(res);
+
+            }
+           return desafio;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BancoDeDadosException(e.getCause());
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public Desafio listarByUser(Integer id) throws BancoDeDadosException {
+        Connection con = null;
+        Desafio desafio = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+
+            String sql = "SELECT * FROM DESAFIO WHERE id_usuario = ?";
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+            // Executa-se a consulta
+            ResultSet res = stmt.executeQuery();
+
+            while (res.next()) {
+                desafio = getRespostaFromResultSet(res);
+               
+            }
+            return desafio;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new BancoDeDadosException(e.getCause());
+        } catch (RegraDeNegocioException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     private Desafio getRespostaFromResultSet(ResultSet res) throws SQLException, RegraDeNegocioException {
         Desafio desafio = new Desafio();
         desafio.setIdDesafio(res.getInt("id_desafio"));
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(res.getInt("id_usuario"));
-//        Usuario userAlterado = usuarioService.findById(usuario.getIdUsuario());
-//        usuario.setEmail(userAlterado.getEmail());
-//        usuario.setSexo(userAlterado.getSexo());
-//        usuario.setNome(userAlterado.getNome());
-//        usuario.setSenha(userAlterado.getSenha());
-//        usuario.setDataNascimento(userAlterado.getDataNascimento());
-//        usuario.setTelefone(userAlterado.getTelefone());
+        Usuario userAlterado = usuarioService.findById(usuario.getIdUsuario());
+        usuario.setEmail(userAlterado.getEmail());
+        usuario.setSexo(userAlterado.getSexo());
+        usuario.setNome(userAlterado.getNome());
+        usuario.setSenha(userAlterado.getSenha());
+        usuario.setDataNascimento(userAlterado.getDataNascimento());
+        usuario.setTelefone(userAlterado.getTelefone());
         desafio.setUsuario(usuario);
         desafio.setPergunta(res.getString("pergunta"));
         desafio.setResposta(res.getInt("resposta"));
