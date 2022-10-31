@@ -17,6 +17,6 @@ public class HobbieCreateDTO {
     private String descricao;
 
     @NotBlank
-    @Schema (description = "1" , example = "Jogos")
+    @Schema (description = "1" , example = "1")
     private String tipoHobbie;
 }

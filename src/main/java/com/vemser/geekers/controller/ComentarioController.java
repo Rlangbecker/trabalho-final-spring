@@ -27,7 +27,7 @@ public class ComentarioController implements ComentarioControllerInterface {
         this.comentarioService = comentarioService;
     }
 
-    @PostMapping("/{comentario}")
+    @PostMapping
     public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException {
         log.info("Adicionando comentário.");
         ComentarioDTO criandoComentarioDto = comentarioService.create(comentario);
