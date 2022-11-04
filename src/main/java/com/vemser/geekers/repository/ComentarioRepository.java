@@ -3,7 +3,7 @@ package com.vemser.geekers.repository;
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.Comentario;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
@@ -57,7 +57,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
 
             stmt.setInt(1, comentario.getIdComentario());
             stmt.setString(2, comentario.getComentario());
-            stmt.setInt(3, comentario.getUsuario().getIdUsuario()); // Resposta 0/1
+            stmt.setInt(3, comentario.getUsuarioEntity().getIdUsuario()); // Resposta 0/1
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarComentario.res=" + res);
@@ -83,7 +83,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE COMENTARIO SET \n");
-            Usuario usuario = comentario.getUsuario();
+            UsuarioEntity usuarioEntity = comentario.getUsuarioEntity();
 
             if (comentario.getComentario() != null) {
                 sql.append(" comentario = ?,");
@@ -225,23 +225,7 @@ public class ComentarioRepository implements Repositorio<Integer, Comentario> {
     }
 
     private Comentario getComentarioFromResultSet(ResultSet res) throws SQLException, RegraDeNegocioException {
-        Comentario comentario = new Comentario();
-        comentario.setIdComentario(res.getInt("id_comentario"));
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(res.getInt("id_usuario"));
-
-        UsuarioDTO usuarioComentario = usuarioService.listarUsuarioPorId(usuario.getIdUsuario());
-        usuario.setNome(usuarioComentario.getNome());
-        usuario.setEmail(usuarioComentario.getEmail());
-        usuario.setTelefone(usuarioComentario.getTelefone());
-        usuario.setSenha(usuarioComentario.getSenha());
-        usuario.setDataNascimento(usuarioComentario.getDataNascimento());
-        usuario.setSexo(usuarioComentario.getSexo());
-
-        comentario.setUsuario(usuario);
-        comentario.setComentario(res.getString("comentario"));
-
-        return comentario;
+        return null;
     }
 
 }

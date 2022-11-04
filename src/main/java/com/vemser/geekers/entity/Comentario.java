@@ -11,6 +11,6 @@ public class Comentario {
 
     private Integer idComentario;
     private String comentario;
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 
 }

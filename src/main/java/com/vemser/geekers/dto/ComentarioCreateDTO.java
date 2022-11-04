@@ -1,6 +1,6 @@
 package com.vemser.geekers.dto;
 
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +22,6 @@ public class ComentarioCreateDTO {
     @Schema(description = "Comentário do usuário", example = "Demais!!")
     private String comentario;
 
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.entity.Desafio;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.DesafioRepository;
@@ -26,11 +26,11 @@ public class DesafioService {
         DesafioDTO desafioDTO;
         try {
             Desafio desafioEntity = objectMapper.convertValue(desafio, Desafio.class);
-            Usuario usuario = usuarioService.findById(id);
+            UsuarioEntity usuarioEntity = usuarioService.findById(id);
             if (listByUser(id) == null){
-                Desafio desafioCriado = desafioRepository.adicionarDesafio(desafioEntity, usuario);
+                Desafio desafioCriado = desafioRepository.adicionarDesafio(desafioEntity, usuarioEntity);
                 desafioDTO = objectMapper.convertValue(desafioCriado, DesafioDTO.class);
-                desafioDTO.setUsuario(usuario);
+                desafioDTO.setUsuarioEntity(usuarioEntity);
                 return desafioDTO;
             }
             else {

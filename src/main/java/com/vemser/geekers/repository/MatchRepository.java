@@ -2,7 +2,7 @@ package com.vemser.geekers.repository;
 
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Match;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
@@ -185,16 +185,16 @@ public class MatchRepository implements Repositorio<Integer, Match> {
     private Match getMatchFromResultSet(ResultSet res) throws SQLException, RegraDeNegocioException {
         Match match = new Match();
         match.setIdMatch(res.getInt("id_match"));
-        Usuario usuario = new Usuario();
-        Usuario usuario2 = new Usuario();
-        usuario.setIdUsuario(res.getInt("id_usuario"));
-        Usuario usuario1 = usuarioService.findById(usuario.getIdUsuario());
-        usuario.setNome(usuario1.getNome());
-        usuario2.setIdUsuario(res.getInt("id_usuario_main"));
-        Usuario usuarioLogado = usuarioService.findById(usuario2.getIdUsuario());
-        usuario2.setNome(usuarioLogado.getNome());
-        match.setUsuario(usuario.getIdUsuario());
-        match.setUsuarioMain(usuario2.getIdUsuario());
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        UsuarioEntity usuarioEntity2 = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(res.getInt("id_usuario"));
+        UsuarioEntity usuarioEntity1 = usuarioService.findById(usuarioEntity.getIdUsuario());
+        usuarioEntity.setNome(usuarioEntity1.getNome());
+        usuarioEntity2.setIdUsuario(res.getInt("id_usuario_main"));
+        UsuarioEntity usuarioEntityLogado = usuarioService.findById(usuarioEntity2.getIdUsuario());
+        usuarioEntity2.setNome(usuarioEntityLogado.getNome());
+        match.setUsuario(usuarioEntity.getIdUsuario());
+        match.setUsuarioMain(usuarioEntity2.getIdUsuario());
         return match;
     }
 

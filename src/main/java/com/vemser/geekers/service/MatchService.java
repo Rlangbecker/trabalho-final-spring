@@ -6,7 +6,7 @@ import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.Match;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -85,10 +85,10 @@ public class MatchService {
             DesafioDTO desafio = desafioService.listByUser(matchCreateDTO.getUsuario());
             if (resposta == desafio.getResposta()) {
                 Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
-                Usuario usuario1 = usuarioService.findById(matchEntity.getUsuario());
-                Usuario usuario2 = usuarioService.findById(matchEntity.getUsuarioMain());
-                UsuarioDTO user1Dto = objectMapper.convertValue(usuario1, UsuarioDTO.class);
-                UsuarioDTO user2Dto = objectMapper.convertValue(usuario2, UsuarioDTO.class);
+                UsuarioEntity usuarioEntity1 = usuarioService.findById(matchEntity.getUsuario());
+                UsuarioEntity usuarioEntity2 = usuarioService.findById(matchEntity.getUsuarioMain());
+                UsuarioDTO user1Dto = objectMapper.convertValue(usuarioEntity1, UsuarioDTO.class);
+                UsuarioDTO user2Dto = objectMapper.convertValue(usuarioEntity2, UsuarioDTO.class);
 
                 try {
                     emailService.sendEmail(user1Dto, user2Dto, TipoEmail.MATCH);

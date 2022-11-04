@@ -3,7 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -20,93 +20,61 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
-    private final Integer QUANTIDADE_USUARIOS = 3;
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException {
-        try {
-            Usuario usuarioEntity = objectMapper.convertValue(usuarioDto, Usuario.class);
-            Usuario usuario = usuarioRepository.adicionar(usuarioEntity);
-            UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
-            try {
-                emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return usuarioDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
-        }
+        UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioDto, UsuarioEntity.class);
+        UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
+        emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
+        return usuarioDTO;
     }
 
     // Busca no banco de No máximo QUANTIDADE_USUARIOS (3)
-    public List<UsuarioDTO> listaQuantidadeUsuarios() throws RegraDeNegocioException {
-        try {
-            return usuarioRepository.listarUsuariosRandom(QUANTIDADE_USUARIOS)
-                    .stream()
-                    .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
-                    .toList();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao buscar Geekers ^_^");
-        }
+    public List<UsuarioDTO> list() throws RegraDeNegocioException {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                .toList();
     }
 
     public UsuarioDTO editarUsuario(Integer id, UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
-        try {
-            Usuario usuarioRecuperado = findById(id);
-            usuarioRecuperado.setNome(usuarioAtualizar.getNome());
-            usuarioRecuperado.setSenha(usuarioAtualizar.getSenha());
-            usuarioRecuperado.setEmail(usuarioAtualizar.getEmail());
-            usuarioRecuperado.setTelefone(usuarioAtualizar.getTelefone());
-            usuarioRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
-            usuarioRecuperado.setSexo(usuarioAtualizar.getSexo());
+        UsuarioEntity usuarioEntityRecuperado = findById(id);
+        usuarioEntityRecuperado.setNome(usuarioAtualizar.getNome());
+        usuarioEntityRecuperado.setSenha(usuarioAtualizar.getSenha());
+        usuarioEntityRecuperado.setEmail(usuarioAtualizar.getEmail());
+        usuarioEntityRecuperado.setTelefone(usuarioAtualizar.getTelefone());
+        usuarioEntityRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
+        usuarioEntityRecuperado.setSexo(usuarioAtualizar.getSexo());
 
-            usuarioRepository.editar(id, usuarioRecuperado);
+        usuarioRepository.save(usuarioEntityRecuperado);
 
-            return objectMapper.convertValue(usuarioRecuperado, UsuarioDTO.class);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Falha ao editar Geeker, tente novamente mais tarde");
-        }
+        return objectMapper.convertValue(usuarioEntityRecuperado, UsuarioDTO.class);
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException {
         try {
-            Usuario usuario = findById(id);
-            usuarioRepository.remover(usuario.getIdUsuario());
-        } catch (BancoDeDadosException e) {
+            UsuarioEntity usuarioEntity = findById(id);
+            usuarioRepository.delete(usuarioEntity);
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha na tentativa de remover seu perfil do Geekers");
         }
     }
 
-    public UsuarioDTO listarUsuarioPorId(Integer idUsuario) throws RegraDeNegocioException {
-        Usuario usuario = findById(idUsuario);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
-        return usuarioDTO;
-    }
 
-    public UsuarioDTO listarUsuarioPorNome(String nomeUsuario) throws RegraDeNegocioException {
-        Usuario usuario = findByName(nomeUsuario);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
-        return  usuarioDTO;
-    }
-
-    public Usuario findById(Integer id) throws RegraDeNegocioException {
+    public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
         try {
-            Usuario usuario = usuarioRepository.listarUsuarioPorID(id);
-            return usuario;
-        } catch ( BancoDeDadosException e) {
+            return usuarioRepository.findById(id)
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+        } catch ( RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Geeker não foi encontrado pelo id ^_^");
         }
     }
 
-    public Usuario findByName(String nome) throws RegraDeNegocioException {
-        try {
-            Usuario usuario = usuarioRepository.listarUsuarioPorNome(nome.toUpperCase());
-            if(usuario.getNome() == null) {
-                throw new RegraDeNegocioException("Geeker não foi encontrado pelo nome ^_^");
-            }
-            return usuario;
-        } catch ( BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro de conexão ao banco Geeker, tente novamente mais tarde");
-        }
+    public List<UsuarioDTO> findByName(String nome) throws RegraDeNegocioException {
+        return usuarioRepository.findUsuarioEntityByNome(nome)
+                .stream()
+                .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                .toList();
+
     }
 }

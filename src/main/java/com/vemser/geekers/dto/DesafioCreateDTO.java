@@ -1,11 +1,10 @@
 package com.vemser.geekers.dto;
 
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Data
 public class DesafioCreateDTO {
@@ -14,6 +13,6 @@ public class DesafioCreateDTO {
     @NotNull
     private Integer resposta;
 
-    private Usuario Usuario;
+    private UsuarioEntity UsuarioEntity;
 
 }

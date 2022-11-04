@@ -1,6 +1,5 @@
 package com.vemser.geekers.dto;
 
-import com.vemser.geekers.entity.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,12 +1,12 @@
 package com.vemser.geekers.dto;
 
 
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import lombok.Data;
 
 @Data
 public class MatchUsuarioDTO {
     private Integer idMatch;
-    private Usuario usuario;
-    private Usuario usuarioMain;
+    private UsuarioEntity usuarioEntity;
+    private UsuarioEntity usuarioEntityMain;
 }

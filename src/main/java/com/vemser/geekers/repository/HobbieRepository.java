@@ -2,7 +2,7 @@ package com.vemser.geekers.repository;
 
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Hobbie;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import org.springframework.stereotype.Repository;
 
@@ -216,9 +216,9 @@ public class HobbieRepository implements Repositorio<Integer, Hobbie> {
         hobbie.setIdHobbies(res.getInt("id_hobbie"));
         hobbie.setTipoHobbie(res.getString("tipo_hobbie"));
         hobbie.setDescricao(res.getString("descricao"));
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(res.getInt("id_usuario"));
-        hobbie.setIdUsuario(usuario.getIdUsuario());
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(res.getInt("id_usuario"));
+        hobbie.setIdUsuario(usuarioEntity.getIdUsuario());
         return hobbie;
     }
 }

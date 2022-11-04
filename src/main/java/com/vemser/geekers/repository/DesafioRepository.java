@@ -2,7 +2,7 @@ package com.vemser.geekers.repository;
 
 import com.vemser.geekers.config.ConexaoBancoDeDados;
 import com.vemser.geekers.entity.Desafio;
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
@@ -40,7 +40,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
         return null;
     }
 
-    public Desafio adicionarDesafio(Desafio desafio, Usuario usuario) throws BancoDeDadosException {
+    public Desafio adicionarDesafio(Desafio desafio, UsuarioEntity usuarioEntity) throws BancoDeDadosException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -57,7 +57,7 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
             stmt.setInt(1, desafio.getIdDesafio());
             stmt.setString(2, desafio.getPergunta());
             stmt.setInt(3, desafio.getResposta()); // Resposta 0/1
-            stmt.setInt(4, usuario.getIdUsuario()); //Resolver o bug de nao aparecer o usuario
+            stmt.setInt(4, usuarioEntity.getIdUsuario()); //Resolver o bug de nao aparecer o usuario
 
             int res = stmt.executeUpdate();
             System.out.println("adicionarDesafio.res=" + res);
@@ -251,16 +251,16 @@ public class DesafioRepository implements Repositorio<Integer,Desafio>{
     private Desafio getRespostaFromResultSet(ResultSet res) throws SQLException, RegraDeNegocioException {
         Desafio desafio = new Desafio();
         desafio.setIdDesafio(res.getInt("id_desafio"));
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(res.getInt("id_usuario"));
-        Usuario userAlterado = usuarioService.findById(usuario.getIdUsuario());
-        usuario.setEmail(userAlterado.getEmail());
-        usuario.setSexo(userAlterado.getSexo());
-        usuario.setNome(userAlterado.getNome());
-        usuario.setSenha(userAlterado.getSenha());
-        usuario.setDataNascimento(userAlterado.getDataNascimento());
-        usuario.setTelefone(userAlterado.getTelefone());
-        desafio.setUsuario(usuario);
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(res.getInt("id_usuario"));
+        UsuarioEntity userAlterado = usuarioService.findById(usuarioEntity.getIdUsuario());
+        usuarioEntity.setEmail(userAlterado.getEmail());
+        usuarioEntity.setSexo(userAlterado.getSexo());
+        usuarioEntity.setNome(userAlterado.getNome());
+        usuarioEntity.setSenha(userAlterado.getSenha());
+        usuarioEntity.setDataNascimento(userAlterado.getDataNascimento());
+        usuarioEntity.setTelefone(userAlterado.getTelefone());
+        desafio.setUsuarioEntity(usuarioEntity);
         desafio.setPergunta(res.getString("pergunta"));
         desafio.setResposta(res.getInt("resposta"));
         return desafio;

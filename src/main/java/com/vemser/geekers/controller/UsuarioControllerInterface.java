@@ -57,7 +57,7 @@ public interface UsuarioControllerInterface {
             }
     )
     @GetMapping("/by-nome")
-    public ResponseEntity<UsuarioDTO> ListarPorNome(@RequestParam("nome") String nome) throws BancoDeDadosException, RegraDeNegocioException;
+    public ResponseEntity<List<UsuarioDTO>> ListarPorNome(@RequestParam("nome") String nome) throws BancoDeDadosException, RegraDeNegocioException;
 
     @Operation(summary = "Atualiza os dados do usuário por ID", description = "Realiza a atualização dos dados do usuário no banco pelo seu ID")
     @ApiResponses(

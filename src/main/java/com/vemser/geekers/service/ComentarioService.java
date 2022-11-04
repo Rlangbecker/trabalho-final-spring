@@ -22,7 +22,7 @@ public class ComentarioService {
 
     public ComentarioDTO create(ComentarioCreateDTO comentarioDto) throws RegraDeNegocioException {
         try {
-            usuarioService.findById(comentarioDto.getUsuario().getIdUsuario());
+            usuarioService.findById(comentarioDto.getUsuarioEntity().getIdUsuario());
             Comentario comentarioEntity = objectMapper.convertValue(comentarioDto, Comentario.class);
             Comentario comentario = comentarioRepository.adicionar(comentarioEntity);
             ComentarioDTO comentarioDTO = objectMapper.convertValue(comentario, ComentarioDTO.class);
@@ -49,7 +49,7 @@ public class ComentarioService {
 
     public ComentarioDTO editarComentario(Integer idComentario, ComentarioDTO atualizarComentario) throws RegraDeNegocioException {
         try {
-            usuarioService.findById(atualizarComentario.getUsuario().getIdUsuario());
+            usuarioService.findById(atualizarComentario.getUsuarioEntity().getIdUsuario());
             Comentario comentarioRecuperado = findById(idComentario);
             comentarioRecuperado.setComentario(atualizarComentario.getComentario());
             comentarioRepository.editar(idComentario, comentarioRecuperado);
