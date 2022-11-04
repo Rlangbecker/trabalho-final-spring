@@ -1,4 +1,5 @@
 package com.vemser.geekers.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class UsuarioEntity {
     @Column(name = "sexo")
     private String sexo;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private DesafioEntity desafio;
 }
 
 

@@ -13,6 +13,6 @@ public class DesafioCreateDTO {
     @NotNull
     private Integer resposta;
 
-    private UsuarioEntity UsuarioEntity;
+    private Integer idUsuario;
 
 }

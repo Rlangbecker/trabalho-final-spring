@@ -29,7 +29,6 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    // Busca no banco de No máximo QUANTIDADE_USUARIOS (3)
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
         return usuarioRepository.findAll()
                 .stream()
@@ -52,25 +51,17 @@ public class UsuarioService {
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException {
-        try {
-            UsuarioEntity usuarioEntity = findById(id);
-            usuarioRepository.delete(usuarioEntity);
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Falha na tentativa de remover seu perfil do Geekers");
-        }
+        UsuarioEntity usuarioEntity = findById(id);
+        usuarioRepository.delete(usuarioEntity);
     }
 
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
-        try {
-            return usuarioRepository.findById(id)
-                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
-        } catch ( RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Geeker não foi encontrado pelo id ^_^");
-        }
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
     }
 
-    public List<UsuarioDTO> findByName(String nome) throws RegraDeNegocioException {
+    public List<UsuarioDTO> findByName(String nome) {
         return usuarioRepository.findUsuarioEntityByNome(nome)
                 .stream()
                 .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))

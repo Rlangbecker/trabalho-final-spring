@@ -82,7 +82,7 @@ public class MatchService {
 
     public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws RegraDeNegocioException {
         try {
-            DesafioDTO desafio = desafioService.listByUser(matchCreateDTO.getUsuario());
+            DesafioDTO desafio = desafioService.findById(matchCreateDTO.getUsuario());
             if (resposta == desafio.getResposta()) {
                 Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
                 UsuarioEntity usuarioEntity1 = usuarioService.findById(matchEntity.getUsuario());
