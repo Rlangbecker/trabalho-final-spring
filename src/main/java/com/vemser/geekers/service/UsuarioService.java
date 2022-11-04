@@ -62,12 +62,8 @@ public class UsuarioService {
 
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
-        try {
             return usuarioRepository.findById(id)
                     .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
-        } catch ( RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Geeker não foi encontrado pelo id ^_^");
-        }
     }
 
     public List<UsuarioDTO> findByName(String nome) throws RegraDeNegocioException {

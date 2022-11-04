@@ -2,7 +2,7 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
-import com.vemser.geekers.entity.Hobbie;
+import com.vemser.geekers.entity.HobbieEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +33,7 @@ public interface HobbieControllerInterface {
             }
     )
     @GetMapping("{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public List<Hobbie> listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
+    public HobbieDTO listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualizar hobbie", description = "Atualiza o hobbie do usuario passado por ID(Hobbie)")
     @ApiResponses(
