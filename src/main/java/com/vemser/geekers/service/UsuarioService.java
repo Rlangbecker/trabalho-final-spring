@@ -25,7 +25,7 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioDto, UsuarioEntity.class);
         UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
-        emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
+//        emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
         return usuarioDTO;
     }
 

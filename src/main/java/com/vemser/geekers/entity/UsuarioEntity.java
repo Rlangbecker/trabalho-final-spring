@@ -9,11 +9,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity(name = "usuario")
 public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQ")
-    @SequenceGenerator(name = "USUARIO_SEQ", sequenceName = "seq_usario", allocationSize = 1)
+    @SequenceGenerator(name = "USUARIO_SEQ", sequenceName = "seq_usuario", allocationSize = 1)
     @Column(name = "id_usuario")
     private Integer idUsuario;
     @Column(name = "nome")
@@ -28,8 +29,6 @@ public class UsuarioEntity {
     private LocalDate dataNascimento;
     @Column(name = "sexo")
     private String sexo;
-    @Column(name = "logado")
-    private boolean logado;
 
 }
 
