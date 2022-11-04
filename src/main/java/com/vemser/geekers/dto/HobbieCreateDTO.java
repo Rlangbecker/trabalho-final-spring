@@ -1,6 +1,5 @@
 package com.vemser.geekers.dto;
 
-import com.vemser.geekers.entity.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -18,6 +17,6 @@ public class HobbieCreateDTO {
     private String descricao;
 
     @NotBlank
-    @Schema (description = "1" , example = "Jogos")
+    @Schema (description = "1" , example = "1")
     private String tipoHobbie;
 }

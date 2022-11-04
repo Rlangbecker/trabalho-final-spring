@@ -76,7 +76,7 @@ public class EmailService {
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
                 mimeMessageHelper.setFrom(TO);
-                mimeMessageHelper.setBcc(usuario.getEmail()+","+usuario2.getEmail());
+                mimeMessageHelper.setBcc(usuario2.getEmail());
                 mimeMessageHelper.setSubject("Novo Match");
                 mimeMessageHelper.setText(geContentFromTemplate(usuario,usuario2,tipoEmail), true);
 

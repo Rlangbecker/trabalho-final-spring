@@ -1,6 +1,7 @@
 package com.vemser.geekers.dto;
 
-import com.vemser.geekers.entity.Usuario;
+import com.vemser.geekers.entity.UsuarioEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,9 @@ public class ComentarioCreateDTO {
     @NotBlank(message = "Comentário não pode ser inserido em branco.")
     @NotNull(message = "Comentário não pode ser nulo.")
     @Size(max = 225)
+    @Schema(description = "Comentário do usuário", example = "Demais!!")
     private String comentario;
-    private Usuario usuario;
+
+    private UsuarioEntity usuarioEntity;
 
 }
