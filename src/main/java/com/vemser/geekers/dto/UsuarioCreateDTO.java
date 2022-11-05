@@ -40,6 +40,6 @@ public class UsuarioCreateDTO {
     @Schema(description = "Genero do usuário", example = "M")
     private String sexo;
 
-    private boolean logado;
+
 
 }

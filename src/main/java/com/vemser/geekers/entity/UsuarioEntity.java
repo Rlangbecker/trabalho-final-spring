@@ -1,10 +1,13 @@
 package com.vemser.geekers.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +33,13 @@ public class UsuarioEntity {
     @Column(name = "sexo")
     private String sexo;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private DesafioEntity desafio;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private Set<MatchEntity> matchs;
 }
 
 

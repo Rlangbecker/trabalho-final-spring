@@ -2,6 +2,7 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
@@ -67,6 +68,11 @@ public class UsuarioController implements UsuarioControllerInterface{
         usuarioService.removerUsuario(idUsuario);
         log.info("Perfil de usuário foi apagado.");
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/listar-usuario-matchs/{id}")
+    public List<UsuarioMatchDTO> listarPessoasEContatos(@RequestParam(required = false) Integer idPessoa) {
+        return usuarioService.listarUsuarioEMatchs(idPessoa);
     }
 
 }

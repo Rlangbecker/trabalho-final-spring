@@ -1,0 +1,16 @@
+package com.vemser.geekers.dto;
+
+import lombok.*;
+
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class PageDTO<T> {
+    private Long totalElementos;
+    private Integer quantidadePaginas;
+    private Integer pagina;
+    private Integer tamanho;
+    private List<T> elementos;
+}

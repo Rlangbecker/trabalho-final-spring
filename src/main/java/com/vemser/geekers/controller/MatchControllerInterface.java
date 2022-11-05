@@ -23,6 +23,7 @@ public interface MatchControllerInterface {
     )
     @PostMapping("/{resposta}")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
+                                           @PathVariable("idUser") Integer idUser,
                                            @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Listar matchs", description = "Listar matchs do banco")
