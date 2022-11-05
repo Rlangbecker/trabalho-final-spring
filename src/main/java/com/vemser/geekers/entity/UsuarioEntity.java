@@ -43,7 +43,7 @@ public class UsuarioEntity {
     private HobbieEntity hobbie;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ComentarioEntity> comentarios;
 
 }

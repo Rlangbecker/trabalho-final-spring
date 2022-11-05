@@ -26,9 +26,10 @@ public class ComentarioService {
         ComentarioEntity comentarioEntity = objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
 
         comentarioEntity.setUsuario(usuarioService.findById(idUsuario));
+        comentarioEntity.getUsuario().setIdUsuario(idUsuario);
 
         ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.save(comentarioEntity), ComentarioDTO.class);
-       comentarioDTO.setIdUsuario(idUsuario);
+        comentarioDTO.setIdUsuario(idUsuario);
         return comentarioDTO;
     }
 
@@ -63,11 +64,17 @@ public class ComentarioService {
     public List<ComentarioDTO> listarComentarioPorUsuario(Integer idUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuario = usuarioService.findById(idUsuario);
 
+
         List<ComentarioDTO> comentarios = comentarioRepository.findComentarioEntityByUsuario(usuario).stream()
                 .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
                 .toList();
+
+
+
         return comentarios;
     }
+
+
 
     public ComentarioDTO findById(Integer idComentario) {
 
