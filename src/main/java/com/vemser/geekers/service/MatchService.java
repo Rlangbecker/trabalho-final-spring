@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
+import com.vemser.geekers.dto.PageDTO;
 import com.vemser.geekers.entity.MatchEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +43,7 @@ public class MatchService {
         UsuarioEntity usuarioEntity = usuarioService.findById(id);
         return matchRepository.findMatchEntitiesByUsuario(usuarioEntity)
                 .stream()
-                .map(matchEntity -> objectMapper.convertValue(matchEntity,MatchDTO.class))
+                .map(matchEntity -> objectMapper.convertValue(matchEntity, MatchDTO.class))
                 .toList();
 
     }
@@ -61,8 +64,7 @@ public class MatchService {
             MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
             matchDTO.setIdUsuario(matchCriado.getIdUsuario());
             return matchDTO;
-        }
-        else {
+        } else {
             throw new RegraDeNegocioException("Resposta errada!");
         }
     }
@@ -73,4 +75,18 @@ public class MatchService {
         matchRepository.delete(matchEntity);
     }
 
+    public PageDTO<MatchDTO> listMatchPaginada(Integer pagina, Integer tamanho) {
+        PageRequest pageRequest = PageRequest.of(pagina, tamanho);
+        Page<MatchEntity> paginaDoRepositorio = matchRepository.findAll(pageRequest);
+        List<MatchDTO> pessoasDaPagina = paginaDoRepositorio.getContent().stream()
+                .map(pessoaEntity -> objectMapper.convertValue(pessoaEntity, MatchDTO.class))
+                .toList();
+        return new PageDTO<>(paginaDoRepositorio.getTotalElements(),
+                paginaDoRepositorio.getTotalPages(),
+                pagina,
+                tamanho,
+                pessoasDaPagina
+        );
+
+    }
 }

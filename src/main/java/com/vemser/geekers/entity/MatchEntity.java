@@ -21,7 +21,6 @@ public class MatchEntity {
     @Column(name = "id_usuario_main")
     private Integer usuarioMain;
 
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")

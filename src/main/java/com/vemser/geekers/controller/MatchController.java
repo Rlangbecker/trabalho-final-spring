@@ -2,6 +2,7 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
+import com.vemser.geekers.dto.PageDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.MatchService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,12 @@ public class MatchController implements MatchControllerInterface{
     public ResponseEntity<List<MatchDTO>> listByIdUser(@PathVariable("idUser") Integer idUser) throws RegraDeNegocioException{
         return new ResponseEntity<>(matchService.listByUser(idUser), HttpStatus.OK);
     }
+
+    @GetMapping("/match-paginado")
+    public PageDTO<MatchDTO> listarPessoasPaginadas(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return matchService.listMatchPaginada(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException {
         matchService.delete(id);
