@@ -27,8 +27,8 @@ public class DesafioController implements DesafioControllerInterface{
 
     @PostMapping("/{idUsuario}")// localhost:8080/desafio
     public ResponseEntity<DesafioDTO> create(@PathVariable("idUsuario") Integer idUsuario,
-            @RequestBody DesafioCreateDTO desafioCreateDTO) throws RegraDeNegocioException {
-        DesafioDTO desafioDTO = desafioService.create(idUsuario,desafioCreateDTO);
+            @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
+        DesafioDTO desafioDTO = desafioService.create(idUsuario,desafio);
         return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
