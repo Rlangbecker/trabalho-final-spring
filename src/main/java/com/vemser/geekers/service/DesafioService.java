@@ -5,14 +5,12 @@ import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.entity.DesafioEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.DesafioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +25,16 @@ public class DesafioService {
             UsuarioEntity usuario = usuarioService.findById(id);
             DesafioEntity desafio = objectMapper.convertValue(desafioCreateDTO, DesafioEntity.class);
             desafio.setUsuario(usuario);
+            usuario.setIdUsuario(id);
 
-            DesafioDTO desafioDTO = objectMapper.convertValue(desafioRepository.save(desafio), DesafioDTO.class);
+            desafioRepository.save(desafio);
+
+            DesafioDTO desafioDTO = objectMapper.convertValue(desafio, DesafioDTO.class);
             desafioDTO.setIdUsuario(id);
             return desafioDTO;
-        } catch (RegraDeNegocioException e) {
+        } catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
@@ -47,10 +45,19 @@ public class DesafioService {
                 .toList();
     }
 
+    public DesafioDTO findByUsuario(Integer id) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        DesafioEntity desafioEntity = desafioRepository.findDesafioEntityByUsuario(usuarioEntity);
+        DesafioDTO desafioDTO = objectMapper.convertValue(desafioEntity, DesafioDTO.class);
+        return desafioDTO;
+    }
+
     public DesafioDTO findById(Integer id) throws RegraDeNegocioException {
         DesafioEntity desafio = desafioRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Desafio não encontrado!"));
-        return objectMapper.convertValue(desafio, DesafioDTO.class);
+        DesafioDTO desafioDTO = objectMapper.convertValue(desafio, DesafioDTO.class);
+        desafioDTO.setIdUsuario(desafio.getUsuario().getIdUsuario());
+        return desafioDTO;
     }
 
     public DesafioDTO edit(Integer id, DesafioCreateDTO desafioCreateDTO) throws RegraDeNegocioException {

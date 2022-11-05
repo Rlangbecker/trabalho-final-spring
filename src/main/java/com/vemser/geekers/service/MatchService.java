@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.DesafioDTO;
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.entity.Match;
+import com.vemser.geekers.entity.MatchEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.enums.TipoEmail;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,95 +23,54 @@ public class MatchService {
 
     private final UsuarioService usuarioService;
 
-    public MatchDTO create(MatchCreateDTO matchCreateDTO) {
-        MatchDTO matchDTO;
-        try {
-            Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
-            usuarioService.findById(matchEntity.getUsuario());
-            usuarioService.findById(matchEntity.getUsuarioMain());
-            Match matchCriado = matchRepository.adicionarMatch(matchEntity);
-            matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
-            return matchDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RuntimeException(e);
-        } catch (RegraDeNegocioException e) {
-            throw new RuntimeException(e);
-        }
+    public MatchDTO create(Integer id, MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
+        return null;
     }
 
     public List<MatchDTO> list() throws RegraDeNegocioException {
-        try {
-            return matchRepository.listar()
-                    .stream()
-                    .map(match -> objectMapper.convertValue(match, MatchDTO.class))
-                    .toList();
-        }
-        catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao listar matchs!");
-        }
+
+        return matchRepository.findAll()
+                .stream()
+                .map(matchEntity -> objectMapper.convertValue(matchEntity, MatchDTO.class))
+                .toList();
+
     }
 
     public List<MatchDTO> listByUser(Integer id) throws RegraDeNegocioException {
-        try {
-            return matchRepository.listarPorUsuario(id)
-                    .stream()
-                    .map(match -> objectMapper.convertValue(match, MatchDTO.class))
-                    .toList();
-        }
-        catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao listar matchs!");
-        }
+        UsuarioEntity usuarioEntity = usuarioService.findById(id);
+        return matchRepository.findMatchEntitiesByUsuario(usuarioEntity)
+                .stream()
+                .map(matchEntity -> objectMapper.convertValue(matchEntity,MatchDTO.class))
+                .toList();
 
     }
 
-    public Match findById(Integer id) throws RegraDeNegocioException {
-        try {
-            Match matchEncontrado = matchRepository.listar().stream()
-                    .filter(match -> match.getIdMatch().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new RegraDeNegocioException("Match não encontrado"));
-            return matchEncontrado;
-        }
-        catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao listar matchs!");
-        }
+    public MatchDTO findById(Integer id) throws RegraDeNegocioException {
+        return objectMapper.convertValue(matchRepository.findById(id), MatchDTO.class);
     }
 
-    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws RegraDeNegocioException {
-        try {
-            DesafioDTO desafio = desafioService.findById(matchCreateDTO.getUsuario());
-            if (resposta == desafio.getResposta()) {
-                Match matchEntity = objectMapper.convertValue(matchCreateDTO, Match.class);
-                UsuarioEntity usuarioEntity1 = usuarioService.findById(matchEntity.getUsuario());
-                UsuarioEntity usuarioEntity2 = usuarioService.findById(matchEntity.getUsuarioMain());
-                UsuarioDTO user1Dto = objectMapper.convertValue(usuarioEntity1, UsuarioDTO.class);
-                UsuarioDTO user2Dto = objectMapper.convertValue(usuarioEntity2, UsuarioDTO.class);
+    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta, Integer idUsuario) throws RegraDeNegocioException {
+        DesafioDTO desafio = desafioService.findByUsuario(idUsuario);
+        if (resposta == desafio.getResposta()) {
+            MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
+            matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
+            UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
+            matchEntity.setUsuario(usuario);
 
-                try {
-                    emailService.sendEmail(user1Dto, user2Dto, TipoEmail.MATCH);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Match matchCriado = matchRepository.adicionarMatch(matchEntity);
-                MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
-                return matchDTO;
-            } else {
-                throw new RegraDeNegocioException("Resposta errada!");
-            }
+            MatchEntity matchCriado = matchRepository.save(matchEntity);
+            MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
+            matchDTO.setIdUsuario(matchCriado.getIdUsuario());
+            return matchDTO;
         }
-        catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao resolver o desafio! ");
+        else {
+            throw new RegraDeNegocioException("Resposta errada!");
         }
-
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
-        try {
-            Match matchRetornado = findById(id);
-            matchRepository.remover(matchRetornado.getIdMatch());
-        }
-        catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao deletar matchs!");
-        }
+        MatchDTO matchDTO = findById(id);
+        MatchEntity matchEntity = objectMapper.convertValue(matchDTO, MatchEntity.class);
+        matchRepository.delete(matchEntity);
     }
+
 }

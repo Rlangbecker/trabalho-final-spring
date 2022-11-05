@@ -28,9 +28,7 @@ public class DesafioController implements DesafioControllerInterface{
     @PostMapping()// localhost:8080/desafio
     public ResponseEntity<DesafioDTO> create(@PathVariable("idUser") Integer idUser,
             @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
-        log.info("Criando Desafio...");
         DesafioDTO desafioDTO = desafioService.create(idUser,desafio);
-        log.info("Desafio criado!");
         return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
@@ -48,7 +46,7 @@ public class DesafioController implements DesafioControllerInterface{
 
     @GetMapping("/usuario/{idUser}")
     public ResponseEntity<DesafioDTO> listByIdUser(@PathVariable("idUser") Integer idUser) throws RegraDeNegocioException{
-        return new ResponseEntity<>(desafioService.findById(idUser), HttpStatus.OK);
+        return new ResponseEntity<>(desafioService.findByUsuario(idUser), HttpStatus.OK);
     }
     @PutMapping("/{id}")
     public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,

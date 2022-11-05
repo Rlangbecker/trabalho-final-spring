@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class MatchCreateDTO {
     @NotNull
-    private Integer usuario;
+    private Integer idUsuario;
     @NotNull
     private Integer usuarioMain;
 }

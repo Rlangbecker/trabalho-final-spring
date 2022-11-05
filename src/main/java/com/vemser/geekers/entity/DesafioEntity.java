@@ -18,7 +18,7 @@ public class DesafioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DESAFIO_SEQ")
     @SequenceGenerator(name = "DESAFIO_SEQ", sequenceName = "seq_desafio", allocationSize = 1)
-    @Column(name = "id_usuario")
+    @Column(name = "id_desafio")
     private Integer idDesafio;
     @Column(name = "pergunta")
     private String pergunta;
@@ -27,7 +27,7 @@ public class DesafioEntity {
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", insertable = false, updatable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuario;
 
 }
