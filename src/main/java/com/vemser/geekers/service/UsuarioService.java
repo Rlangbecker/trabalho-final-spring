@@ -3,9 +3,8 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.enums.TipoEmail;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    // Busca no banco de No máximo QUANTIDADE_USUARIOS (3)
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
         return usuarioRepository.findAll()
                 .stream()
@@ -52,21 +50,17 @@ public class UsuarioService {
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException {
-        try {
-            UsuarioEntity usuarioEntity = findById(id);
-            usuarioRepository.delete(usuarioEntity);
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Falha na tentativa de remover seu perfil do Geekers");
-        }
+        UsuarioEntity usuarioEntity = findById(id);
+        usuarioRepository.delete(usuarioEntity);
     }
 
 
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
-            return usuarioRepository.findById(id)
-                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
     }
 
-    public List<UsuarioDTO> findByName(String nome) throws RegraDeNegocioException {
+    public List<UsuarioDTO> findByName(String nome) {
         return usuarioRepository.findUsuarioEntityByNome(nome)
                 .stream()
                 .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
@@ -74,4 +68,7 @@ public class UsuarioService {
 
     }
 
+    public List<UsuarioMatchDTO> listarUsuarioEMatchs(Integer idUsuario) {
+        return usuarioRepository.listarUsuarioEMatch(idUsuario);
+    }
 }

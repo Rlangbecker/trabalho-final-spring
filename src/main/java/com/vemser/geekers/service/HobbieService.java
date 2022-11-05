@@ -45,7 +45,7 @@ public class HobbieService {
     }
 
     public void remover(Integer id) throws RegraDeNegocioException {
-       HobbieEntity hobbie = objectMapper.convertValue(findHobbieById(id),HobbieEntity.class);
+        HobbieEntity hobbie = objectMapper.convertValue(findHobbieById(id),HobbieEntity.class);
         hobbieRepository.delete(hobbie);
     }
 
@@ -76,10 +76,7 @@ public class HobbieService {
     public HobbieDTO listByIdUsuario(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuario=usuarioService.findById(id);
 
-        HobbieDTO hobbieDTO =objectMapper.convertValue(hobbieRepository.findHobbieEntityByUsuario(usuario),HobbieDTO.class);
-        hobbieDTO.setIdUsuario(id);
-
-        return hobbieDTO;
+        return objectMapper.convertValue(hobbieRepository.findHobbieEntityByUsuario(usuario),HobbieDTO.class);
     }
 
 }
