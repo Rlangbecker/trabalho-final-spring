@@ -12,6 +12,7 @@ import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.HobbieRepository;
+import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class HobbieService {
 
     private final HobbieRepository hobbieRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
 
@@ -51,17 +53,21 @@ public class HobbieService {
 
     public HobbieDTO editar(Integer idHobbie, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
         HobbieEntity hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, HobbieEntity.class);
-        listByIdUsuario(idHobbie);
+        listByIdUsuario(hobbieCreateDTO.getIdUsuario());
+
 
         hobbieEntity.setIdHobbie(idHobbie);
         hobbieEntity.setDescricao(hobbieCreateDTO.getDescricao());
         hobbieEntity.setTipoHobbie(hobbieEntity.getTipoHobbie());
+        hobbieEntity.setUsuario(usuarioService.findById(hobbieCreateDTO.getIdUsuario()));
 
         return objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
     }
 
     public HobbieDTO findHobbieById(Integer id) {
-        HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.findHobbieEntityByIdHobbie(id),HobbieDTO.class);
+        HobbieEntity hobbieEntity=hobbieRepository.findHobbieEntityByIdHobbie(id);
+        HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity,HobbieDTO.class);
+        hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
 
         return hDTO;
     }

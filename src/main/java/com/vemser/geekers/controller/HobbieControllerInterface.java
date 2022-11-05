@@ -17,6 +17,7 @@ public interface HobbieControllerInterface {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Cria um hobbie para o Usuario informado no body"),
+                    @ApiResponse(responseCode = "400", description = "Erro na passagem de dados"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
