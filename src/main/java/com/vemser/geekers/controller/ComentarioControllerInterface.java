@@ -23,8 +23,8 @@ public interface ComentarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Comentário gerou uma exceção")
             }
     )
-    @PostMapping("/{comentario}")
-    public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException;
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Lista de comentários do usuário por ID do usuário (limite de 4 comentários)", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco, com um limite de 4 registros ")
     @ApiResponses(

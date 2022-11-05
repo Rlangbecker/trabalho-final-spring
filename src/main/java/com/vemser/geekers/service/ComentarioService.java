@@ -3,7 +3,8 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
-import com.vemser.geekers.entity.Comentario;
+import com.vemser.geekers.entity.ComentarioEntity;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.ComentarioRepository;
@@ -20,66 +21,59 @@ public class ComentarioService {
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
 
-    public ComentarioDTO create(ComentarioCreateDTO comentarioDto) throws RegraDeNegocioException {
-        try {
-            usuarioService.findById(comentarioDto.getUsuarioEntity().getIdUsuario());
-            Comentario comentarioEntity = objectMapper.convertValue(comentarioDto, Comentario.class);
-            Comentario comentario = comentarioRepository.adicionar(comentarioEntity);
-            ComentarioDTO comentarioDTO = objectMapper.convertValue(comentario, ComentarioDTO.class);
-            return comentarioDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao criar comentário no perfil Geeker, tente novamente mais tarde");
-        }
+    public ComentarioDTO create(Integer idUsuario, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
+
+        ComentarioEntity comentarioEntity = objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
+
+        comentarioEntity.setUsuario(usuarioService.findById(idUsuario));
+        comentarioEntity.getUsuario().setIdUsuario(idUsuario);
+
+        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.save(comentarioEntity), ComentarioDTO.class);
+        comentarioDTO.setIdUsuario(idUsuario);
+        return comentarioDTO;
     }
 
     public ComentarioDTO list(Integer idComentario) throws BancoDeDadosException, RegraDeNegocioException {
-        Comentario comentario = findById(idComentario);
-        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentario, ComentarioDTO.class);
+
+        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.findById(idComentario),ComentarioDTO.class);
+
         return comentarioDTO;
     }
 
     public void delete(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        try {
-            Comentario comentario = findById(id);
-            comentarioRepository.remover(comentario.getIdComentario());
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Falha ao tentar remover comentário Geeker");
-        }
+        comentarioRepository.deleteById(id);
     }
 
     public ComentarioDTO editarComentario(Integer idComentario, ComentarioDTO atualizarComentario) throws RegraDeNegocioException {
-        try {
-            usuarioService.findById(atualizarComentario.getUsuarioEntity().getIdUsuario());
-            Comentario comentarioRecuperado = findById(idComentario);
-            comentarioRecuperado.setComentario(atualizarComentario.getComentario());
-            comentarioRepository.editar(idComentario, comentarioRecuperado);
-            return objectMapper.convertValue(comentarioRecuperado, ComentarioDTO.class);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Falha na tentativa de editar perfil Geeker");
-        }
+
+        UsuarioEntity usuario = usuarioService.findById(atualizarComentario.getIdUsuario());
+
+        ComentarioEntity comentarioEntityRecuperado = objectMapper.convertValue(findById(idComentario), ComentarioEntity.class);
+
+        comentarioEntityRecuperado.setUsuario(usuario);
+        comentarioEntityRecuperado.setComentario(atualizarComentario.getComentario());
+        comentarioRepository.save(comentarioEntityRecuperado);
+
+        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioEntityRecuperado, ComentarioDTO.class);
+
+        comentarioDTO.setIdUsuario(atualizarComentario.getIdUsuario());
+
+        return comentarioDTO;
     }
 
     public List<ComentarioDTO> listarComentarioPorUsuario(Integer idUsuario) throws RegraDeNegocioException {
-        try {
-            usuarioService.findById(idUsuario);
-            List<Comentario> comentarios = comentarioRepository.listarPorUsuario(idUsuario).stream().toList();
-            return comentarios.stream()
-                    .toList()
-                    .stream()
-                    .map(comentario -> objectMapper.convertValue(comentario, ComentarioDTO.class))
-                    .toList();
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Falha ao listar comentários do perfil Geeker");
-        }
+        UsuarioEntity usuario = usuarioService.findById(idUsuario);
+
+        List<ComentarioDTO> comentarios = comentarioRepository.findComentarioEntityByUsuario(usuario).stream()
+                .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
+                .toList();
+        return comentarios;
     }
 
-    public Comentario findById(Integer idComentario) throws RegraDeNegocioException {
-        try {
-            Comentario comentario = comentarioRepository.listarComentarioPorId(idComentario);
-            return comentario;
-        } catch (BancoDeDadosException e) {
-            throw  new RegraDeNegocioException("Comentário Geeker não foi encontrado pelo id ^_^");
-        }
+    public ComentarioDTO findById(Integer idComentario) {
+
+        return objectMapper.convertValue(comentarioRepository.findById(idComentario), ComentarioDTO.class);
+
     }
 
 }

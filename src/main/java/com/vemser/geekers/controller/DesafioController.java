@@ -25,10 +25,10 @@ public class DesafioController implements DesafioControllerInterface{
         this.desafioService = desafioService;
     }
 
-    @PostMapping()// localhost:8080/desafio
-    public ResponseEntity<DesafioDTO> create(@PathVariable("idUser") Integer idUser,
+    @PostMapping("/{idUsuario}")// localhost:8080/desafio
+    public ResponseEntity<DesafioDTO> create(@PathVariable("idUsuario") Integer idUsuario,
             @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
-        DesafioDTO desafioDTO = desafioService.create(idUser,desafio);
+        DesafioDTO desafioDTO = desafioService.create(idUsuario,desafio);
         return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
