@@ -2,7 +2,6 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
-import com.vemser.geekers.entity.Hobbie;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,13 +9,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 public interface HobbieControllerInterface {
     @Operation(summary = "Criar hobbies", description = "Cria um hobbie com o ID do usuario passado no body")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Cria um hobbie para o Usuario informado no body"),
+                    @ApiResponse(responseCode = "400", description = "Erro na passagem de dados"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
@@ -33,7 +31,7 @@ public interface HobbieControllerInterface {
             }
     )
     @GetMapping("{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public List<Hobbie> listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
+    public HobbieDTO listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualizar hobbie", description = "Atualiza o hobbie do usuario passado por ID(Hobbie)")
     @ApiResponses(

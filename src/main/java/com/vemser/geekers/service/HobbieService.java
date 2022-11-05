@@ -6,76 +6,76 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
-import com.vemser.geekers.entity.Hobbie;
-import com.vemser.geekers.exception.BancoDeDadosException;
+import com.vemser.geekers.entity.HobbieEntity;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.HobbieRepository;
+import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class HobbieService {
 
     private final HobbieRepository hobbieRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
 
     // create - remover - editar - listar(ListHobbieByIdUsuario)
 
     public HobbieDTO create(Integer idUsuario, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
-        try {
-            Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
 
-            usuarioService.findById(idUsuario);
+        HobbieEntity hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, HobbieEntity.class);
 
-            hobbieRepository.adicionar(hobbieEntity);
+        UsuarioEntity usuario =usuarioService.findById(idUsuario);
+        hobbieEntity.setUsuario(usuario);
+        hobbieEntity.getUsuario().setIdUsuario(idUsuario);
 
-            HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
+        HobbieDTO hDTO = objectMapper.convertValue( hobbieRepository.save(hobbieEntity), HobbieDTO.class);
 
-            hDTO.setIdHobbie(hobbieEntity.getIdHobbies());
-            return hDTO;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao criar!");
-        }
+        hDTO.setIdHobbie(hobbieEntity.getIdHobbie());
+        hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
+        return hDTO;
     }
 
     public void remover(Integer id) throws RegraDeNegocioException {
-        try {
-            hobbieRepository.remover(id);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao remover!");
-        }
+        HobbieEntity hobbie = objectMapper.convertValue(findHobbieById(id),HobbieEntity.class);
+        hobbieRepository.delete(hobbie);
     }
 
     public HobbieDTO editar(Integer idHobbie, HobbieCreateDTO hobbieCreateDTO) throws RegraDeNegocioException {
-        try {
-            Hobbie hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, Hobbie.class);
-            listByIdUsuario(idHobbie);
-            hobbieRepository.editar(idHobbie, hobbieEntity);
+        HobbieEntity hobbieEntity = objectMapper.convertValue(hobbieCreateDTO, HobbieEntity.class);
+        listByIdUsuario(hobbieCreateDTO.getIdUsuario());
 
-            hobbieEntity.setIdHobbies(idHobbie);
-            return objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao editar!");
-        }
+        hobbieEntity.setIdHobbie(idHobbie);
+        hobbieEntity.setDescricao(hobbieCreateDTO.getDescricao());
+        hobbieEntity.setTipoHobbie(hobbieEntity.getTipoHobbie());
+        hobbieEntity.setUsuario(usuarioService.findById(hobbieCreateDTO.getIdUsuario()));
+        hobbieEntity.getUsuario().setIdUsuario(hobbieCreateDTO.getIdUsuario());
+
+        HobbieDTO hobbieDTO = objectMapper.convertValue(hobbieRepository.save(hobbieEntity), HobbieDTO.class);
+        hobbieDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
+
+        return hobbieDTO;
     }
 
-//    public List<HobbieDTO> list() throws RegraDeNegocioException, BancoDeDadosException {
-//        return hobbieRepository.listar().stream()
-//                .map(hobbie -> objectMapper.convertValue(hobbie, HobbieDTO.class))
-//                .toList();
-//    }
+    public HobbieDTO findHobbieById(Integer id) {
+        HobbieEntity hobbieEntity=hobbieRepository.findHobbieEntityByIdHobbie(id);
+        HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity,HobbieDTO.class);
+        hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
 
-    public List<Hobbie> listByIdUsuario(Integer id) throws RegraDeNegocioException {
-        try {
-            List<Hobbie> hobbieList = hobbieRepository.listHobbieByIdUsuario(id);
-            return hobbieList;
-        } catch (BancoDeDadosException e) {
-            throw new RegraDeNegocioException("Erro ao listar!");
-        }
+        return hDTO;
+    }
+
+    public HobbieDTO listByIdUsuario(Integer id) throws RegraDeNegocioException {
+        UsuarioEntity usuario=usuarioService.findById(id);
+
+        HobbieDTO hobbieDTO =objectMapper.convertValue(hobbieRepository.findHobbieEntityByUsuario(usuario),HobbieDTO.class);
+        hobbieDTO.setIdUsuario(id);
+
+        return hobbieDTO;
     }
 
 }

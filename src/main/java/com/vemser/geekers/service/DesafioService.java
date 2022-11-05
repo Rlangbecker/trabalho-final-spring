@@ -20,6 +20,7 @@ public class DesafioService {
     private final ObjectMapper objectMapper;
     private final UsuarioService usuarioService;
 
+    //TODO Ajustar esse metodo que esta com erro
     public DesafioDTO create(Integer id, DesafioCreateDTO desafioCreateDTO) throws RegraDeNegocioException {
         try {
             UsuarioEntity usuario = usuarioService.findById(id);
