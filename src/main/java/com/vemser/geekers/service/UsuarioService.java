@@ -3,6 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -70,5 +71,9 @@ public class UsuarioService {
 
     public List<UsuarioMatchDTO> listarUsuarioEMatchs(Integer idUsuario) {
         return usuarioRepository.listarUsuarioEMatch(idUsuario);
+    }
+
+    public List<UsuarioDesafioDTO> listarUsuarioEDesafio(Integer idUsuario) {
+        return usuarioRepository.listarUsuarioEDesafio(idUsuario);
     }
 }

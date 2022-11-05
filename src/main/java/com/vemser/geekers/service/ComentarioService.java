@@ -26,6 +26,7 @@ public class ComentarioService {
         ComentarioEntity comentarioEntity = objectMapper.convertValue(comentarioCreateDTO, ComentarioEntity.class);
 
         comentarioEntity.setUsuario(usuarioService.findById(idUsuario));
+        comentarioEntity.getUsuario().setIdUsuario(idUsuario);
 
         ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.save(comentarioEntity), ComentarioDTO.class);
         comentarioDTO.setIdUsuario(idUsuario);

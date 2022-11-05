@@ -1,5 +1,6 @@
 package com.vemser.geekers.repository;
 
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,17 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " left join u.matchs m " +
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
     List<UsuarioMatchDTO> listarUsuarioEMatch(Integer idUsuario);
+
+    @Query(" select new com.vemser.geekers.dto.UsuarioDesafioDTO(" +
+            " u.idUsuario," +
+            " u.nome ," +
+            " u.email ," +
+            " d.pergunta, " +
+            " d.resposta, " +
+            " d.idDesafio " +
+            ")" +
+            "  from usuario u" +
+            " left join u.desafio d " +
+            " where (:idUsuario is null or u.idUsuario = :idUsuario)")
+    List<UsuarioDesafioDTO> listarUsuarioEDesafio(Integer idUsuario);
 }
