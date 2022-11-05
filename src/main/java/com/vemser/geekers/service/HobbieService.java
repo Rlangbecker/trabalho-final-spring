@@ -37,9 +37,7 @@ public class HobbieService {
         hobbieEntity.setUsuario(usuario);
         hobbieEntity.getUsuario().setIdUsuario(idUsuario);
 
-        hobbieRepository.save(hobbieEntity);
-
-        HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
+        HobbieDTO hDTO = objectMapper.convertValue( hobbieRepository.save(hobbieEntity), HobbieDTO.class);
 
         hDTO.setIdHobbie(hobbieEntity.getIdHobbie());
         hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
@@ -61,9 +59,10 @@ public class HobbieService {
         hobbieEntity.setUsuario(usuarioService.findById(hobbieCreateDTO.getIdUsuario()));
         hobbieEntity.getUsuario().setIdUsuario(hobbieCreateDTO.getIdUsuario());
 
-        hobbieRepository.save(hobbieEntity);
+        HobbieDTO hobbieDTO = objectMapper.convertValue(hobbieRepository.save(hobbieEntity), HobbieDTO.class);
+        hobbieDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
 
-        return objectMapper.convertValue(hobbieEntity, HobbieDTO.class);
+        return hobbieDTO;
     }
 
     public HobbieDTO findHobbieById(Integer id) {
