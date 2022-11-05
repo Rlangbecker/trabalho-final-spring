@@ -1,9 +1,6 @@
 package com.vemser.geekers.controller;
 
-import com.vemser.geekers.dto.UsuarioCreateDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.dto.UsuarioDesafioDTO;
-import com.vemser.geekers.dto.UsuarioMatchDTO;
+import com.vemser.geekers.dto.*;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
@@ -79,6 +76,11 @@ public class UsuarioController implements UsuarioControllerInterface{
     @GetMapping("/listar-usuario-desafio/{id}")
     public List<UsuarioDesafioDTO> listarUsuarioEDesafios(@RequestParam(required = false) Integer idPessoa) {
         return usuarioService.listarUsuarioEDesafio(idPessoa);
+    }
+
+    @GetMapping("/usuario-paginado")
+    public PageDTO<UsuarioDTO> listarUsuarioPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
+        return usuarioService.listUsuarioPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
     }
 
 }
