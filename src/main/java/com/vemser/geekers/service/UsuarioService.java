@@ -3,9 +3,8 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.UsuarioCreateDTO;
 import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.enums.TipoEmail;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,5 +66,9 @@ public class UsuarioService {
                 .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
                 .toList();
 
+    }
+
+    public List<UsuarioMatchDTO> listarUsuarioEMatchs(Integer idUsuario) {
+        return usuarioRepository.listarUsuarioEMatch(idUsuario);
     }
 }
