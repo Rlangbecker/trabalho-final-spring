@@ -78,14 +78,14 @@ public class MatchService {
     public PageDTO<MatchDTO> listMatchPaginada(Integer pagina, Integer tamanho) {
         PageRequest pageRequest = PageRequest.of(pagina, tamanho);
         Page<MatchEntity> paginaDoRepositorio = matchRepository.findAll(pageRequest);
-        List<MatchDTO> pessoasDaPagina = paginaDoRepositorio.getContent().stream()
-                .map(pessoaEntity -> objectMapper.convertValue(pessoaEntity, MatchDTO.class))
+        List<MatchDTO> matchDTOS = paginaDoRepositorio.getContent().stream()
+                .map(matchs -> objectMapper.convertValue(matchs, MatchDTO.class))
                 .toList();
         return new PageDTO<>(paginaDoRepositorio.getTotalElements(),
                 paginaDoRepositorio.getTotalPages(),
                 pagina,
                 tamanho,
-                pessoasDaPagina
+                matchDTOS
         );
 
     }

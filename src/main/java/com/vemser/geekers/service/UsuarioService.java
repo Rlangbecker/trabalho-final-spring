@@ -1,14 +1,13 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.UsuarioCreateDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.dto.UsuarioDesafioDTO;
-import com.vemser.geekers.dto.UsuarioMatchDTO;
+import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,5 +74,20 @@ public class UsuarioService {
 
     public List<UsuarioDesafioDTO> listarUsuarioEDesafio(Integer idUsuario) {
         return usuarioRepository.listarUsuarioEDesafio(idUsuario);
+    }
+
+    public PageDTO<UsuarioDTO> listUsuarioPaginado(Integer pagina, Integer tamanho) {
+        PageRequest pageRequest = PageRequest.of(pagina, tamanho);
+        Page<UsuarioEntity> paginaDoRepositorio = usuarioRepository.findAll(pageRequest);
+        List<UsuarioDTO> usuarios = paginaDoRepositorio.getContent().stream()
+                .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
+                .toList();
+        return new PageDTO<>(paginaDoRepositorio.getTotalElements(),
+                paginaDoRepositorio.getTotalPages(),
+                pagina,
+                tamanho,
+                usuarios
+        );
+
     }
 }

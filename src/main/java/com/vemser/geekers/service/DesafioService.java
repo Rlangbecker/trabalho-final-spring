@@ -40,9 +40,13 @@ public class DesafioService {
     }
 
     public List<DesafioDTO> list(){
-        return desafioRepository.findAll()
-                .stream()
-                .map(desafio -> objectMapper.convertValue(desafio, DesafioDTO.class))
+        List<DesafioEntity> all = desafioRepository.findAll();
+        return all.stream()
+                .map(desafio -> {
+                    DesafioDTO desafioDTO = objectMapper.convertValue(desafio, DesafioDTO.class);
+                    desafioDTO.setIdUsuario(desafio.getUsuario().getIdUsuario());
+                    return desafioDTO;
+                })
                 .toList();
     }
 
@@ -50,6 +54,7 @@ public class DesafioService {
         UsuarioEntity usuarioEntity = usuarioService.findById(id);
         DesafioEntity desafioEntity = desafioRepository.findDesafioEntityByUsuario(usuarioEntity);
         DesafioDTO desafioDTO = objectMapper.convertValue(desafioEntity, DesafioDTO.class);
+        desafioDTO.setIdUsuario(desafioEntity.getUsuario().getIdUsuario());
         return desafioDTO;
     }
 
