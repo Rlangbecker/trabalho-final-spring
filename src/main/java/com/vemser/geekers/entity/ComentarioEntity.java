@@ -1,5 +1,6 @@
 package com.vemser.geekers.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,13 @@ public class ComentarioEntity {
     @SequenceGenerator(name = "COMENTARIO_SEQ", sequenceName = "SEQ_COMENTARIO", allocationSize = 1)
     @Column(name = "ID_COMENTARIO")
     private Integer idComentario;
-
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+    private Integer idUsuario;
     @Column(name = "comentario")
     private String comentario;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ID_USUARIO", referencedColumnName = "ID_USUARIO")
     private UsuarioEntity usuario;
 
