@@ -40,8 +40,10 @@ public class ComentarioService {
         return comentarioDTO;
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException, BancoDeDadosException {
-        comentarioRepository.deleteById(id);
+    public void delete(Integer id) throws RegraDeNegocioException {
+        ComentarioDTO comentarioDTO = findById(id);
+        ComentarioEntity comentarioEntity = objectMapper.convertValue(comentarioDTO, ComentarioEntity.class);
+        comentarioRepository.delete(comentarioEntity);
     }
 
     public ComentarioDTO editarComentario(Integer idComentario, ComentarioDTO atualizarComentario) throws RegraDeNegocioException {
@@ -67,12 +69,20 @@ public class ComentarioService {
         List<ComentarioDTO> comentarios = comentarioRepository.findComentarioEntityByUsuario(usuario).stream()
                 .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
                 .toList();
+
+        comentarios.stream().forEach(comentario -> comentario.setIdUsuario(idUsuario));
+
         return comentarios;
     }
 
-    public ComentarioDTO findById(Integer idComentario) {
+    public ComentarioDTO findById(Integer idComentario) throws RegraDeNegocioException {
+        ComentarioEntity comentarioEntity = comentarioRepository.findById(idComentario)
+                .orElseThrow(() -> new RegraDeNegocioException("Comentario não encontrado"));
 
-        return objectMapper.convertValue(comentarioRepository.findById(idComentario), ComentarioDTO.class);
+        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioEntity,ComentarioDTO.class);
+        comentarioDTO.setIdUsuario(comentarioEntity.getUsuario().getIdUsuario());
+
+        return comentarioDTO;
 
     }
 

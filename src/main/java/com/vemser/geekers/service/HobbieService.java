@@ -71,10 +71,10 @@ public class HobbieService {
 
     public HobbieDTO listByIdUsuario(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuario=usuarioService.findById(id);
+        HobbieEntity hobbie = hobbieRepository.findHobbieEntityByUsuario(usuario);
+        HobbieDTO hobbieDTO=objectMapper.convertValue(hobbie, HobbieDTO.class);
 
-        HobbieDTO hobbieDTO =objectMapper.convertValue(hobbieRepository.findHobbieEntityByUsuario(usuario),HobbieDTO.class);
-        hobbieDTO.setIdUsuario(id);
-
+        hobbieDTO.setIdUsuario(usuario.getIdUsuario());
         return hobbieDTO;
     }
 
