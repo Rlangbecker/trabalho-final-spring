@@ -68,12 +68,12 @@ public class UsuarioController implements UsuarioControllerInterface{
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/listar-usuario-matchs/{id}")
+    @GetMapping("/listar-usuario-matchs")
     public List<UsuarioMatchDTO> listarUsuariosEMatchs(@RequestParam(required = false) Integer idPessoa) {
         return usuarioService.listarUsuarioEMatchs(idPessoa);
     }
 
-    @GetMapping("/listar-usuario-desafio/{id}")
+    @GetMapping("/listar-usuario-desafio")
     public List<UsuarioDesafioDTO> listarUsuarioEDesafios(@RequestParam(required = false) Integer idPessoa) {
         return usuarioService.listarUsuarioEDesafio(idPessoa);
     }
