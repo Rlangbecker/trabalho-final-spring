@@ -2,36 +2,63 @@ package com.vemser.geekers.security;
 
 import com.vemser.geekers.entity.UsuarioLoginEntity;
 import com.vemser.geekers.service.UsuarioLoginService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 
 public class TokenService {
 
+    @Value("${jwt.secret}")
+    private String secret;
+
 private final UsuarioLoginService usuarioLoginService;
 
     public String getToken(UsuarioLoginEntity usuarioEntity) {
-        // FIXME por meio do usuário, gerar um token
-        String tokenTexto = usuarioEntity.getLogin() + ";" + usuarioEntity.getSenha();
-        String token = Base64.getEncoder().encodeToString(tokenTexto.getBytes());
-        return token;
+        LocalDateTime dataAtualLD = LocalDateTime.now();
+        Date dataAtual = Date.from(dataAtualLD.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime dataExpLD = dataAtualLD.plusDays(1);
+        Date dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+        return Jwts.builder()
+                .setIssuer("vemser-api")
+                .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
+                .setIssuedAt(dataAtual)
+                .setExpiration(dataExp)
+                .signWith(SignatureAlgorithm.HS256, secret) // mudar para a vm args
+                .compact();
     }
 
-    public Optional<UsuarioLoginEntity> isValid(String token) {
+    public UsernamePasswordAuthenticationToken isValid(String token) {
         // FIXME validar se o token é válido e retornar o usuário se for válido
         if(token == null) {
-            return Optional.empty();
+            return null;
         }
         token = token.replace("Bearer ", ""); // token, example: dXZfbFgEH=
 
-        byte[] decodedBytes = Base64.getUrlDecoder().decode(token);
-        String decoded = new String(decodedBytes);
-        String[] split = decoded.split(";");
-        return usuarioLoginService.findByLoginAndSenha(split[0], split[1]);
+        Claims keys = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+
+
+        String idLoginUsuario = keys.get(Claims.ID, String.class);
+
+        UsernamePasswordAuthenticationToken dtoSecurityObject =
+                new UsernamePasswordAuthenticationToken(idLoginUsuario,
+                        null,
+                        Collections.emptyList());
+
+        return dtoSecurityObject;
     }
 }

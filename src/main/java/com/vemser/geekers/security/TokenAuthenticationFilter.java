@@ -1,6 +1,5 @@
 package com.vemser.geekers.security;
 
-import com.vemser.geekers.entity.UsuarioLoginEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,8 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -21,18 +18,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // FIXME recuperar token do header
         String headerAuth = request.getHeader("Authorization");
-        Optional<UsuarioLoginEntity> isValid = tokenService.isValid(headerAuth);
 
-        if(isValid.isPresent()) {
-            UsuarioLoginEntity usuarioEntity = isValid.get();
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(usuarioEntity.getLogin(),
-                    usuarioEntity.getSenha(), Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(token);
-        } else {
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
+        UsernamePasswordAuthenticationToken dtoSecurity = tokenService.isValid(headerAuth);
+
+
+        SecurityContextHolder.getContext().setAuthentication(dtoSecurity); // se for null, ele vai definir como null,
+        // e se for diferente de null, ele define como ele mesmo.
 
         filterChain.doFilter(request, response);
     }
