@@ -40,7 +40,7 @@ private final UsuarioLoginService usuarioLoginService;
     }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
-        // FIXME validar se o token é válido e retornar o usuário se for válido
+
         if(token == null) {
             return null;
         }

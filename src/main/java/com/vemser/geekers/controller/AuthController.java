@@ -1,6 +1,7 @@
 package com.vemser.geekers.controller;
 
-import br.com.dbc.vemser.pessoaapi.dto.LoginDTO;
+import com.vemser.geekers.dto.LoginDTO;
+import com.vemser.geekers.dto.LoginWithIdDTO;
 import com.vemser.geekers.entity.UsuarioLoginEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.security.TokenService;
@@ -9,14 +10,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -54,5 +54,14 @@ public class AuthController {
         UsuarioLoginEntity usuarioLoginEntity = (UsuarioLoginEntity) principal;
         String token = tokenService.getToken(usuarioLoginEntity);
         return token;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<LoginDTO> create(@RequestBody @Valid LoginDTO loginDTO) {
+        return ResponseEntity.ok(usuarioLoginService.create(loginDTO));
+    }
+    @GetMapping("/logged")
+    public ResponseEntity<LoginWithIdDTO> findByLogin() throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioLoginService.getLoggedUser(), HttpStatus.OK);
     }
 }
