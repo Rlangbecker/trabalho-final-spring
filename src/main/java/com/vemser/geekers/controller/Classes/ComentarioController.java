@@ -1,5 +1,6 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Classes;
 
+import com.vemser.geekers.controller.Interfaces.ComentarioControllerInterface;
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
 import com.vemser.geekers.exception.BancoDeDadosException;

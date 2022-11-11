@@ -1,4 +1,4 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Interfaces;
 
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.DesafioDTO;
@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 public interface DesafioControllerInterface {
-    @Operation(summary = "Criar Desafio", description = "Criar um desafio")
+    @Operation(summary = "Criar Desafio", description = "Criar um desafio para um usuário específico presente no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna um desafio criado"),

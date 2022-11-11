@@ -1,5 +1,6 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Classes;
 
+import com.vemser.geekers.controller.Interfaces.AuthControllerInterface;
 import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -24,22 +25,14 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerInterface {
 
     private final UsuarioLoginService usuarioLoginService;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    @Operation(summary = "Autenticar dados", description = "Verifica se seus dados consta no banco e cria um token de acesso.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Token criado com sucesso!"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
     @PostMapping
-    public String auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+    public ResponseEntity<String> auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
@@ -53,7 +46,7 @@ public class AuthController {
         Object principal = authenticate.getPrincipal();
         UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
         String token = tokenService.getToken(usuarioEntity);
-        return token;
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -61,7 +54,7 @@ public class AuthController {
         return ResponseEntity.ok(usuarioLoginService.create(usuarioCreateDTO));
     }
     @GetMapping("/logged")
-    public ResponseEntity<LoginWithIdDTO> findByLogin() throws RegraDeNegocioException {
+    public ResponseEntity<LoginWithIdDTO> loggedVerify() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioLoginService.getLoggedUser(), HttpStatus.OK);
     }
 

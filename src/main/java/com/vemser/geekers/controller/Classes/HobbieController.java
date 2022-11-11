@@ -1,5 +1,6 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Classes;
 
+import com.vemser.geekers.controller.Interfaces.HobbieControllerInterface;
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/hobbie") // localhost:8080/hobbie
-public class HobbieController implements HobbieControllerInterface{
+public class HobbieController implements HobbieControllerInterface {
 
     private final HobbieService hobbieService;
 

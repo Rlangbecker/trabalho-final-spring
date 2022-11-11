@@ -1,7 +1,8 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Interfaces;
 
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
+import com.vemser.geekers.dto.PageDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,4 +59,15 @@ public interface MatchControllerInterface {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException;
+
+    @Operation(summary = "Listar matches paginados", description = "Lista os matches presentes no banco de dados com uma separação por páginas")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Listagem paginada realizada com sucesso!"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para se cadastrar neste recurso"),
+                    @ApiResponse(responseCode = "500", description = "Cadastro gerou uma exceção")
+            }
+    )
+    ResponseEntity<PageDTO<MatchDTO>> listarMatchesPaginados(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina);
+
 }

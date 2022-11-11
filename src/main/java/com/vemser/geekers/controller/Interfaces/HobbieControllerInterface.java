@@ -1,4 +1,4 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Interfaces;
 
 import com.vemser.geekers.dto.HobbieCreateDTO;
 import com.vemser.geekers.dto.HobbieDTO;

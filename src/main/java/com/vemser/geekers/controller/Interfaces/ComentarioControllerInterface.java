@@ -1,4 +1,4 @@
-package com.vemser.geekers.controller;
+package com.vemser.geekers.controller.Interfaces;
 
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
@@ -36,6 +36,16 @@ public interface ComentarioControllerInterface {
     )
     @GetMapping("/{id-usuario}/usuario")
     public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
+
+    @Operation(summary = "Listar comentários", description = "Lista os comentários presentes no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso!"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para se cadastrar neste recurso"),
+                    @ApiResponse(responseCode = "500", description = "Cadastro gerou uma exceção")
+            }
+    )
+    ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException;
 
     @Operation(summary = "Lista de comentários do usuário com limite de 4 registros", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco está limitada à 4 registros")
     @ApiResponses(
