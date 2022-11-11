@@ -24,9 +24,19 @@ public class UsuarioController implements UsuarioControllerInterface {
 
     private final UsuarioService usuarioService;
 
-    @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException { //
-        return new ResponseEntity<>(usuarioService.list(), HttpStatus.OK);
+    @GetMapping("/ativos")
+    public ResponseEntity<List<UsuarioDTO>> listUsuariosAtivos() { //
+        return new ResponseEntity<>(usuarioService.listByAtivo(), HttpStatus.OK);
+    }
+
+    @GetMapping("/inativos")
+    public ResponseEntity<List<UsuarioDTO>> listUsuariosInativos() { //
+        return new ResponseEntity<>(usuarioService.listByInativo(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException {
+        return null;
     }
 
     @GetMapping("/{id-usuario}")

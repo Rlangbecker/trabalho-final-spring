@@ -3,6 +3,7 @@ package com.vemser.geekers.repository;
 import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
+import com.vemser.geekers.enums.TipoAtivo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     UsuarioEntity findByEmail(String email);
 
-
+    List<UsuarioEntity> findByAtivo(TipoAtivo tipoAtivo);
 
     @Query(" select new com.vemser.geekers.dto.UsuarioMatchDTO(" +
             " u.idUsuario," +

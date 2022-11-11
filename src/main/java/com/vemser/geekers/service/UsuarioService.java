@@ -32,6 +32,20 @@ public class UsuarioService {
                 .toList();
     }
 
+    public List<UsuarioDTO> listByAtivo(){
+        return usuarioRepository.findByAtivo(TipoAtivo.ATIVO)
+                .stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .toList();
+    }
+
+    public List<UsuarioDTO> listByInativo(){
+        return usuarioRepository.findByAtivo(TipoAtivo.INATIVO)
+                .stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .toList();
+    }
+
     public UsuarioDTO editarUsuario(Integer id, UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntityRecuperado = findById(id);
         usuarioEntityRecuperado.setNome(usuarioAtualizar.getNome());
