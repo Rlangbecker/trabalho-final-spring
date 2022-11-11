@@ -47,6 +47,28 @@ public class TokenService {
                 .compact();
     }
 
+    public String getTokenTemporary(UsuarioEntity usuarioEntity) {
+        LocalDateTime dataAtualLD = LocalDateTime.now();
+        Date dataAtual = Date.from(dataAtualLD.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime dataExpLD = dataAtualLD.plusDays(1);
+        Date dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+        dataExpLD = dataAtualLD.plusMinutes(10);
+        dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+
+        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+                .map(CargoEntity::getAuthority)
+                .toList();
+
+        return Jwts.builder()
+                .setIssuer("vemser-api")
+                .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
+                .claim(CHAVE_CARGOS, cargosDoUsuario)
+                .setIssuedAt(dataAtual)
+                .setExpiration(dataExp)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
 //    public String getToken(UsuarioEntity usuarioEntity) {
 //        LocalDateTime dataAtualLD = LocalDateTime.now();
 //        Date dataAtual = Date.from(dataAtualLD.atZone(ZoneId.systemDefault()).toInstant());
@@ -77,7 +99,7 @@ public class TokenService {
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
 
-        if(token == null) {
+        if (token == null) {
             return null;
         }
         token = token.replace("Bearer ", ""); // token, example: dXZfbFgEH=

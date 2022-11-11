@@ -61,7 +61,7 @@ public class UsuarioLoginService {
         UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
         UsuarioSeguroDTO usuarioSeguroDTO = objectMapper.convertValue(usuarioEntity, UsuarioSeguroDTO.class);
         // UsuarioEntityPrincipal
-        String token = tokenService.getToken(usuarioEntity);
+        String token = tokenService.getTokenTemporary(usuarioEntity);
         usuarioSeguroDTO.setToken(token);
         emailService.sendEmailSeguro(usuarioSeguroDTO,TipoEmail.TROCA_SENHA);
         usuarioRepository.save(usuarioEntity);
