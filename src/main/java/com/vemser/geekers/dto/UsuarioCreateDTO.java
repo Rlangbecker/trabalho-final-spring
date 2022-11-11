@@ -15,6 +15,15 @@ import java.time.LocalDate;
 @Data
 public class UsuarioCreateDTO {
 
+    @NotNull
+    @Schema(description = "Login do usuário", example = "teste")
+    private String login;
+
+    @NotEmpty
+    @NotNull
+    @Schema(description = "Senha do usuário", example = "K83nsdb&@s")
+    private String senha;
+
     @NotEmpty
     @NotBlank
     @Schema(description = "Nome do usuário", example = "Felipe Noguez")
@@ -27,11 +36,6 @@ public class UsuarioCreateDTO {
     @NotNull
     @Schema(description = "Telefone do usuário", example = "+555198778545")
     private String telefone;
-
-    @NotEmpty
-    @NotNull
-    @Schema(description = "Senha do usuário", example = "K83nsdb&@s")
-    private String senha;
 
     @Schema(description = "Data de nascimento do usuário", example = "2002-02-02")
     private LocalDate dataNascimento;

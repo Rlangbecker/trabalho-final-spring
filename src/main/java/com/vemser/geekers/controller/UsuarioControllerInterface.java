@@ -23,17 +23,6 @@ public interface UsuarioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Cadastro gerou uma exceção")
             }
     )
-    @PostMapping("/{usuario}")
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException;
-
-    @Operation(summary = "Lista de usuários aleatórios", description = "Realiza a pesquisa de usuários no banco aleatóriamente com no máximo 3 registros")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Pesquisa de usuários realizado com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para pesquisar neste recurso"),
-                    @ApiResponse(responseCode = "500", description = "A pesquisa gerou uma exceção")
-            }
-    )
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException;
 

@@ -3,6 +3,7 @@ package com.vemser.geekers.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,29 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth.antMatchers("/", "/auth/**").permitAll()
 
-                        //ao meio - nossa regras específicas.
+                        //USUARIO
+
+                        // -> listas
+                        .antMatchers("/usuario/listar-usuario-desafio").hasRole("USUARIO")
+                        .antMatchers("/usuario/by-nome").hasRole("USUARIO")
+                        .antMatchers(HttpMethod.PUT, "/usuario").hasRole("USUARIO")
+
+                        // -> desafio
+                        .antMatchers(HttpMethod.POST, "/desafio").hasRole("USUARIO")
+                        .antMatchers(HttpMethod.DELETE, "/desafio").hasRole("USUARIO")
+                        .antMatchers(HttpMethod.PUT, "/desafio").hasRole("USUARIO")
+                        .antMatchers(HttpMethod.GET, "/desafio/usuario").hasRole("USUARIO")
+
+                        // -> hobbie
+                        .antMatchers("/hobbie/**").hasAnyRole("USUARIO", "ADMIN")
+
+                        // -> comentários
+                        .antMatchers(HttpMethod.PUT, "/comentario").hasRole("USUARIO")
+                        .antMatchers(HttpMethod.POST, "/comentario").hasRole("USUARIO")
+//                        .antMatchers(HttpMethod.GET, "/comentario/**/usuario").hasRole("USUARIO")
+
+                        //ADMIN
+
 
                         .anyRequest().authenticated());
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

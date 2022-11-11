@@ -2,7 +2,9 @@ package com.vemser.geekers.controller;
 
 import com.vemser.geekers.dto.LoginDTO;
 import com.vemser.geekers.dto.LoginWithIdDTO;
-import com.vemser.geekers.entity.UsuarioLoginEntity;
+import com.vemser.geekers.dto.UsuarioCreateDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.security.TokenService;
 import com.vemser.geekers.service.UsuarioLoginService;
@@ -49,16 +51,16 @@ public class AuthController {
 
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        // UsuarioLoginEntity
+        // UsuarioEntity
         Object principal = authenticate.getPrincipal();
-        UsuarioLoginEntity usuarioLoginEntity = (UsuarioLoginEntity) principal;
-        String token = tokenService.getToken(usuarioLoginEntity);
+        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
+        String token = tokenService.getToken(usuarioEntity);
         return token;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginDTO> create(@RequestBody @Valid LoginDTO loginDTO) {
-        return ResponseEntity.ok(usuarioLoginService.create(loginDTO));
+    public ResponseEntity<UsuarioDTO> create(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        return ResponseEntity.ok(usuarioLoginService.create(usuarioCreateDTO));
     }
     @GetMapping("/logged")
     public ResponseEntity<LoginWithIdDTO> findByLogin() throws RegraDeNegocioException {

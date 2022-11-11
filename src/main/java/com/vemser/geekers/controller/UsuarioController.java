@@ -26,14 +26,7 @@ public class UsuarioController implements UsuarioControllerInterface{
 
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException, BancoDeDadosException {
-        log.info("Iniciando cadastro de usuário . . .");
-        UsuarioDTO criandoUsuarioDto = usuarioService.create(usuarioDto);
-        log.info("Usuário cadastrado.");
 
-        return new ResponseEntity<>(criandoUsuarioDto, HttpStatus.OK);
-    }
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException {

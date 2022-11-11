@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
@@ -39,4 +40,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " left join u.desafio d " +
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
     List<UsuarioDesafioDTO> listarUsuarioEDesafio(Integer idUsuario);
+
+    Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha);
+
+    Optional<UsuarioEntity> findByLogin(String login);
 }

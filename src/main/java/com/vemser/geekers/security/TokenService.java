@@ -1,41 +1,48 @@
 package com.vemser.geekers.security;
 
-import com.vemser.geekers.entity.UsuarioLoginEntity;
-import com.vemser.geekers.service.UsuarioLoginService;
+import com.vemser.geekers.entity.CargoEntity;
+import com.vemser.geekers.entity.UsuarioEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 
 public class TokenService {
 
+    private static final String CHAVE_CARGOS = "CARGOS";
     @Value("${jwt.secret}")
     private String secret;
 
-private final UsuarioLoginService usuarioLoginService;
-
-    public String getToken(UsuarioLoginEntity usuarioEntity) {
+    public String getToken(UsuarioEntity usuarioEntity) {
         LocalDateTime dataAtualLD = LocalDateTime.now();
         Date dataAtual = Date.from(dataAtualLD.atZone(ZoneId.systemDefault()).toInstant());
         LocalDateTime dataExpLD = dataAtualLD.plusDays(1);
         Date dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+
+        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+                .map(CargoEntity::getAuthority)
+                .toList();
+
         return Jwts.builder()
                 .setIssuer("vemser-api")
                 .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
+                .claim(CHAVE_CARGOS, cargosDoUsuario)
                 .setIssuedAt(dataAtual)
                 .setExpiration(dataExp)
-                .signWith(SignatureAlgorithm.HS256, secret) // mudar para a vm args
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
@@ -53,11 +60,16 @@ private final UsuarioLoginService usuarioLoginService;
 
 
         String idLoginUsuario = keys.get(Claims.ID, String.class);
+        List<String> cargos = keys.get(CHAVE_CARGOS, List.class);
+
+        List<SimpleGrantedAuthority> listaDeCargos = cargos.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
         UsernamePasswordAuthenticationToken dtoSecurityObject =
                 new UsernamePasswordAuthenticationToken(idLoginUsuario,
                         null,
-                        Collections.emptyList());
+                        listaDeCargos);
 
         return dtoSecurityObject;
     }

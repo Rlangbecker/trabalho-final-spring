@@ -3,31 +3,37 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.LoginDTO;
 import com.vemser.geekers.dto.LoginWithIdDTO;
-import com.vemser.geekers.entity.UsuarioLoginEntity;
+import com.vemser.geekers.dto.UsuarioCreateDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.entity.CargoEntity;
+import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
-import com.vemser.geekers.repository.UsuarioLoginRepository;
+import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioLoginService {
-    private final UsuarioLoginRepository usuarioLoginRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CargoService cargoService;
     private final ObjectMapper objectMapper;
 
-    public LoginDTO create(LoginDTO loginDTO){
-        UsuarioLoginEntity usuarioLoginEntity = objectMapper.convertValue(loginDTO, UsuarioLoginEntity.class);
-        usuarioLoginEntity.setSenha(new BCryptPasswordEncoder().encode(loginDTO.getSenha()));
-        usuarioLoginRepository.save(usuarioLoginEntity);
-        return loginDTO;
-    }
-
-    public Optional<UsuarioLoginEntity> findByLoginAndSenha(String login, String senha) {
-        return usuarioLoginRepository.findByLoginAndSenha(login, senha);
+    public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        UsuarioEntity usuarioLoginEntity = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
+        usuarioLoginEntity.setSenha(passwordEncoder.encode(usuarioCreateDTO.getSenha()));
+        CargoEntity cargoEntity = cargoService.findById(2);
+        cargoEntity.setUsuarios(Set.of(usuarioLoginEntity));
+        usuarioLoginEntity.setCargos(Set.of(cargoEntity));
+        usuarioRepository.save(usuarioLoginEntity);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuarioLoginEntity, UsuarioDTO.class);
+        return usuarioDTO;
     }
 
     public Integer getIdLoggedUser() {
@@ -36,19 +42,19 @@ public class UsuarioLoginService {
     }
 
     public LoginWithIdDTO getLoggedUser() throws RegraDeNegocioException {
-        UsuarioLoginEntity userLogged = findById(getIdLoggedUser());
+        UsuarioEntity userLogged = findById(getIdLoggedUser());
         return objectMapper.convertValue(userLogged, LoginWithIdDTO.class);
     }
 
-    public UsuarioLoginEntity findById(Integer idLoginUsuario) throws RegraDeNegocioException {
-         UsuarioLoginEntity usuarioLoginEntity = usuarioLoginRepository.findById(idLoginUsuario)
+    public UsuarioEntity findById(Integer idLoginUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(idLoginUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
-         return usuarioLoginEntity;
+         return usuarioEntity;
     }
 
 
 
-    public Optional<UsuarioLoginEntity> findByLogin(String login) {
-        return usuarioLoginRepository.findByLogin(login);
+    public Optional<UsuarioEntity> findByLogin(String login) {
+        return usuarioRepository.findByLogin(login);
     }
 }

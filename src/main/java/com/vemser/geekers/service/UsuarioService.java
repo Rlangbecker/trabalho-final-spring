@@ -8,6 +8,7 @@ import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +20,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
-
-    public UsuarioDTO create(UsuarioCreateDTO usuarioDto) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioDto, UsuarioEntity.class);
-        UsuarioEntity usuario = usuarioRepository.save(usuarioEntity);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
-//        emailService.sendEmail(usuarioDTO,null, TipoEmail.CADASTRO);
-        return usuarioDTO;
-    }
 
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
         return usuarioRepository.findAll()
