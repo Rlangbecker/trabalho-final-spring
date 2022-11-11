@@ -1,5 +1,6 @@
 package com.vemser.geekers.service;
 import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioSeguroDTO;
 import com.vemser.geekers.enums.TipoEmail;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -60,7 +61,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void sendEmail(UsuarioDTO usuario,UsuarioDTO usuario2, TipoEmail tipoEmail) {
+    public void sendEmail(UsuarioDTO usuario, UsuarioDTO usuario2, TipoEmail tipoEmail) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
             if(tipoEmail==TipoEmail.CADASTRO){
@@ -97,14 +98,50 @@ public class EmailService {
         if (tipoEmail==TipoEmail.CADASTRO){
             dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
             dados.put("msg2", " Seu cadastro foi realizado com sucesso, seu identificador é " + usuario.getIdUsuario());
+            dados.put("msg3","");
         }else{
             dados.put("nome", usuario.getNome());
             dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
             dados.put("msg2", "Você deu match com " + usuario2.getNome().toUpperCase() + " 8)");
+            dados.put("msg3","");
         }
 
         Template template = fmConfiguration.getTemplate("email-template-universal.ftl");
         String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
         return html;
     }
+
+    public String geContentFromTemplateUsuarioSeguro(UsuarioSeguroDTO usuario, TipoEmail tipoEmail) throws IOException, TemplateException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", usuario.getNome());
+        dados.put("email", from);
+
+            dados.put("nome", usuario.getNome());
+            dados.put("msg1", "Foi solicitada uma troca de senha, caso não tenha sido você \n" +
+                    "apenas ignore esta mensagem");
+            dados.put("msg2", "Utilize esse token para fazer o login e trocar sua senha: ");
+            dados.put("msg3",usuario.getToken());
+
+        Template template = fmConfiguration.getTemplate("email-template-universal.ftl");
+        String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+        return html;
+    }
+
+    public void sendEmailSeguro(UsuarioSeguroDTO usuario,TipoEmail tipoEmail) {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+                mimeMessageHelper.setFrom(TO);
+                mimeMessageHelper.setTo(usuario.getEmail());
+                mimeMessageHelper.setSubject("Nova senha");
+                mimeMessageHelper.setText(geContentFromTemplateUsuarioSeguro(usuario, tipoEmail), true);
+
+                emailSender.send(mimeMessageHelper.getMimeMessage());
+
+        } catch (MessagingException | IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

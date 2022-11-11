@@ -1,8 +1,12 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.*;
+import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
+import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
+import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +23,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
         return usuarioRepository.findAll()
@@ -31,7 +35,8 @@ public class UsuarioService {
     public UsuarioDTO editarUsuario(Integer id, UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntityRecuperado = findById(id);
         usuarioEntityRecuperado.setNome(usuarioAtualizar.getNome());
-        usuarioEntityRecuperado.setSenha(usuarioAtualizar.getSenha());
+        usuarioEntityRecuperado.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenha()));
+
         usuarioEntityRecuperado.setEmail(usuarioAtualizar.getEmail());
         usuarioEntityRecuperado.setTelefone(usuarioAtualizar.getTelefone());
         usuarioEntityRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
@@ -44,7 +49,8 @@ public class UsuarioService {
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = findById(id);
-        usuarioRepository.delete(usuarioEntity);
+        usuarioEntity.setAtivo(TipoAtivo.INATIVO);
+        usuarioRepository.save(usuarioEntity);
     }
 
 
@@ -82,5 +88,16 @@ public class UsuarioService {
                 usuarios
         );
 
+    }
+
+
+    public String trocarSenha(String email, String senha) throws RegraDeNegocioException{
+     UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
+        if(usuarioEntity == null) {
+            throw new RegraDeNegocioException("Usuário não encontrado!");
+        }
+        usuarioEntity.setSenha(passwordEncoder.encode(senha));
+        usuarioRepository.save(usuarioEntity);
+     return "Senha atualizada com sucesso!";
     }
 }

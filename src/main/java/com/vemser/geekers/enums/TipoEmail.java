@@ -2,5 +2,6 @@ package com.vemser.geekers.enums;
 
 public enum TipoEmail {
     CADASTRO,
-    MATCH;
+    MATCH,
+    TROCA_SENHA;
 }

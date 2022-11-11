@@ -29,30 +29,30 @@ public class SecurityConfiguration {
         http.headers().frameOptions().disable().and()
                 .cors().and()
                 .csrf().disable()
-                .authorizeHttpRequests((auth) -> auth.antMatchers("/", "/auth/**").permitAll()
+                .authorizeHttpRequests((auth) -> auth.antMatchers("/auth", "/auth/**").permitAll()
 
-                        //USUARIO
-
-                        // -> listas
-                        .antMatchers("/usuario/listar-usuario-desafio").hasRole("USUARIO")
-                        .antMatchers("/usuario/by-nome").hasRole("USUARIO")
-                        .antMatchers(HttpMethod.PUT, "/usuario").hasRole("USUARIO")
-
-                        // -> desafio
-                        .antMatchers(HttpMethod.POST, "/desafio").hasRole("USUARIO")
-                        .antMatchers(HttpMethod.DELETE, "/desafio").hasRole("USUARIO")
-                        .antMatchers(HttpMethod.PUT, "/desafio").hasRole("USUARIO")
-                        .antMatchers(HttpMethod.GET, "/desafio/usuario").hasRole("USUARIO")
-
-                        // -> hobbie
+                        // LISTAS
+                        // -> USUARIO
+                        .antMatchers("/usuario/listar-usuario-desafio").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers("/usuario/by-nome").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.PUT, "/usuario").hasAnyRole("USUARIO", "ADMIN")
+                        // -> ADMIN
+                        .antMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario/**").hasRole("ADMIN")
+                        // DESAFIOS
+                        .antMatchers("/desafio/**").hasAnyRole("USUARIO", "ADMIN")
+                        // HOBBIES
                         .antMatchers("/hobbie/**").hasAnyRole("USUARIO", "ADMIN")
+                        // COMENTÁRIOS
+                        // -> USUARIO
+                        .antMatchers(HttpMethod.PUT, "/comentario").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.POST, "/comentario").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET, "/comentario/**/usuario").hasAnyRole("USUARIO", "ADMIN")
+                        // -> ADMIN
+                        .antMatchers(HttpMethod.DELETE, "/comentario/**").hasRole("ADMIN")
 
-                        // -> comentários
-                        .antMatchers(HttpMethod.PUT, "/comentario").hasRole("USUARIO")
-                        .antMatchers(HttpMethod.POST, "/comentario").hasRole("USUARIO")
-//                        .antMatchers(HttpMethod.GET, "/comentario/**/usuario").hasRole("USUARIO")
-
-                        //ADMIN
+                        // MATCH
+//                        .antMatchers(HttpMethod.POST, "/mat")
 
 
                         .anyRequest().authenticated());
@@ -73,9 +73,9 @@ public class SecurityConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-               registry.addMapping("/**")
-                       .allowedMethods("*")
-                       .exposedHeaders("Authorization");
+                registry.addMapping("/**")
+                        .allowedMethods("*")
+                        .exposedHeaders("Authorization");
             }
         };
     }

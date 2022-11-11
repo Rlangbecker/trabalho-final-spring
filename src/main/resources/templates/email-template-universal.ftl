@@ -33,6 +33,8 @@ backgrily: Arial, Helvetica, sans-serif; font-size: 13px; color: #000000; paddin
                             <br>
                             <p style="font-size:24px; color: white;">${msg2}</p>
                             <br>
+                            <p style="font-size:14px; color: yellow;">${msg3}</p>
+                            <br>
                             <br>
                             <p style="font-size:18px;border: 5px solid transparent;
                                 border-radius: 38px;background: rgb(121,9,75);

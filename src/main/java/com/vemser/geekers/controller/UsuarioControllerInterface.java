@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface UsuarioControllerInterface {
 
-    @Operation(summary = "Cadastro de usuário", description = "Realiza o cadastro do usuário no banco")
+    @Operation(summary = "Listar usuários", description = "Listar usuários no banco")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Cadastro de usuário realizado com sucesso"),

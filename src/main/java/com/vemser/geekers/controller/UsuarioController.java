@@ -4,6 +4,7 @@ import com.vemser.geekers.dto.*;
 import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +17,11 @@ import java.util.List;
 @RestController
 @Validated
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/usuario")
 public class UsuarioController implements UsuarioControllerInterface{
 
     private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-
-    }
-
-
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException, BancoDeDadosException {
@@ -74,6 +69,12 @@ public class UsuarioController implements UsuarioControllerInterface{
     @GetMapping("/usuario-paginado")
     public PageDTO<UsuarioDTO> listarUsuarioPaginado(Integer paginaQueEuQuero, Integer tamanhoDeRegistrosPorPagina){
         return usuarioService.listUsuarioPaginado(paginaQueEuQuero, tamanhoDeRegistrosPorPagina);
+    }
+
+    @PutMapping("/change-password")
+    public String trocarSenha(@Valid @RequestParam("Email") String email,
+                              @Valid @RequestParam("Nova Senha") String senha) throws RegraDeNegocioException {
+        return usuarioService.trocarSenha(email, senha);
     }
 
 }

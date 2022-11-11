@@ -1,6 +1,7 @@
 package com.vemser.geekers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "hobbie")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class HobbieEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HOBBIE_SEQ")

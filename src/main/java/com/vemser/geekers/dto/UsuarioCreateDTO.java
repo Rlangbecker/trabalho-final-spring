@@ -1,5 +1,7 @@
 package com.vemser.geekers.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vemser.geekers.enums.TipoAtivo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,6 +46,9 @@ public class UsuarioCreateDTO {
     @Schema(description = "Genero do usuário", example = "M")
     private String sexo;
 
+    @Schema(description = "Ativo", example = "S")
+    @JsonIgnore
+    private TipoAtivo ativo;
 
 
 }

@@ -15,6 +15,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     List<UsuarioEntity> findUsuarioEntityByNome(String nome);
 
+    UsuarioEntity findByEmail(String email);
+
+
 
     @Query(" select new com.vemser.geekers.dto.UsuarioMatchDTO(" +
             " u.idUsuario," +

@@ -1,6 +1,8 @@
 package com.vemser.geekers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vemser.geekers.enums.TipoAtivo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity(name = "usuario")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UsuarioEntity implements UserDetails {
 
     @Id
@@ -39,6 +42,13 @@ public class UsuarioEntity implements UserDetails {
 
     @Column(name = "senha")
     private String senha;
+
+    @Column(name = "ativo")
+    private TipoAtivo ativo;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
+    private Set<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,7 +84,6 @@ public class UsuarioEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
     @JsonIgnore
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private DesafioEntity desafio;
@@ -91,9 +100,6 @@ public class UsuarioEntity implements UserDetails {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ComentarioEntity> comentarios;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
-    private Set<CargoEntity> cargos;
 }
 
 

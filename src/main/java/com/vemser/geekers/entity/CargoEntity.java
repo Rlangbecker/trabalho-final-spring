@@ -1,6 +1,7 @@
 package com.vemser.geekers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity(name = "cargo")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CargoEntity implements GrantedAuthority {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGO_SEQ")

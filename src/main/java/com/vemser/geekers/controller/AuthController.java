@@ -1,9 +1,6 @@
 package com.vemser.geekers.controller;
 
-import com.vemser.geekers.dto.LoginDTO;
-import com.vemser.geekers.dto.LoginWithIdDTO;
-import com.vemser.geekers.dto.UsuarioCreateDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.security.TokenService;
@@ -12,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,5 +63,10 @@ public class AuthController {
     @GetMapping("/logged")
     public ResponseEntity<LoginWithIdDTO> findByLogin() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioLoginService.getLoggedUser(), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> findEmail(@RequestBody @Valid String email){
+        return new ResponseEntity<>(usuarioLoginService.findUserByEmail(email),HttpStatus.OK);
     }
 }

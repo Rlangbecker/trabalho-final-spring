@@ -2,6 +2,7 @@ package com.vemser.geekers.security;
 
 import com.vemser.geekers.entity.CargoEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
+import com.vemser.geekers.enums.TipoEmail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -45,6 +46,34 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
+
+//    public String getToken(UsuarioEntity usuarioEntity) {
+//        LocalDateTime dataAtualLD = LocalDateTime.now();
+//        Date dataAtual = Date.from(dataAtualLD.atZone(ZoneId.systemDefault()).toInstant());
+//        LocalDateTime dataExpLD = dataAtualLD.plusDays(1);
+//        Date dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+//        List<String> cargosDoUsuario = usuarioEntity.getCargos().stream()
+//                .map(CargoEntity::getAuthority)
+//                .toList();
+//        if(TipoEmail.TROCA_SENHA) {
+//            dataExpLD = dataAtualLD.plusMinutes(10);
+//            dataExp = Date.from(dataExpLD.atZone(ZoneId.systemDefault()).toInstant());
+//            return GetTokenSenha(usuarioEntity, cargosDoUsuario, dataAtual, dataExp);
+//        }
+//       return GetTokenSenha(usuarioEntity, cargosDoUsuario, dataAtual, dataExp);
+//
+//    }
+//
+//    public String GetTokenSenha(UsuarioEntity usuarioEntity, List<String> listaCargos,Date dataAtual,Date dataExpTokenSenha){
+//        return Jwts.builder()
+//                .setIssuer("vemser-api")
+//                .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
+//                .claim(CHAVE_CARGOS, listaCargos)
+//                .setIssuedAt(dataAtual)
+//                .setExpiration(dataExpTokenSenha)
+//                .signWith(SignatureAlgorithm.HS256, secret)
+//                .compact();
+//    }
 
     public UsernamePasswordAuthenticationToken isValid(String token) {
 
