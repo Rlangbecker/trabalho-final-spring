@@ -2,6 +2,7 @@ package com.vemser.geekers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vemser.geekers.enums.TipoAtivo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ public class MatchEntity {
     private Integer idUsuario;
     @Column(name = "id_usuario_main")
     private Integer usuarioMain;
+    @Column(name = "ativo")
+    private TipoAtivo ativo;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

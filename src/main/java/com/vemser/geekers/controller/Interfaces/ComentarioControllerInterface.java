@@ -2,7 +2,6 @@ package com.vemser.geekers.controller.Interfaces;
 
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +23,7 @@ public interface ComentarioControllerInterface {
             }
     )
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException;
+    public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException;
 
     @Operation(summary = "Lista de comentários do usuário por ID do usuário (limite de 4 comentários)", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco, com um limite de 4 registros ")
     @ApiResponses(
@@ -35,17 +34,7 @@ public interface ComentarioControllerInterface {
             }
     )
     @GetMapping("/{id-usuario}/usuario")
-    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
-
-    @Operation(summary = "Listar comentários", description = "Lista os comentários presentes no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Listagem realizada com sucesso!"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para se cadastrar neste recurso"),
-                    @ApiResponse(responseCode = "500", description = "Cadastro gerou uma exceção")
-            }
-    )
-    ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException;
+    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException;
 
     @Operation(summary = "Lista de comentários do usuário com limite de 4 registros", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco está limitada à 4 registros")
     @ApiResponses(
@@ -56,7 +45,7 @@ public interface ComentarioControllerInterface {
             }
     )
     @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException;
+    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualiza o comentário do usuário por ID", description = "Realiza a atualização do comentário do usuário no banco pelo seu ID")
     @ApiResponses(
@@ -68,7 +57,7 @@ public interface ComentarioControllerInterface {
     )
     @PutMapping("/{id-comentario}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable("id-comentario") Integer idComentario,
-                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException, BancoDeDadosException;
+                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException;
 
     @Operation(summary = "Remove o comentário do usuário por ID", description = "Realiza a remoção dos comentário do usuário no banco pelo seu ID")
     @ApiResponses(
@@ -79,6 +68,6 @@ public interface ComentarioControllerInterface {
             }
     )
     @DeleteMapping("/{id-comentario}/remover-comentario")
-    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException;
+    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException;
 
 }

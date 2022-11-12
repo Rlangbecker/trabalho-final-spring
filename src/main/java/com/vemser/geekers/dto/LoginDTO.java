@@ -1,4 +1,5 @@
 package com.vemser.geekers.dto;
+import com.vemser.geekers.enums.TipoAtivo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

@@ -24,6 +24,7 @@ public class CargoService {
     public CargoDTO create(Integer idUsuario, CargoCreateDTO cargoCreateDTO) throws RegraDeNegocioException {
         UsuarioEntity usuario = usuarioService.findById(idUsuario);
         CargoEntity cargoEntity = objectMapper.convertValue(cargoCreateDTO, CargoEntity.class);
+
         cargoEntity.setUsuarios(Set.of(usuario));
         usuario.setCargos(Set.of(cargoEntity));
         cargoRepository.save(cargoEntity);

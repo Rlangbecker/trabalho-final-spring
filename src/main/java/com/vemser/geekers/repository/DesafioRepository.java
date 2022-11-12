@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface DesafioRepository extends JpaRepository<DesafioEntity, Integer> {
 
     DesafioEntity findDesafioEntityByUsuario(UsuarioEntity usuario);
+
 }

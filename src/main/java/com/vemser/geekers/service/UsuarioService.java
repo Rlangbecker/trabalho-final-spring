@@ -1,14 +1,13 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.PageDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.dto.UsuarioDesafioDTO;
-import com.vemser.geekers.dto.UsuarioMatchDTO;
+import com.vemser.geekers.dto.*;
+import com.vemser.geekers.entity.CargoEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
+import com.vemser.geekers.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -39,26 +40,11 @@ public class UsuarioService {
                 .toList();
     }
 
-    public List<UsuarioDTO> listByInativo(){
+    public List<UsuarioDTO> listByInativo() {
         return usuarioRepository.findByAtivo(TipoAtivo.INATIVO)
                 .stream()
                 .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
                 .toList();
-    }
-
-    public UsuarioDTO editarUsuario(Integer id, UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntityRecuperado = findById(id);
-        usuarioEntityRecuperado.setNome(usuarioAtualizar.getNome());
-        usuarioEntityRecuperado.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenha()));
-
-        usuarioEntityRecuperado.setEmail(usuarioAtualizar.getEmail());
-        usuarioEntityRecuperado.setTelefone(usuarioAtualizar.getTelefone());
-        usuarioEntityRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
-        usuarioEntityRecuperado.setSexo(usuarioAtualizar.getSexo());
-
-        usuarioRepository.save(usuarioEntityRecuperado);
-
-        return objectMapper.convertValue(usuarioEntityRecuperado, UsuarioDTO.class);
     }
 
     public void removerUsuario(Integer id) throws RegraDeNegocioException {
@@ -104,14 +90,14 @@ public class UsuarioService {
 
     }
 
+//    public UsuarioDTO atualizarCargo(Integer idUsuario, Integer idCargo) throws RegraDeNegocioException{
+//        UsuarioEntity usuario = usuarioService.findById(idUsuario);
+//        CargoEntity cargoEntity = cargoService.findById(idCargo);
+//        cargoEntity.setUsuarios(Set.of(usuario));
+//        usuario.setCargos(Set.of(cargoEntity));
+//        usuarioRepository.save(usuario);
+//        UsuarioDTO usuarioDTO = objectMapper.convertValue(usuario, UsuarioDTO.class);
+//        return usuarioDTO;
+//    }
 
-    public String trocarSenha(String email, String senha) throws RegraDeNegocioException{
-     UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
-        if(usuarioEntity == null) {
-            throw new RegraDeNegocioException("Usuário não encontrado!");
-        }
-        usuarioEntity.setSenha(passwordEncoder.encode(senha));
-        usuarioRepository.save(usuarioEntity);
-     return "Senha atualizada com sucesso!";
-    }
 }

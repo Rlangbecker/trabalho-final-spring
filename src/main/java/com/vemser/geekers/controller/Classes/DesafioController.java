@@ -26,10 +26,10 @@ public class DesafioController implements DesafioControllerInterface {
         this.desafioService = desafioService;
     }
 
-    @PostMapping("/{idUsuario}")// localhost:8080/desafio
-    public ResponseEntity<DesafioDTO> create(@PathVariable("idUsuario") Integer idUsuario,
+    @PostMapping// localhost:8080/desafio
+    public ResponseEntity<DesafioDTO> create(
             @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException {
-        DesafioDTO desafioDTO = desafioService.create(idUsuario,desafio);
+        DesafioDTO desafioDTO = desafioService.create(desafio);
         return new ResponseEntity<>(desafioDTO, HttpStatus.OK);
     }
 
@@ -49,15 +49,15 @@ public class DesafioController implements DesafioControllerInterface {
     public ResponseEntity<DesafioDTO> listByIdUser(@PathVariable("idUser") Integer idUser) throws RegraDeNegocioException{
         return new ResponseEntity<>(desafioService.findByUsuario(idUser), HttpStatus.OK);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,
+    @PutMapping
+    public ResponseEntity<DesafioDTO> update(
                                          @Valid @RequestBody DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException {
-        return new ResponseEntity<>(desafioService.edit(id, desafioAtualizar), HttpStatus.OK);
+        return new ResponseEntity<>(desafioService.edit(desafioAtualizar), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException {
-        desafioService.delete(id);
+    @DeleteMapping
+    public ResponseEntity<Void> delete() throws RegraDeNegocioException {
+        desafioService.delete();
         return ResponseEntity.ok().build();
     }
 

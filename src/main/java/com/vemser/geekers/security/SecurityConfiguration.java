@@ -32,28 +32,22 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) -> auth.antMatchers("/auth", "/auth/**").permitAll()
 
                         // LISTAS
-                        // -> USUARIO
+                        .antMatchers("/desafio/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers("/hobbie/**").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers("/usuario/listar-usuario-desafio").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers("/usuario/by-nome").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/comentario/**").hasAnyRole("ADMIN","USUARIO")
                         .antMatchers(HttpMethod.PUT, "/usuario").hasAnyRole("USUARIO", "ADMIN")
-                        // -> ADMIN
-                        .antMatchers(HttpMethod.DELETE, "/usuario/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario/**").hasRole("ADMIN")
-                        // DESAFIOS
-                        .antMatchers("/desafio/**").hasAnyRole("USUARIO", "ADMIN")
-                        // HOBBIES
-                        .antMatchers("/hobbie/**").hasAnyRole("USUARIO", "ADMIN")
-                        // COMENTÁRIOS
-                        // -> USUARIO
+                        .antMatchers(HttpMethod.PUT, "/usuario/usuario-paginado").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario/listar-usuario-desafio/**").hasAnyRole("USUARIO", "ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario/ativos/").hasAnyRole("USUARIO","ADMIN")
                         .antMatchers(HttpMethod.PUT, "/comentario").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.POST, "/comentario").hasAnyRole("USUARIO", "ADMIN")
                         .antMatchers(HttpMethod.GET, "/comentario/**/usuario").hasAnyRole("USUARIO", "ADMIN")
-                        // -> ADMIN
-                        .antMatchers(HttpMethod.DELETE, "/comentario/**").hasRole("ADMIN")
-
-                        // MATCH
-//                        .antMatchers(HttpMethod.POST, "/mat")
-
+                        .antMatchers(HttpMethod.GET, "/usuario/inativos/").hasAnyRole("USUARIO_GOLD","ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario/listar-usuario-matchs").hasRole("ADMIN")
 
                         .anyRequest().authenticated());
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

@@ -3,6 +3,7 @@ package com.vemser.geekers.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
+import com.vemser.geekers.dto.LoginWithIdDTO;
 import com.vemser.geekers.entity.ComentarioEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.exception.BancoDeDadosException;
@@ -20,6 +21,7 @@ public class ComentarioService {
     private final ComentarioRepository comentarioRepository;
     private final UsuarioService usuarioService;
     private final ObjectMapper objectMapper;
+    private final UsuarioLoginService usuarioLoginService;
 
     public ComentarioDTO create(Integer idUsuario, ComentarioCreateDTO comentarioCreateDTO) throws RegraDeNegocioException {
 
@@ -33,7 +35,7 @@ public class ComentarioService {
         return comentarioDTO;
     }
 
-    public ComentarioDTO list(Integer idComentario) throws BancoDeDadosException, RegraDeNegocioException {
+    public ComentarioDTO list(Integer idComentario) throws RegraDeNegocioException {
 
         ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.findById(idComentario),ComentarioDTO.class);
 
@@ -42,6 +44,10 @@ public class ComentarioService {
 
     public void delete(Integer id) throws RegraDeNegocioException {
         ComentarioDTO comentarioDTO = findById(id);
+        LoginWithIdDTO login = usuarioLoginService.getLoggedUser();
+        if(login.getIdUsuario() != comentarioDTO.getIdUsuario()) {
+            throw new RegraDeNegocioException("Este comentário não lhe pertence!");
+        }
         ComentarioEntity comentarioEntity = objectMapper.convertValue(comentarioDTO, ComentarioEntity.class);
         comentarioRepository.delete(comentarioEntity);
     }

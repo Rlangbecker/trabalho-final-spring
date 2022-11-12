@@ -1,12 +1,10 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.DesafioDTO;
-import com.vemser.geekers.dto.MatchCreateDTO;
-import com.vemser.geekers.dto.MatchDTO;
-import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.MatchEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
+import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +20,9 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
     private final DesafioService desafioService;
-    private final EmailService emailService;
 
     private final UsuarioService usuarioService;
+    private final UsuarioLoginService usuarioLoginService;
 
     public MatchDTO create(Integer id, MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
         return null;
@@ -52,14 +50,15 @@ public class MatchService {
         return objectMapper.convertValue(matchRepository.findById(id), MatchDTO.class);
     }
 
-    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta, Integer idUsuario) throws RegraDeNegocioException {
-        DesafioDTO desafio = desafioService.findByUsuario(idUsuario);
+    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws RegraDeNegocioException {
+        LoginWithIdDTO login = usuarioLoginService.getLoggedUser();
+        DesafioDTO desafio = desafioService.findByUsuario(login.getIdUsuario());
         if (resposta == desafio.getResposta()) {
             MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
             matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
             UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
             matchEntity.setUsuario(usuario);
-
+            matchEntity.setAtivo(TipoAtivo.ATIVO);
             MatchEntity matchCriado = matchRepository.save(matchEntity);
             MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
             matchDTO.setIdUsuario(matchCriado.getIdUsuario());
@@ -71,8 +70,9 @@ public class MatchService {
 
     public void delete(Integer id) throws RegraDeNegocioException {
         MatchDTO matchDTO = findById(id);
-        MatchEntity matchEntity = objectMapper.convertValue(matchDTO, MatchEntity.class);
-        matchRepository.delete(matchEntity);
+        matchDTO.setAtivo(TipoAtivo.INATIVO);
+        MatchEntity match = objectMapper.convertValue(matchDTO, MatchEntity.class);
+        matchRepository.save(match);
     }
 
     public PageDTO<MatchDTO> listMatchPaginada(Integer pagina, Integer tamanho) {

@@ -1,5 +1,7 @@
 package com.vemser.geekers.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vemser.geekers.enums.TipoAtivo;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -9,5 +11,7 @@ public class MatchCreateDTO {
     @NotNull
     private Integer idUsuario;
     @NotNull
-    private Integer usuarioMain;
+    @JsonIgnore
+    private Integer idUsuarioMatch;
+    private TipoAtivo ativo;
 }

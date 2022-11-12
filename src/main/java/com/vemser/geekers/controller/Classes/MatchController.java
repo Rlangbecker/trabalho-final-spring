@@ -24,12 +24,11 @@ import java.util.List;
 public class MatchController implements MatchControllerInterface {
     private final MatchService matchService;
 
-    @PostMapping("/{resposta}/usuario/{idUser}")
+    @PostMapping("/{resposta}/usuario")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
-            @PathVariable("idUser") Integer idUser,
             @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
         log.info("Criando Match...");
-        MatchDTO matchDTO = matchService.resolverDesafio(matchCreateDTO,resposta, idUser);
+        MatchDTO matchDTO = matchService.resolverDesafio(matchCreateDTO,resposta);
         log.info("Match dado!");
         return new ResponseEntity<>(matchDTO, HttpStatus.OK);
     }

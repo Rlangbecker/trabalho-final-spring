@@ -21,8 +21,8 @@ public interface DesafioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUser}")
-    public ResponseEntity<DesafioDTO> create(@PathVariable("idUser") Integer idUser,
+    @PostMapping
+    public ResponseEntity<DesafioDTO> create(
                                              @Valid @RequestBody DesafioCreateDTO desafio) throws RegraDeNegocioException;
 
     @Operation(summary = "Listar Desafio por id", description = "Listar Desafio por id")
@@ -66,9 +66,8 @@ public interface DesafioControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/{id}")
-    public ResponseEntity<DesafioDTO> update(@PathVariable("id") Integer id,
-                                             @Valid @RequestBody DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException;
+    @PutMapping
+    public ResponseEntity<DesafioDTO> update(@Valid @RequestBody DesafioCreateDTO desafioAtualizar) throws RegraDeNegocioException;
 
     @Operation(summary = "Deletar desafio por id", description = "Deletar desafio por id")
     @ApiResponses(
@@ -79,6 +78,6 @@ public interface DesafioControllerInterface {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) throws RegraDeNegocioException;
+     ResponseEntity<Void> delete() throws RegraDeNegocioException;
 
     }

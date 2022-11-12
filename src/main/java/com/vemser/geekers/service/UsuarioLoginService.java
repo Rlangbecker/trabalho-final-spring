@@ -68,6 +68,40 @@ public class UsuarioLoginService {
         return "Email enviado com o token!";
     }
 
+
+    public String trocarSenha(String senha) throws RegraDeNegocioException {
+        LoginWithIdDTO login = getLoggedUser();
+        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(login.getEmail());
+        if (usuarioEntity == null) {
+            throw new RegraDeNegocioException("Usuário não encontrado!");
+        }
+        usuarioEntity.setSenha(passwordEncoder.encode(senha));
+        usuarioRepository.save(usuarioEntity);
+        return "Senha atualizada com sucesso!";
+    }
+
+    public UsuarioDTO editarUsuario(UsuarioDTO usuarioAtualizar) throws RegraDeNegocioException {
+        LoginWithIdDTO login = getLoggedUser();
+        UsuarioEntity usuarioEntityRecuperado = findById(login.getIdUsuario());
+        usuarioEntityRecuperado.setNome(usuarioAtualizar.getNome());
+        usuarioEntityRecuperado.setSenha(passwordEncoder.encode(usuarioAtualizar.getSenha()));
+
+        usuarioEntityRecuperado.setEmail(usuarioAtualizar.getEmail());
+        usuarioEntityRecuperado.setTelefone(usuarioAtualizar.getTelefone());
+        usuarioEntityRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
+        usuarioEntityRecuperado.setSexo(usuarioAtualizar.getSexo());
+
+        usuarioRepository.save(usuarioEntityRecuperado);
+
+        return objectMapper.convertValue(usuarioEntityRecuperado, UsuarioDTO.class);
+    }
+
+    public String atualizarCargo(Integer idUsuario) throws RegraDeNegocioException {
+        findById(idUsuario);
+        usuarioRepository.alterarCargo(idUsuario);
+        return "Usuario atualizado para Usuario Gold";
+    }
+
     public Optional<UsuarioEntity> findByLogin(String login) {
         return usuarioRepository.findByLogin(login);
     }

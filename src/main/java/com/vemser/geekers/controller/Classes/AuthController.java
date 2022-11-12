@@ -3,6 +3,7 @@ package com.vemser.geekers.controller.Classes;
 import com.vemser.geekers.controller.Interfaces.AuthControllerInterface;
 import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.UsuarioEntity;
+import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.security.TokenService;
 import com.vemser.geekers.service.UsuarioLoginService;
@@ -33,7 +34,6 @@ public class AuthController implements AuthControllerInterface {
 
     @PostMapping
     public ResponseEntity<String> auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
-
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getLogin(),
@@ -45,8 +45,11 @@ public class AuthController implements AuthControllerInterface {
         // UsuarioEntity
         Object principal = authenticate.getPrincipal();
         UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
-        String token = tokenService.getToken(usuarioEntity);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        if (usuarioEntity.getAtivo() != TipoAtivo.INATIVO) {
+            String token = tokenService.getToken(usuarioEntity);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Conta desativada!", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/register")

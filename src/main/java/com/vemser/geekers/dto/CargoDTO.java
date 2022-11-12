@@ -1,5 +1,4 @@
 package com.vemser.geekers.dto;
-
 import lombok.Data;
 
 @Data

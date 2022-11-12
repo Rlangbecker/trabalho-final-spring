@@ -29,7 +29,7 @@ public class ComentarioController implements ComentarioControllerInterface {
     }
 
     @PostMapping("/{idUsuario}")
-    public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException {
         log.info("Adicionando comentário.");
         ComentarioDTO criandoComentarioDto = comentarioService.create(idUsuario,comentario);
         log.info("Comentário adicionado.");
@@ -37,24 +37,18 @@ public class ComentarioController implements ComentarioControllerInterface {
     }
 
     @GetMapping("/{id-usuario}/usuario")
-    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException  {
         return new ResponseEntity<>(comentarioService.listarComentarioPorUsuario(idComentario), HttpStatus.OK);
     }
 
     @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException {
         return new ResponseEntity<>(comentarioService.list(idComentario), HttpStatus.OK);
-    }
-
-    @Operation(hidden = true)
-    @GetMapping
-    public ResponseEntity<List<ComentarioDTO>> list() throws RegraDeNegocioException, BancoDeDadosException {
-        return null;
     }
 
     @PutMapping("/{id-comentario}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable("id-comentario") Integer idComentario,
-                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException, BancoDeDadosException {
+                                                @Valid @RequestBody ComentarioDTO atualizarComantario) throws RegraDeNegocioException{
         log.info("Atualizando comentário, aguarde . . .");
         ComentarioDTO comentarioAtualizado = comentarioService.editarComentario(idComentario, atualizarComantario);
         log.info("Comentário adicionado com sucesso.");
@@ -62,7 +56,7 @@ public class ComentarioController implements ComentarioControllerInterface {
     }
 
     @DeleteMapping("/{id-comentario}/remover-comentario")
-    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException, BancoDeDadosException {
+    public ResponseEntity<Void> delete(@PathVariable("id-comentario") Integer idUsuario) throws RegraDeNegocioException {
         comentarioService.delete(idUsuario);
         return ResponseEntity.noContent().build();
     }

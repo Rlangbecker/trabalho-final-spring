@@ -6,6 +6,7 @@ import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,6 +45,13 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " left join u.desafio d " +
             " where (:idUsuario is null or u.idUsuario = :idUsuario)")
     List<UsuarioDesafioDTO> listarUsuarioEDesafio(Integer idUsuario);
+
+
+    @Query(value = "UPDATE USUARIO_CARGO u " +
+            "SET u.ID_CARGO = 3 " +
+            "WHERE u.ID_USUARIO = ?1",
+    nativeQuery = true)
+    void alterarCargo(@Param("idUsuario") Integer idUsuario);
 
     Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha);
 

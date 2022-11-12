@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 public interface HobbieControllerInterface {
     @Operation(summary = "Criar hobbies", description = "Cria um hobbie com o ID do usuario passado no body")
     @ApiResponses(
@@ -19,8 +21,8 @@ public interface HobbieControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PostMapping("/{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public ResponseEntity<HobbieDTO> create(@PathVariable("idUsuario") Integer idUsuario , @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException;
+    @PostMapping // localhost:8080/hobbie/idUsuario
+    public ResponseEntity<HobbieDTO> create(@Valid @RequestBody HobbieDTO hobbieDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "listar hobbies", description = "Lista todos os hobbie do usuario passado por ID")
     @ApiResponses(
@@ -31,7 +33,7 @@ public interface HobbieControllerInterface {
             }
     )
     @GetMapping("{idUsuario}") // localhost:8080/hobbie/idUsuario
-    public HobbieDTO listByIdUsuario(@PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
+    public HobbieDTO listByIdUsuario(@Valid @PathVariable ("idUsuario") Integer idUsuario) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualizar hobbie", description = "Atualiza o hobbie do usuario passado por ID(Hobbie)")
     @ApiResponses(
@@ -41,9 +43,8 @@ public interface HobbieControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @PutMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public ResponseEntity<HobbieDTO> update(@PathVariable("idHobbie") Integer idHobbie,
-                                            @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException;
+    @PutMapping // localhost:8080/hobbie/idHobbie
+    public ResponseEntity<HobbieDTO> update(@Valid @RequestBody HobbieCreateDTO hobbieAtualizar) throws RegraDeNegocioException;
     @Operation(summary = "Deletar hobbie", description = "Deleta o hobbie do usuario passado por ID(Hobbie)")
     @ApiResponses(
             value = {
@@ -52,8 +53,8 @@ public interface HobbieControllerInterface {
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @DeleteMapping("/{idHobbie}") // localhost:8080/hobbie/idHobbie
-    public void delete(@PathVariable("idHobbie") Integer idHobbie) throws RegraDeNegocioException;
+    @DeleteMapping() // localhost:8080/hobbie/idHobbie
+    public void delete() throws RegraDeNegocioException;
 
 
 }
