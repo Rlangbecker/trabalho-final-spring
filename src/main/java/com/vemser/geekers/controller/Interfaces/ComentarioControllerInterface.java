@@ -25,7 +25,7 @@ public interface ComentarioControllerInterface {
     @PostMapping("/{idUsuario}")
     public ResponseEntity<ComentarioDTO> create(@Valid @PathVariable("idUsuario") Integer idUsuario, @RequestBody ComentarioCreateDTO comentario) throws RegraDeNegocioException;
 
-    @Operation(summary = "Lista de comentários do usuário por ID do usuário (limite de 4 comentários)", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco, com um limite de 4 registros ")
+    @Operation(summary = "Lista de comentários do usuário por ID do usuário", description = "Realiza a pesquisa de comentários pelo ID do usuário no banco ")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Pesquisa de comentários por ID realizada com sucesso"),
@@ -36,7 +36,7 @@ public interface ComentarioControllerInterface {
     @GetMapping("/{id-usuario}/usuario")
     public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException;
 
-    @Operation(summary = "Lista de comentários do usuário com limite de 4 registros", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco está limitada à 4 registros")
+    @Operation(summary = "Lista de comentários do usuário", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Pesquisa de comentários realizada com sucesso"),
