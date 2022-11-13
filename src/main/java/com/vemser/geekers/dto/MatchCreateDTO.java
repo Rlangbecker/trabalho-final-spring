@@ -10,8 +10,9 @@ import javax.validation.constraints.NotNull;
 public class MatchCreateDTO {
     @NotNull
     private Integer idUsuario;
-    @NotNull
+
     @JsonIgnore
     private Integer idUsuarioMatch;
+    @JsonIgnore
     private TipoAtivo ativo;
 }

@@ -52,16 +52,18 @@ public class MatchService {
 
     public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws RegraDeNegocioException {
         LoginWithIdDTO login = usuarioLoginService.getLoggedUser();
-        DesafioDTO desafio = desafioService.findByUsuario(login.getIdUsuario());
+        DesafioDTO desafio = desafioService.findByUsuario(matchCreateDTO.getIdUsuario());
         if (resposta == desafio.getResposta()) {
             MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
             matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
             UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
             matchEntity.setUsuario(usuario);
+            matchEntity.setUsuarioMain(usuarioService.findById(login.getIdUsuario()).getIdUsuario());
             matchEntity.setAtivo(TipoAtivo.ATIVO);
             MatchEntity matchCriado = matchRepository.save(matchEntity);
             MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
             matchDTO.setIdUsuario(matchCriado.getIdUsuario());
+            matchDTO.setIdUsuarioMatch(matchCriado.getUsuarioMain());
             return matchDTO;
         } else {
             throw new RegraDeNegocioException("Resposta errada!");
@@ -89,4 +91,16 @@ public class MatchService {
         );
 
     }
+
+//    public UsuarioMatchDadosDTO listaComNomeUsuarioMatch(Integer idUsuario) throws RegraDeNegocioException {
+//        LoginWithIdDTO login = usuarioLoginService.getLoggedUser();
+//        UsuarioEntity usuario1 = usuarioService.findById(idUsuario);
+//        UsuarioEntity usuarioLogado = usuarioService.findById(login.getIdUsuario());
+//        UsuarioMatchDadosDTO usuarioMatchDadosDTO = null;
+//        usuarioMatchDadosDTO.setNomeUsuario(usuario1.getNome());
+//        usuarioMatchDadosDTO.setIdUsuario(usuario1.getIdUsuario());
+//        usuarioMatchDadosDTO.setIdUsuarioLogado(usuarioLogado.getIdUsuario());
+//        usuarioMatchDadosDTO.setNomeUsuarioLogado(usuarioLogado.getNome());
+//        return usuarioMatchDadosDTO;
+//    }
 }

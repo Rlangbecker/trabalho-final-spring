@@ -4,6 +4,7 @@ import com.vemser.geekers.controller.Interfaces.MatchControllerInterface;
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.UsuarioMatchDadosDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.MatchService;
 import lombok.RequiredArgsConstructor;
@@ -53,4 +54,9 @@ public class MatchController implements MatchControllerInterface {
         matchService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+//    @GetMapping("/UsuarioComMatch/{id}")
+//    public ResponseEntity<UsuarioMatchDadosDTO> listaComUsuario(@PathVariable Integer id) throws RegraDeNegocioException{
+//        return new ResponseEntity<>(matchService.listaComNomeUsuarioMatch(id),HttpStatus.OK);
+//    }
 }

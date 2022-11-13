@@ -26,7 +26,7 @@ public interface MatchControllerInterface {
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
                                            @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException;
 
-    @Operation(summary = "Listar matchs", description = "Listar matchs do banco")
+    @Operation(summary = "Listar todos os matchs - (GOLD)", description = "Listar matchs do banco")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Retorna os matchs"),

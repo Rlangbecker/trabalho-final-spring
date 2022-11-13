@@ -36,7 +36,7 @@ public interface UsuarioControllerInterface {
     @GetMapping("/by-nome")
     ResponseEntity<List<UsuarioDTO>> ListarPorNome(@RequestParam("nome") String nome) throws RegraDeNegocioException;
 
-    @Operation(summary = "Atualiza os dados do usuário por ID", description = "Realiza a atualização dos dados do usuário no banco pelo seu ID")
+    @Operation(summary = "Atualiza os dados do usuário logado", description = "Realiza a atualização dos dados do usuário no banco pelo seu ID")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Atualiza de dados de usuário por id realizada com sucesso!"),

@@ -35,6 +35,9 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET, "/admin/listar-usuario-matchs").hasAnyRole("ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET, "/usuario").hasAnyRole("ADMIN")
+                        .antMatchers("/usuario/by-nome").hasAnyRole("ADMIN", "USUARIO_GOLD")
+                        .antMatchers(HttpMethod.GET,"/match").hasAnyRole("ADMIN", "USUARIO_GOLD")
+
 
                         .anyRequest().authenticated());
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
