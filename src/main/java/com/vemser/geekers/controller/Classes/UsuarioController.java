@@ -27,14 +27,11 @@ public class UsuarioController implements UsuarioControllerInterface {
     private final UsuarioService usuarioService;
 
     @GetMapping("/ativos")
-    public ResponseEntity<List<UsuarioDTO>> listUsuariosAtivos() { //
+    public ResponseEntity<List<UsuarioDTO>> listUsuariosAtivos() {
         return new ResponseEntity<>(usuarioService.listByAtivo(), HttpStatus.OK);
     }
 
-    @GetMapping("/inativos")
-    public ResponseEntity<List<UsuarioDTO>> listUsuariosInativos() { //
-        return new ResponseEntity<>(usuarioService.listByInativo(), HttpStatus.OK);
-    }
+
 
     @GetMapping("/{id-usuario}")
     public ResponseEntity<UsuarioDTO> listUsuarioPorId(@PathVariable(name = "id-usuario") Integer idUsuario) throws RegraDeNegocioException {//

@@ -47,7 +47,12 @@ public class UsuarioEntity implements UserDetails {
     private TipoAtivo ativo;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USUARIO_CARGO",
+            joinColumns = @JoinColumn(name = "ID_USUARIO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
+    )
     private Set<CargoEntity> cargos;
 
     @Override

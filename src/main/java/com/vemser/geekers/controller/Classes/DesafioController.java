@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class DesafioController implements DesafioControllerInterface {
 
-    private DesafioService desafioService;
+    private final DesafioService desafioService;
 
     public DesafioController(DesafioService desafioService) {
         this.desafioService = desafioService;

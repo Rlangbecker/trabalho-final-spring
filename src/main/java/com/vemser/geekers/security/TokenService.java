@@ -75,7 +75,7 @@ public class TokenService {
         if (token == null) {
             return null;
         }
-        token = token.replace("Bearer ", ""); // token, example: dXZfbFgEH=
+        token = token.replace("Bearer ", "");
 
         Claims keys = Jwts.parser()
                 .setSigningKey(secret)
@@ -91,7 +91,8 @@ public class TokenService {
                 .toList();
 
         UsernamePasswordAuthenticationToken dtoSecurityObject =
-                new UsernamePasswordAuthenticationToken(idLoginUsuario,
+                new UsernamePasswordAuthenticationToken(
+                        idLoginUsuario,
                         null,
                         listaDeCargos);
 

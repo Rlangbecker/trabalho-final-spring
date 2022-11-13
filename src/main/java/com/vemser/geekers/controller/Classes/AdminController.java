@@ -35,8 +35,14 @@ public class AdminController implements AdminControllerInterface {
         return new ResponseEntity<>(usuarioService.listarUsuarioEMatchs(idPessoa), HttpStatus.OK);
     }
 
+
+    @GetMapping("/inativos")
+    public ResponseEntity<List<UsuarioDTO>> listUsuariosInativos() {
+        return new ResponseEntity<>(usuarioService.listByInativo(), HttpStatus.OK);
+    }
+
     @PutMapping("/alterar-cargo/{id}")
-    public ResponseEntity<String> alterarCargo(@Valid @PathVariable("idUsuario") Integer id) throws RegraDeNegocioException {
+    public ResponseEntity<String> alterarCargo(@Valid @PathVariable("id") Integer id) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioLoginService.atualizarCargo(id), HttpStatus.OK);
     }
 

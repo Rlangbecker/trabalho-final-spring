@@ -6,6 +6,7 @@ import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,16 @@ public interface AdminControllerInterface {
     )
     ResponseEntity<List<UsuarioMatchDTO>> listarUsuariosEMatchs(@RequestParam(required = false) Integer idPessoa);
 
-
+    @Operation(summary = "Listar usuários inativos", description = "Realiza a pesquisa de usuário inativos no banco pelo seu nome")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Pesquisa de usuários inativos realizada com sucesso!"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para pesquisar neste recurso"),
+                    @ApiResponse(responseCode = "500", description = "A pesquisa gerou uma exceção")
+            }
+    )
+    @GetMapping("/inativos")
+    ResponseEntity<List<UsuarioDTO>> listUsuariosInativos();
 
     @Operation(summary = "Atualize o cargo do usuário!", description = "Atualiza o cargo do usuário mencionado buscando o mesmo pelo ID presente no banco de dados.")
     @ApiResponses(

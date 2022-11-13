@@ -16,16 +16,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain )
             throws ServletException, IOException {
         String headerAuth = request.getHeader("Authorization");
 
         UsernamePasswordAuthenticationToken dtoSecurity = tokenService.isValid(headerAuth);
 
-
-        SecurityContextHolder.getContext().setAuthentication(dtoSecurity); // se for null, ele vai definir como null,
-        // e se for diferente de null, ele define como ele mesmo.
-
+        SecurityContextHolder.getContext().setAuthentication(dtoSecurity);
         filterChain.doFilter(request, response);
     }
 }

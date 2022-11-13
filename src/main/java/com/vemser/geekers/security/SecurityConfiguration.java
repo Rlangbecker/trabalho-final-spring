@@ -31,23 +31,10 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((auth) -> auth.antMatchers("/auth", "/auth/**").permitAll()
 
-                        // LISTAS
-                        .antMatchers("/desafio/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/hobbie/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/usuario/listar-usuario-desafio").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers("/usuario/by-nome").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, "/comentario/**").hasAnyRole("ADMIN","USUARIO")
-                        .antMatchers(HttpMethod.PUT, "/usuario").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.PUT, "/usuario/usuario-paginado").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario/listar-usuario-desafio/**").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario/ativos/").hasAnyRole("USUARIO","ADMIN")
-                        .antMatchers(HttpMethod.PUT, "/comentario").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.POST, "/comentario").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/comentario/**/usuario").hasAnyRole("USUARIO", "ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario/inativos/").hasAnyRole("USUARIO_GOLD","ADMIN")
+                        .antMatchers("/admin/inativos").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/admin/listar-usuario-matchs").hasAnyRole("ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/usuario/listar-usuario-matchs").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/usuario").hasAnyRole("ADMIN")
 
                         .anyRequest().authenticated());
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
@@ -76,7 +63,7 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // fazer o Gerador para poder funcionar
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
