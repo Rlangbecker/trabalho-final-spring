@@ -58,6 +58,8 @@ CREATE TABLE DESAFIO (
 CREATE TABLE MATCH (
   id_match NUMBER,
   id_usuario NUMBER,
+  id_usuario_main NUMBER,
+  ativo char(1),
   PRIMARY KEY (id_match),
   CONSTRAINT FK_MATCH_USUARIO_ID_USUARIO
    FOREIGN KEY (id_usuario)
@@ -108,6 +110,9 @@ VALUES (seq_cargo.nextval, 'ROLE_ADMIN'); -- 1
 
 INSERT INTO CARGO (ID_CARGO, NOME)
 VALUES (seq_cargo.nextval, 'ROLE_USUARIO'); -- 2
+
+INSERT INTO CARGO (ID_CARGO, NOME)
+VALUES (seq_cargo.nextval, 'ROLE_USUARIO_GOLD'); -- 3
 
 CREATE TABLE USUARIO_CARGO (
     ID_USUARIO NUMBER NOT NULL,
