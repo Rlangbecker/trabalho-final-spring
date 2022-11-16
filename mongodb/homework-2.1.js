@@ -188,3 +188,89 @@ db.desafios.deleteOne(
 { acknowledged: true, deletedCount: 0 }
 
 ----------------------------------------------------
+
+--Hobbie
+
+-- Criar collection
+db.createCollection("hobbie")
+
+
+-- Inserir
+db.hobbie.insert([
+	{
+  "idUsuario": 1,
+  "descricao": "Call of duty",
+  "tipoHobbie": "1",
+  "_id": 1
+},
+{
+  "idUsuario": 2,
+  "descricao": "Valorant",
+  "tipoHobbie": "1",
+  "_id": 2
+}
+])
+
+db.hobbie.insertOne(
+	{
+  "idUsuario": 3,
+  "descricao": "Transformice",
+  "tipoHobbie": "1",
+  "_id": 3
+}
+)
+
+-- Find
+
+db.hobbie.find({
+    "idUsuario": 1
+})
+
+db.hobbie.find({
+    "descricao": "Valorant"
+})
+
+-- Update
+
+db.hobbie.updateOne(
+   { idUsuario: 2 },
+   {
+     $set: { "descricao": "Bomba patch 2006", statusHobbie: "Inativo" }           
+   }
+)
+
+db.hobbie.updateOne(
+   { idUsuario: 1 },
+   {
+     $set: { "tipoHobbie": 2, descricao: "Harry Potter" }           
+   }
+)
+
+-- Delete
+
+db.hobbie.deleteMany({ })
+
+db.hobbie.deleteOne( { idUsuario: 2} )
+
+-- Projection
+
+db.hobbie.find( {}, { _id: 0, idUsuario: 1, descricao: 1 } )
+
+db.hobbie.find({}, 
+{
+ usuario_hobbie: { $concat: [  "$descricao" ,  " - ",{ $convert: { input: "$idUsuario", to: "string"}} ]},
+ tipoHobbie: 1,
+ status: 1
+})
+
+-- Aggregate
+
+db.hobbie.aggregate( [
+   { $match: { tipoHobbie: "1" } },
+   { $group: { _id: "$tipoHobbie", ContadorDeUsuarios: { $sum: 1 } } }
+] )
+
+db.hobbie.aggregate( [
+   { $match: { tipoHobbie: "2" } },
+   { $group: { _id: "$tipoHobbie", ContadorDeUsuarios: { $sum: 1 } } }
+] )
