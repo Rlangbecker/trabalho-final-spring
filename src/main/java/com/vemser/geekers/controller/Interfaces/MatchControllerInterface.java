@@ -3,6 +3,7 @@ package com.vemser.geekers.controller.Interfaces;
 import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.enums.TipoEvento;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +25,7 @@ public interface MatchControllerInterface {
     )
     @PostMapping("/{resposta}")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
+                                           @RequestParam("TipoEvento") TipoEvento tipoEvento,
                                            @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException;
 
     @Operation(summary = "Listar todos os matchs - (GOLD)", description = "Listar matchs do banco")

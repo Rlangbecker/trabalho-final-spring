@@ -5,6 +5,7 @@ import com.vemser.geekers.dto.MatchCreateDTO;
 import com.vemser.geekers.dto.MatchDTO;
 import com.vemser.geekers.dto.PageDTO;
 import com.vemser.geekers.dto.UsuarioMatchDadosDTO;
+import com.vemser.geekers.enums.TipoEvento;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.MatchService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,10 @@ public class MatchController implements MatchControllerInterface {
 
     @PostMapping("/{resposta}/usuario")
     public ResponseEntity<MatchDTO> create(@PathVariable("resposta") Integer resposta,
+            @RequestParam("TipoEvento") TipoEvento tipoEvento,
             @Valid @RequestBody MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
         log.info("Criando Match...");
-        MatchDTO matchDTO = matchService.resolverDesafio(matchCreateDTO,resposta);
+        MatchDTO matchDTO = matchService.resolverDesafio(matchCreateDTO,resposta, tipoEvento);
         log.info("Match dado!");
         return new ResponseEntity<>(matchDTO, HttpStatus.OK);
     }

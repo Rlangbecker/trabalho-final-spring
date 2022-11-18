@@ -11,5 +11,6 @@ import java.util.List;
 public interface MatchRepository extends JpaRepository<MatchEntity, Integer> {
 
     List<MatchEntity> findMatchEntitiesByUsuario(UsuarioEntity usuario);
+    Integer countByUsuarioMain (Integer usuario);
 
 }
