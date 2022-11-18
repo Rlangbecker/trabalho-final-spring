@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -68,6 +69,7 @@ public class MatchService {
                 MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
                 matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
                 UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
+
                 matchEntity.setUsuario(usuario);
                 matchEntity.setUsuarioMain(usuarioLogado.getIdUsuario());
                 matchEntity.setAtivo(TipoAtivo.ATIVO);
@@ -75,6 +77,14 @@ public class MatchService {
                 MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
                 matchDTO.setIdUsuario(matchCriado.getIdUsuario());
                 matchDTO.setIdUsuarioMatch(matchCriado.getUsuarioMain());
+
+                LogDTO logDTO = new LogDTO();
+                LocalDate dataAtual = LocalDate.now();
+                logDTO.setData(dataAtual);
+                logDTO.setIdUsuario(usuario.getIdUsuario());
+                logDTO.setUsuarioMain(usuarioLogado.getIdUsuario());
+                logDTO.setAtivo(usuario.getAtivo());
+                logMatchService.createLog(logDTO);
                 return matchDTO;
             } else {
                 throw new RegraDeNegocioException("Resposta errada!");
