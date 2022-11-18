@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,5 +27,11 @@ public class LogMatchController {
 
     private final LogMatchService logMatchService;
 
+    @GetMapping
+    public ResponseEntity<List<LogDTO>> findAll(){
+        List<LogDTO> list = logMatchService.listAllLogs();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
+    @GetMapping("/log-por-data")
 }

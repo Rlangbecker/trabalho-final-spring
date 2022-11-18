@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @Data
 public class ComentarioCreateDTO {
 
-
     @NotBlank(message = "Comentário não pode ser inserido em branco.")
     @NotNull(message = "Comentário não pode ser nulo.")
     @Size(max = 225)

@@ -9,7 +9,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,21 @@ public class LogMatchService {
         BeanUtils.copyProperties(logDTO, log);
         log.setData(sdfComplete.format(new Date()));
         logMatchRepository.save(log);
+    }
+
+    public List<LogDTO> listAllLogs() {
+        return logMatchRepository.findAll()
+                .stream()
+                .map(log -> objectMapper.convertValue(log,LogDTO.class))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<LogDTO> listLogsByDataCriado(LocalDate data){
+        return logMatchRepository.findByData(data)
+                .stream()
+                .map(log -> objectMapper.convertValue(log, LogDTO.class))
+                .collect(Collectors.toList());
     }
 
 }
