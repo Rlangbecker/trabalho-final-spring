@@ -116,7 +116,6 @@ public class HobbieServiceTest {
     @Test
     public void deveTestarDeleteComSucesso() throws RegraDeNegocioException {
         //SETUP
-        Integer id = 10;
         HobbieEntity hobbieEntity = getHobbieEntity();
         hobbieEntity.setIdHobbie(10);
         when(usuarioLoginService.getLoggedUser()).thenReturn(getLogin());
