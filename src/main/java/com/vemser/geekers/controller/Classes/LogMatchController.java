@@ -34,4 +34,9 @@ public class LogMatchController {
     }
 
     @GetMapping("/log-por-data")
+    public ResponseEntity<List<LogDTO>> findByDate(@RequestParam("Data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                       LocalDate data){
+        return new ResponseEntity<>(logMatchService.listLogsByDataCriado(data), HttpStatus.OK);
+    }
+
 }

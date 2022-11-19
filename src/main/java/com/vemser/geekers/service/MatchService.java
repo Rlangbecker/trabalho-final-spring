@@ -80,7 +80,7 @@ public class MatchService {
 
                 LogDTO logDTO = new LogDTO();
                 LocalDate dataAtual = LocalDate.now();
-                logDTO.setData(dataAtual);
+                logDTO.setData(dataAtual.toString());
                 logDTO.setIdUsuario(usuario.getIdUsuario());
                 logDTO.setUsuarioMain(usuarioLogado.getIdUsuario());
                 logDTO.setAtivo(usuario.getAtivo());
