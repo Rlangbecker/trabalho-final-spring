@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HobbieRepository extends JpaRepository<HobbieEntity,Integer> {
 
-    HobbieEntity findHobbieEntityByIdHobbie(Integer idHobbie);
-
     HobbieEntity findHobbieEntityByUsuario(UsuarioEntity usuario);
 
 }
