@@ -3,10 +3,8 @@ package com.vemser.geekers.controller.Classes;
 import com.vemser.geekers.controller.Interfaces.ComentarioControllerInterface;
 import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.ComentarioService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +40,8 @@ public class ComentarioController implements ComentarioControllerInterface {
     }
 
     @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException {
-        return new ResponseEntity<>(comentarioService.list(idComentario), HttpStatus.OK);
+    public ResponseEntity<ComentarioDTO> findByIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException {
+        return new ResponseEntity<>(comentarioService.findById(idComentario), HttpStatus.OK);
     }
 
     @PutMapping("/{id-comentario}")
