@@ -20,7 +20,7 @@ public class LogMatchService {
 
     private final LogMatchRepository logMatchRepository;
     private final ObjectMapper objectMapper;
-    SimpleDateFormat sdfComplete = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    SimpleDateFormat sdfComplete = new SimpleDateFormat("dd-MM-yyyy");
 
     public void createLog(LogDTO logDTO){
         var log = new LogMatchEntity();
@@ -38,7 +38,9 @@ public class LogMatchService {
     }
 
     public List<LogDTO> listLogsByDataCriado(LocalDate data){
-        return logMatchRepository.findByData(data)
+        String novaData = data.toString();
+        novaData = sdfComplete.format(new Date());
+        return logMatchRepository.findByDataContaining(novaData)
                 .stream()
                 .map(log -> objectMapper.convertValue(log, LogDTO.class))
                 .collect(Collectors.toList());

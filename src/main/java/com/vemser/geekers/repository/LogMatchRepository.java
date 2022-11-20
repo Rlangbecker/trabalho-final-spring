@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface LogMatchRepository extends MongoRepository<LogMatchEntity, String> {
 
-    List<LogMatchEntity> findByData(LocalDate data);
+    List<LogMatchEntity> findByDataContaining(String data);
 
 }
