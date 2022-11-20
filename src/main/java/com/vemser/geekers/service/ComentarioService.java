@@ -6,7 +6,6 @@ import com.vemser.geekers.dto.ComentarioDTO;
 import com.vemser.geekers.dto.LoginWithIdDTO;
 import com.vemser.geekers.entity.ComentarioEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.exception.BancoDeDadosException;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.ComentarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +31,6 @@ public class ComentarioService {
 
         ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.save(comentarioEntity), ComentarioDTO.class);
         comentarioDTO.setIdUsuario(idUsuario);
-        return comentarioDTO;
-    }
-
-    public ComentarioDTO list(Integer idComentario) throws RegraDeNegocioException {
-
-        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.findById(idComentario),ComentarioDTO.class);
-
         return comentarioDTO;
     }
 

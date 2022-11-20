@@ -33,5 +33,5 @@ public class LogMatchController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/log-por-data")
+//    @GetMapping("/log-por-data")
 }

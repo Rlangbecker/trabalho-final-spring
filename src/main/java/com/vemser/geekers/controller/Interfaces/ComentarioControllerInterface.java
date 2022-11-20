@@ -36,16 +36,16 @@ public interface ComentarioControllerInterface {
     @GetMapping("/{id-usuario}/usuario")
     public ResponseEntity<List<ComentarioDTO>> listaComentarioPorIdUsuario(@PathVariable("id-usuario") Integer idComentario) throws RegraDeNegocioException;
 
-    @Operation(summary = "Lista de comentários do usuário", description = "Realiza a pesquisa de comentários no banco, a query realizada no banco")
+    @Operation(summary = "procura um comentário pelo id", description = "Realiza a pesquisa de um comentário no banco")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Pesquisa de comentários realizada com sucesso"),
+                    @ApiResponse(responseCode = "200", description = "Pesquisa do comentário realizada com sucesso"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para pesquisar comentário"),
                     @ApiResponse(responseCode = "500", description = "A pesquisa de comentário gerou uma exceção")
             }
     )
     @GetMapping("/{id-comentario}/comentario")
-    public ResponseEntity<ComentarioDTO> listarPorIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException;
+    public ResponseEntity<ComentarioDTO> findByIdComentario(@PathVariable(name = "id-comentario") Integer idComentario) throws RegraDeNegocioException;
 
     @Operation(summary = "Atualiza o comentário do usuário por ID", description = "Realiza a atualização do comentário do usuário no banco pelo seu ID")
     @ApiResponses(
