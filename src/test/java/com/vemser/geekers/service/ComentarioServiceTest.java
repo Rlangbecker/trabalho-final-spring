@@ -99,7 +99,7 @@ public class ComentarioServiceTest {
         when(comentarioRepository.findById(any())).thenReturn(Optional.of(comentarioEntity));
 
         // ACT - Ação, ou seja, testar o método.
-        comentarioRepository.delete(comentarioEntity);
+        comentarioService.delete(comentarioEntity.getIdComentario());
 
         // ASSERT - Verificação do método.
         verify(comentarioRepository, times(1)).delete(any());

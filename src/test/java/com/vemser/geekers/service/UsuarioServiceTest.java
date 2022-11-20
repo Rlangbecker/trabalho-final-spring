@@ -119,10 +119,9 @@ public class UsuarioServiceTest {
         when(usuarioRepository.save(any())).thenReturn(usuarioEntity);
 
         // ACT - Ação, ou seja, testar o método.
-        UsuarioEntity usuarioEntitySave = usuarioRepository.save(usuarioEntity);
+        usuarioService.removerUsuario(usuarioEntity.getIdUsuario());
 
         // ASSERT - Verificação do método.
-        assertNotNull(usuarioEntitySave);
         verify(usuarioRepository, times(1)).save(any());
     }
 
