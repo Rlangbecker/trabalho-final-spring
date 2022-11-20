@@ -36,11 +36,6 @@ public class EventoServiceTest {
     @Mock
     private EventoRepository eventoRepository;
 
-    @Mock
-    private UsuarioLoginService usuarioLoginService;
-    @Mock
-    private UsuarioService usuarioService;
-
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
