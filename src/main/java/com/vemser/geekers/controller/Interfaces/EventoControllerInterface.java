@@ -62,7 +62,7 @@ public interface EventoControllerInterface {
     )
     ResponseEntity<Void> delete(@PathVariable("id") String id) throws RegraDeNegocioException;
 
-    @Operation(summary = "Atualizar informações", description = "Atualiza as informações de um log de Matches no banco de dados")
+    @Operation(summary = "Atualizar Ativo", description = "Atualiza um evento para ativo caso ele estiver inativo, e atualiza para inativo caso esteja ativo no banco de dados")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Atualização realizada com sucesso!"),
