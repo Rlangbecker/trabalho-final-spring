@@ -1,5 +1,6 @@
 package com.vemser.geekers.controller.Classes;
 
+import com.vemser.geekers.controller.Interfaces.EventoControllerInterface;
 import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.EventoCreateDTO;
 import com.vemser.geekers.dto.EventoDTO;
@@ -24,7 +25,7 @@ import java.time.LocalDate;
 @Slf4j
 @RequestMapping("/evento")
 @Validated
-public class EventoController {
+public class EventoController implements EventoControllerInterface {
 
     private final EventoService eventoService;
 

@@ -1,5 +1,6 @@
 package com.vemser.geekers.controller.Classes;
 
+import com.vemser.geekers.controller.Interfaces.LogMatchControllerInterface;
 import com.vemser.geekers.dto.EventoCreateDTO;
 import com.vemser.geekers.dto.EventoDTO;
 import com.vemser.geekers.dto.LogDTO;
@@ -23,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/logMatchs")
 @Validated
-public class LogMatchController {
+public class LogMatchController implements LogMatchControllerInterface {
 
     private final LogMatchService logMatchService;
 
