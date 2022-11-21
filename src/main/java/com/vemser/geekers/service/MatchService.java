@@ -2,9 +2,11 @@ package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.*;
+import com.vemser.geekers.entity.EventoEntity;
 import com.vemser.geekers.entity.MatchEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
+import com.vemser.geekers.enums.TipoEvento;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,13 +23,13 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final ObjectMapper objectMapper;
     private final DesafioService desafioService;
-
     private final UsuarioService usuarioService;
     private final UsuarioLoginService usuarioLoginService;
+    private final EventoService eventoService;
+    private final LogMatchService logMatchService;
 
-    public MatchDTO create(Integer id, MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
-        return null;
-    }
+    private Integer limite = 5;
+
 
     public List<MatchDTO> list() throws RegraDeNegocioException {
 
@@ -50,24 +53,43 @@ public class MatchService {
         return objectMapper.convertValue(matchRepository.findById(id), MatchDTO.class);
     }
 
-    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta) throws RegraDeNegocioException {
+    public MatchDTO resolverDesafio(MatchCreateDTO matchCreateDTO, Integer resposta, TipoEvento tipoEvento) throws RegraDeNegocioException {
         LoginWithIdDTO login = usuarioLoginService.getLoggedUser();
+        UsuarioEntity usuarioLogado = usuarioService.findById(login.getIdUsuario());
         DesafioDTO desafio = desafioService.findByUsuario(matchCreateDTO.getIdUsuario());
-        if (resposta == desafio.getResposta()) {
-            MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
-            matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
-            UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
-            matchEntity.setUsuario(usuario);
-            matchEntity.setUsuarioMain(usuarioService.findById(login.getIdUsuario()).getIdUsuario());
-            matchEntity.setAtivo(TipoAtivo.ATIVO);
-            MatchEntity matchCriado = matchRepository.save(matchEntity);
-            MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
-            matchDTO.setIdUsuario(matchCriado.getIdUsuario());
-            matchDTO.setIdUsuarioMatch(matchCriado.getUsuarioMain());
-            return matchDTO;
-        } else {
-            throw new RegraDeNegocioException("Resposta errada!");
+        if (eventoService.existeEvento(tipoEvento)) {
+            limite = 10;
         }
+
+        if (matchRepository.countByUsuarioMain(usuarioLogado.getIdUsuario()) <= limite) {
+            if (resposta == desafio.getResposta()) {
+                MatchEntity matchEntity = objectMapper.convertValue(matchCreateDTO, MatchEntity.class);
+                matchEntity.setIdUsuario(matchCreateDTO.getIdUsuario());
+                UsuarioEntity usuario = usuarioService.findById(matchEntity.getIdUsuario());
+
+                matchEntity.setUsuario(usuario);
+                matchEntity.setUsuarioMain(usuarioLogado.getIdUsuario());
+                matchEntity.setAtivo(TipoAtivo.ATIVO);
+                MatchEntity matchCriado = matchRepository.save(matchEntity);
+                MatchDTO matchDTO = objectMapper.convertValue(matchCriado, MatchDTO.class);
+                matchDTO.setIdUsuario(matchCriado.getIdUsuario());
+                matchDTO.setIdUsuarioMatch(matchCriado.getUsuarioMain());
+
+                LogDTO logDTO = new LogDTO();
+                LocalDate dataAtual = LocalDate.now();
+                logDTO.setData(dataAtual.toString());
+                logDTO.setIdUsuario(usuario.getIdUsuario());
+                logDTO.setUsuarioMain(usuarioLogado.getIdUsuario());
+                logDTO.setAtivo(usuario.getAtivo());
+                logMatchService.createLog(logDTO);
+                return matchDTO;
+            } else {
+                throw new RegraDeNegocioException("Resposta errada!");
+            }
+        } else {
+            throw new RegraDeNegocioException("Você atingiu o limite de matchs!");
+        }
+
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {

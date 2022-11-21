@@ -35,8 +35,8 @@ public class HobbieService {
 
         HobbieDTO hDTO = objectMapper.convertValue(hobbieRepository.save(hobbieEntity), HobbieDTO.class);
 
-        hDTO.setIdHobbie(hobbieEntity.getIdHobbie());
         hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
+        hDTO.setIdHobbie(hobbieEntity.getIdHobbie());
         return hDTO;
     }
 
@@ -63,12 +63,9 @@ public class HobbieService {
         return hobbieDTO;
     }
 
-    public HobbieDTO findHobbieById(Integer id) {
-        HobbieEntity hobbieEntity=hobbieRepository.findHobbieEntityByIdHobbie(id);
-        HobbieDTO hDTO = objectMapper.convertValue(hobbieEntity,HobbieDTO.class);
-        hDTO.setIdUsuario(hobbieEntity.getUsuario().getIdUsuario());
-
-        return hDTO;
+    public HobbieEntity findHobbieById(Integer id) throws RegraDeNegocioException {
+        return hobbieRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Hobbie não encontrado!"));
     }
 
     public HobbieDTO findByIdUsuario(Integer id) throws RegraDeNegocioException {
