@@ -48,7 +48,7 @@ public class UsuarioLoginServiceTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    CargoRepository cargoRepository;
+    private CargoRepository cargoRepository;
 
     @Before
     public void init() {
@@ -76,25 +76,26 @@ public class UsuarioLoginServiceTest {
 
     } // FindById
 
-    @Test
-    public void deveTestarFindByEmailComSucesso() throws RegraDeNegocioException {
-
-        // SETUP - Criar variáveis
-        String busca = "linck@gmail.com";
-        UsuarioEntity usuario = getUsuarioEntity();
-
-        when(usuarioRepository.findByEmail(any())).thenReturn(usuario);
-        when(usuarioRepository.save(any())).thenReturn(usuario);
-
-        // ACT - Ação, ou seja, testar o método.
-        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(any());
-
-        // ASSERT - Verificação do método.
-        assertNotNull(usuarioEntity);
-
-        verify(usuarioRepository, times(1)).findByEmail(any());
-
-    } // FindByEmail (n sei se ta certo)
+//    @Test
+//    public void deveTestarFindByEmailComSucesso() throws RegraDeNegocioException {
+//
+//        // SETUP - Criar variáveis
+//        String busca = "linck@gmail.com";
+//        UsuarioEntity usuario = getUsuarioEntity();
+//
+//        when(usuarioRepository.findByEmail(busca)).thenReturn(usuario);
+//        when(usuarioRepository.save(any())).thenReturn(usuario);
+//
+//
+//        // ACT - Ação, ou seja, testar o método.
+//        String string = usuarioLoginService.findUserByEmail(any());
+//
+//        // ASSERT - Verificação do método.
+//        assertNotNull(string);
+//
+//        verify(usuarioRepository, times(1)).findByEmail(any());
+//
+//    } // FindByEmail (n sei se ta certo)
 
     @Test
     public void deveTestarFindByLoginComSucesso() throws RegraDeNegocioException {
@@ -158,14 +159,15 @@ public class UsuarioLoginServiceTest {
 //    } não consegui fazer
 
 
-    //    @Test
-//    public void deveTestarTrocarSenhaComSucesso() throws RegraDeNegocioException {
-//
+    @Test
+    public void deveTestarTrocarSenhaComSucesso() throws RegraDeNegocioException {
+
 //        // SETUP - Criar variáveis
 //        LoginWithIdDTO loginWithIdDTO = getLogin();
 //        UsuarioEntity usuario = getUsuarioEntity();
 //        String senhaNova = "456";
 //
+//        when(usuarioLoginService.getLoggedUser()).thenReturn(loginWithIdDTO);
 //        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
 //        when(usuarioRepository.save(any())).thenReturn(usuario);
 //
@@ -175,11 +177,9 @@ public class UsuarioLoginServiceTest {
 //        // ASSERT - Verificação do método.
 //        assertNotNull(usuarioEntity);
 //        assertEquals("456", usuarioEntity);
-//
-//        verify(usuarioRepository, times(1)).findById(anyInt());
-//        verify(usuarioRepository, times(1)).save(any());
-//
-//    } // TrocarSenha
+
+
+    } // TrocarSenha
 
     private static UsuarioDTO getUsuarioDTO() {
         UsuarioDTO usuarioDTO = new UsuarioDTO();

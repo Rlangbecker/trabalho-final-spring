@@ -117,7 +117,7 @@ public class ComentarioServiceTest {
     comentarioEntity.setComentario("Gostei do seu perfil");
     comentarioEntity.setIdComentario(10);
 
-        when(usuarioService.findById(getLogin().getIdUsuario())).thenReturn(getUsuarioEntity());
+
         when(comentarioRepository.findById(any())).thenReturn(Optional.of(comentarioEntity));
         when(comentarioRepository.save(any())).thenReturn(comentarioEntity);
 
