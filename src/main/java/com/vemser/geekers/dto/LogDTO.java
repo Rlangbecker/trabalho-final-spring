@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class LogDTO{
 
     private String id;
-    private LocalDate data;
+    private String data;
     private Integer idUsuario;
     private Integer usuarioMain;
     private TipoAtivo ativo;

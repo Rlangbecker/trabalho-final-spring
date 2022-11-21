@@ -30,9 +30,6 @@ public class MatchService {
 
     private Integer limite = 5;
 
-    public MatchDTO create(Integer id, MatchCreateDTO matchCreateDTO) throws RegraDeNegocioException {
-        return null;
-    }
 
     public List<MatchDTO> list() throws RegraDeNegocioException {
 
@@ -80,7 +77,7 @@ public class MatchService {
 
                 LogDTO logDTO = new LogDTO();
                 LocalDate dataAtual = LocalDate.now();
-                logDTO.setData(dataAtual);
+                logDTO.setData(dataAtual.toString());
                 logDTO.setIdUsuario(usuario.getIdUsuario());
                 logDTO.setUsuarioMain(usuarioLogado.getIdUsuario());
                 logDTO.setAtivo(usuario.getAtivo());
