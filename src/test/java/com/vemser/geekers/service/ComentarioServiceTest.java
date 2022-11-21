@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.vemser.geekers.dto.ComentarioCreateDTO;
 import com.vemser.geekers.dto.ComentarioDTO;
 import com.vemser.geekers.dto.LoginWithIdDTO;
 import com.vemser.geekers.entity.ComentarioEntity;
@@ -67,14 +68,15 @@ public class ComentarioServiceTest {
 
         // SETUP - Criar variáveis.
         ComentarioEntity comentarioEntity = getComentarioEntity();
-        comentarioEntity.setIdUsuario(10);
-        comentarioEntity.setIdComentario(1);
-        when(usuarioService.findById(any())).thenReturn(getUsuarioEntity());
+        Integer id = 10;
+        ComentarioCreateDTO comentarioCreateDTO = getComentarioCreateDTO();
+
+        when(usuarioService.findById(anyInt())).thenReturn(getUsuarioEntity());
         when(comentarioRepository.save(any())).thenReturn(comentarioEntity);
 
         // ACT - Ação, ou seja, testar o método.
 
-        ComentarioDTO comentarioDTO = objectMapper.convertValue(comentarioRepository.save(comentarioEntity), ComentarioDTO.class);
+        ComentarioDTO comentarioDTO = comentarioService.create(id,comentarioCreateDTO);
 
         // ASSERT - Verificação do método.
 
@@ -88,18 +90,18 @@ public class ComentarioServiceTest {
     public void deveTestarDeleteComSucesso() throws RegraDeNegocioException {
 
         // SETUP - Criar variáveis.
-    Integer id = 10;
+        Integer id = 10;
 
         ComentarioEntity comentarioEntity = getComentarioEntity();
 
         comentarioEntity.setIdComentario(10);
-        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.of(comentarioEntity));
+
         when(usuarioLoginService.getLoggedUser()).thenReturn(getLogin());
-        when(usuarioService.findById(getLogin().getIdUsuario())).thenReturn(getUsuarioEntity());
-        when(comentarioRepository.findById(any())).thenReturn(Optional.of(comentarioEntity));
+        when(comentarioRepository.findById(anyInt())).thenReturn(Optional.of(comentarioEntity));
+
 
         // ACT - Ação, ou seja, testar o método.
-        comentarioService.delete(comentarioEntity.getIdComentario());
+        comentarioService.delete(id);
 
         // ASSERT - Verificação do método.
         verify(comentarioRepository, times(1)).delete(any());
@@ -114,7 +116,7 @@ public class ComentarioServiceTest {
     ComentarioEntity comentarioEntity = getComentarioEntity();
     comentarioEntity.setComentario("Gostei do seu perfil");
     comentarioEntity.setIdComentario(10);
-        when(usuarioLoginService.getLoggedUser()).thenReturn(getLogin());
+
         when(usuarioService.findById(getLogin().getIdUsuario())).thenReturn(getUsuarioEntity());
         when(comentarioRepository.findById(any())).thenReturn(Optional.of(comentarioEntity));
         when(comentarioRepository.save(any())).thenReturn(comentarioEntity);
@@ -135,7 +137,7 @@ public class ComentarioServiceTest {
         ComentarioEntity comentarioEntity = getComentarioEntity();
         List<ComentarioEntity> listaComentarioByUsuario = new ArrayList<>();
         listaComentarioByUsuario.add(comentarioEntity);
-        when(usuarioService.findById(anyInt())).thenReturn(usuarioEntity);
+
         when(comentarioRepository.findComentarioEntityByUsuario(any())).thenReturn(listaComentarioByUsuario);
 
         // ACT - Ação, ou seja, testar o método.
@@ -207,7 +209,7 @@ public class ComentarioServiceTest {
 
     private static LoginWithIdDTO getLogin(){
         LoginWithIdDTO login = new LoginWithIdDTO();
-        login.setIdUsuario(1);
+        login.setIdUsuario(10);
         login.setNome("Gustavo Linck");
         login.setEmail("linck@gmail.com");
         login.setLogin("linck");
@@ -215,6 +217,12 @@ public class ComentarioServiceTest {
         return login;
     }
 
+    private static ComentarioCreateDTO getComentarioCreateDTO(){
+        ComentarioCreateDTO comentarioCreateDTO = new ComentarioCreateDTO();
+        comentarioCreateDTO.setComentario("eu também gosto de dragon ball!");
+        comentarioCreateDTO.setIdUsuario(1);
+        return comentarioCreateDTO;
+    }
 
 }
 

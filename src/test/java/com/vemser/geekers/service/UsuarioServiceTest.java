@@ -93,6 +93,7 @@ public class UsuarioServiceTest {
         assertEquals(1, lista.size());
     } // ListByAtivo
 
+
     @Test
     public void deveTestarListByInativoComSucesso() {
         // SETUP - Criar variáveis.
