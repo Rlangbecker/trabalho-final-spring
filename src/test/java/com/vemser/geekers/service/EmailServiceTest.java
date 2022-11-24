@@ -37,46 +37,46 @@ public class EmailServiceTest{
     @Mock
     private freemarker.template.Configuration fmConfiguration;
 
-    @Test
-    public void deveTestarGetTemplateComSucesso() throws IOException, TemplateException {
-        LocalDate data = LocalDate.of(2002,03,14);
-        Template template = new Template("", Reader.nullReader());
-
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setIdUsuario(1);
-        usuarioDTO.setEmail("kaioaar@gmail.com");
-        usuarioDTO.setAtivo(TipoAtivo.ATIVO);
-        usuarioDTO.setLogin("kaio");
-        usuarioDTO.setSenha("123");
-        usuarioDTO.setSexo("M");
-        usuarioDTO.setDataNascimento(data);
-
-        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
-        usuarioDTO2.setIdUsuario(1);
-        usuarioDTO2.setEmail("kaioaar2@gmail.com");
-        usuarioDTO2.setAtivo(TipoAtivo.ATIVO);
-        usuarioDTO2.setLogin("kaio");
-        usuarioDTO2.setSenha("123");
-        usuarioDTO2.setSexo("M");
-        usuarioDTO2.setDataNascimento(data);
-
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("nome", usuarioDTO.getNome());
-        dados.put("email", from);
-        dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
-        dados.put("msg2", " Seu cadastro foi realizado com sucesso, seu identificador é " + usuarioDTO.getIdUsuario());
-        dados.put("msg3","");
-
-        when(fmConfiguration.getTemplate(anyString())).thenReturn(template);
-
-        //ACT
-        String html = emailService.geContentFromTemplate(usuarioDTO, usuarioDTO2, TipoEmail.CADASTRO);
-        template = fmConfiguration.getTemplate("email-template-universal.ftl");
-        FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
-
-        //ASSERT
-        assertNotNull(html);
-    }
+//    @Test
+//    public void deveTestarGetTemplateComSucesso() throws IOException, TemplateException {
+//        LocalDate data = LocalDate.of(2002,03,14);
+//        Template template = new Template("", Reader.nullReader());
+//
+//        UsuarioDTO usuarioDTO = new UsuarioDTO();
+//        usuarioDTO.setIdUsuario(1);
+//        usuarioDTO.setEmail("kaioaar@gmail.com");
+//        usuarioDTO.setAtivo(TipoAtivo.ATIVO);
+//        usuarioDTO.setLogin("kaio");
+//        usuarioDTO.setSenha("123");
+//        usuarioDTO.setSexo("M");
+//        usuarioDTO.setDataNascimento(data);
+//
+//        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
+//        usuarioDTO2.setIdUsuario(1);
+//        usuarioDTO2.setEmail("kaioaar2@gmail.com");
+//        usuarioDTO2.setAtivo(TipoAtivo.ATIVO);
+//        usuarioDTO2.setLogin("kaio");
+//        usuarioDTO2.setSenha("123");
+//        usuarioDTO2.setSexo("M");
+//        usuarioDTO2.setDataNascimento(data);
+//
+//        Map<String, Object> dados = new HashMap<>();
+//        dados.put("nome", usuarioDTO.getNome());
+//        dados.put("email", from);
+//        dados.put("msg1", "Estamos muito contentes por você fazer parte da nossa comunidade!");
+//        dados.put("msg2", " Seu cadastro foi realizado com sucesso, seu identificador é " + usuarioDTO.getIdUsuario());
+//        dados.put("msg3","");
+//
+//        when(fmConfiguration.getTemplate(anyString())).thenReturn(template);
+//
+//        //ACT
+//        String html = emailService.geContentFromTemplate(usuarioDTO, usuarioDTO2, TipoEmail.CADASTRO);
+//        template = fmConfiguration.getTemplate("email-template-universal.ftl");
+//        FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+//
+//        //ASSERT
+//        assertNotNull(html);
+//    }
 
 
     @Test

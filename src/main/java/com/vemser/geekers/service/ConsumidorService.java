@@ -48,4 +48,6 @@ public class ConsumidorService {
             usuarioLoginService.atualizarCargo(usuarioGold.getIdUsuario());
         }
     }
+
+
 }
