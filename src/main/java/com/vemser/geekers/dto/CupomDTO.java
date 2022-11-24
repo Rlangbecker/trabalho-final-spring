@@ -11,7 +11,7 @@ public class CupomDTO {
     @NotBlank
     private String nome;
     @NotNull
-    private Double valor;
+    private Double preco;
     @NotNull
     private LocalDate DataVencimento;
 }

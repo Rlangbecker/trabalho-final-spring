@@ -14,11 +14,13 @@ import com.vemser.geekers.repository.CargoRepository;
 import com.vemser.geekers.repository.UsuarioRepository;
 import com.vemser.geekers.security.TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -55,6 +57,7 @@ public class UsuarioLoginService {
     }
 
     public LoginWithIdDTO getLoggedUser() throws RegraDeNegocioException {
+        emailService.enviarEmailTempoEvento();
         UsuarioEntity userLogged = findById(getIdLoggedUser());
         return objectMapper.convertValue(userLogged, LoginWithIdDTO.class);
     }

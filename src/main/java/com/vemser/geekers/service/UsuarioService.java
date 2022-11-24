@@ -7,11 +7,13 @@ import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
+import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,15 @@ public class UsuarioService {
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
 
+
     public List<UsuarioDTO> list() throws RegraDeNegocioException {
+
         return usuarioRepository.findAll()
                 .stream()
                 .map(usuario -> objectMapper.convertValue(usuario, UsuarioDTO.class))
                 .toList();
     }
+
 
     public List<UsuarioDTO> listByAtivo(){
         return usuarioRepository.findByAtivo(TipoAtivo.ATIVO)

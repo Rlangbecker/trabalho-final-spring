@@ -32,7 +32,7 @@ public class ConsumidorService {
                               @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
                               @Header(KafkaHeaders.OFFSET) Long offset) throws JsonProcessingException {
         TopicoCupomDTO topicoCupomDTO = objectMapper.readValue(cupom, TopicoCupomDTO.class);
-        log.info("CUPOM RECEBIDO -> '{}' Nome -> '{}' Valor -> '{}' -> Data de Vencimento -> '{}' Partition -> {} ", topicoCupomDTO.getNome(), topicoCupomDTO.getValor(),
+        log.info("CUPOM RECEBIDO -> '{}' Nome -> '{}' Valor -> '{}' -> Data de Vencimento -> '{}' Partition -> '{}' ", topicoCupomDTO.getNome(), topicoCupomDTO.getPreco(),
                 topicoCupomDTO.getDataVencimento(), partition);
         cupomRepository.save(objectMapper.convertValue(topicoCupomDTO, CupomEntity.class));
     }

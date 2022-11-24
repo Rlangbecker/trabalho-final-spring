@@ -31,7 +31,7 @@ public class ProdutorService {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     private final ObjectMapper objectMapper;
-    @Scheduled()
+
     public void enviarMensagem(TopicoCupomDTO topicoCupomDTO) throws JsonProcessingException {
         String mensagemStr = objectMapper.writeValueAsString(topicoCupomDTO);
 
