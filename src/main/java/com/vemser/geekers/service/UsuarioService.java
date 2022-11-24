@@ -1,13 +1,14 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.*;
-import com.vemser.geekers.entity.CargoEntity;
+import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
+import com.vemser.geekers.dto.UsuarioMatchDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.UsuarioRepository;
-import com.vemser.geekers.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service

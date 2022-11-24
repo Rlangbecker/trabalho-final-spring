@@ -1,7 +1,6 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.EventoAtualDTO;
 import com.vemser.geekers.dto.EventoCreateDTO;
 import com.vemser.geekers.dto.EventoDTO;
 import com.vemser.geekers.dto.EventoDTOContador;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

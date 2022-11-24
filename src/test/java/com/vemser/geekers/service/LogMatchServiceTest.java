@@ -76,7 +76,7 @@ public class LogMatchServiceTest {
         LocalDate data = LocalDate.of(2022,03,01);
         List<LogMatchEntity> lista = new ArrayList<>();
         lista.add(logMatchEntity);
-        when(logMatchRepository.findByDataContaining(any())).thenReturn(lista);
+        when(logMatchRepository.findByData(any())).thenReturn(lista);
 
         List<LogDTO> list = logMatchService.listLogsByDataCriado(data);
 

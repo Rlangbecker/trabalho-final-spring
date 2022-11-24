@@ -1,7 +1,10 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.*;
+import com.vemser.geekers.dto.LoginWithIdDTO;
+import com.vemser.geekers.dto.UsuarioCreateDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioSeguroDTO;
 import com.vemser.geekers.entity.CargoEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
@@ -11,9 +14,6 @@ import com.vemser.geekers.repository.CargoRepository;
 import com.vemser.geekers.repository.UsuarioRepository;
 import com.vemser.geekers.security.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
