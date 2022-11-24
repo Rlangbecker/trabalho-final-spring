@@ -1,10 +1,7 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.PageDTO;
-import com.vemser.geekers.dto.UsuarioDTO;
-import com.vemser.geekers.dto.UsuarioDesafioDTO;
-import com.vemser.geekers.dto.UsuarioMatchDTO;
+import com.vemser.geekers.dto.*;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.enums.TipoEmail;
@@ -61,6 +58,12 @@ public class UsuarioService {
     public UsuarioEntity findById(Integer id) throws RegraDeNegocioException {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado"));
+    }
+
+    public UsuarioEntity findUserByEmail(String email) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
+
+        return usuarioEntity;
     }
 
     public List<UsuarioDTO> findByName(String nome) {
