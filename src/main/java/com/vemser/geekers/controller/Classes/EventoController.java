@@ -1,14 +1,12 @@
 package com.vemser.geekers.controller.Classes;
 
 import com.vemser.geekers.controller.Interfaces.EventoControllerInterface;
-import com.vemser.geekers.dto.DesafioCreateDTO;
 import com.vemser.geekers.dto.EventoCreateDTO;
 import com.vemser.geekers.dto.EventoDTO;
 import com.vemser.geekers.dto.EventoDTOContador;
 import com.vemser.geekers.enums.TipoEvento;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.EventoService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;

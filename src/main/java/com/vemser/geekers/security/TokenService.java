@@ -2,7 +2,6 @@ package com.vemser.geekers.security;
 
 import com.vemser.geekers.entity.CargoEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
-import com.vemser.geekers.enums.TipoEmail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

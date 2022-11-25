@@ -2,7 +2,6 @@ package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vemser.geekers.dto.*;
-import com.vemser.geekers.entity.EventoEntity;
 import com.vemser.geekers.entity.MatchEntity;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;

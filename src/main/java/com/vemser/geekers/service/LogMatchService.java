@@ -39,11 +39,12 @@ public class LogMatchService {
 
     public List<LogDTO> listLogsByDataCriado(LocalDate data){
         String novaData = data.toString();
-        novaData = sdfComplete.format(new Date());
-        return logMatchRepository.findByDataContaining(novaData)
+        return logMatchRepository.findByData(novaData)
                 .stream()
                 .map(log -> objectMapper.convertValue(log, LogDTO.class))
                 .collect(Collectors.toList());
     }
+
+
 
 }

@@ -1,17 +1,16 @@
 package com.vemser.geekers.controller.Classes;
 
 import com.vemser.geekers.controller.Interfaces.AuthControllerInterface;
-import com.vemser.geekers.dto.*;
+import com.vemser.geekers.dto.LoginDTO;
+import com.vemser.geekers.dto.LoginWithIdDTO;
+import com.vemser.geekers.dto.UsuarioCreateDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.UsuarioEntity;
 import com.vemser.geekers.enums.TipoAtivo;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.security.TokenService;
 import com.vemser.geekers.service.UsuarioLoginService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

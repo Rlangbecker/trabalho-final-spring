@@ -1,7 +1,8 @@
 package com.vemser.geekers.controller.Interfaces;
 
-import com.vemser.geekers.dto.*;
-import com.vemser.geekers.exception.BancoDeDadosException;
+import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

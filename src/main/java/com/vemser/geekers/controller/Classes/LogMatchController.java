@@ -1,11 +1,7 @@
 package com.vemser.geekers.controller.Classes;
 
 import com.vemser.geekers.controller.Interfaces.LogMatchControllerInterface;
-import com.vemser.geekers.dto.EventoCreateDTO;
-import com.vemser.geekers.dto.EventoDTO;
 import com.vemser.geekers.dto.LogDTO;
-import com.vemser.geekers.enums.TipoEvento;
-import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.LogMatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +9,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -1,26 +1,30 @@
 package com.vemser.geekers.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vemser.geekers.dto.EventoAtualDTO;
 import com.vemser.geekers.dto.EventoCreateDTO;
 import com.vemser.geekers.dto.EventoDTO;
 import com.vemser.geekers.dto.EventoDTOContador;
+import com.vemser.geekers.dto.UsuarioDTO;
 import com.vemser.geekers.entity.EventoEntity;
 import com.vemser.geekers.enums.TipoAtivo;
+import com.vemser.geekers.enums.TipoEmail;
 import com.vemser.geekers.enums.TipoEvento;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.repository.EventoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class EventoService {
 
     private final EventoRepository eventoRepository;
+    private final UsuarioService usuarioService;
+
     private final ObjectMapper objectMapper;
 
 
@@ -77,5 +81,7 @@ public class EventoService {
             return false;
         }
     }
+
+
 
 }

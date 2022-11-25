@@ -27,6 +27,7 @@ public class AdminController implements AdminControllerInterface {
     private final UsuarioLoginService usuarioLoginService;
 
     public ResponseEntity<List<UsuarioDTO>> listUsuarios() throws RegraDeNegocioException {
+
         return new ResponseEntity<>(usuarioService.list(), HttpStatus.OK);
     }
 

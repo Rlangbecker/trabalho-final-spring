@@ -1,8 +1,9 @@
 package com.vemser.geekers.controller.Classes;
 
 import com.vemser.geekers.controller.Interfaces.UsuarioControllerInterface;
-import com.vemser.geekers.dto.*;
-import com.vemser.geekers.exception.BancoDeDadosException;
+import com.vemser.geekers.dto.PageDTO;
+import com.vemser.geekers.dto.UsuarioDTO;
+import com.vemser.geekers.dto.UsuarioDesafioDTO;
 import com.vemser.geekers.exception.RegraDeNegocioException;
 import com.vemser.geekers.service.UsuarioLoginService;
 import com.vemser.geekers.service.UsuarioService;
